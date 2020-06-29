@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Pagination from './Pagination';
-
 const LeftColumnTableList = (props) => {
   console.log("inside table list:");
   console.log(props.header);
@@ -26,7 +24,6 @@ const LeftColumnTableList = (props) => {
               </tr>
             )
           })}
-          <Pagination />
         </tbody>
       </table>
     </div>

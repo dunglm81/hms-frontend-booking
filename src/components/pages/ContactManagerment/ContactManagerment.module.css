@@ -1,0 +1,12 @@
+.datalistPopup {
+    z-index: 1000;
+    position: absolute;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid rgb(215, 215, 215);
+}
+
+.datalistItem {
+    height: 40px;
+    max-width: 400px;
+}
