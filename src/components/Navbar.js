@@ -54,6 +54,7 @@ export default class Navbar extends Component {
                 <a className="dropdown-item" href="/contact">Tạo KH</a>
                 <a className="dropdown-item" href="/createbooking">Tạo Booking</a>
                 <a className="dropdown-item" href="/contactmanagerment">QL Khách hàng</a>
+                <a className="dropdown-item" href="/viewbooking">View Booking</a>
 
                 <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href="/Search_booking">Tìm kiếm</a>

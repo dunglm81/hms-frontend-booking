@@ -7,6 +7,6 @@
     "USER_POOL_ID": "ap-southeast-1_sSaN6wbbJ",
     "APP_CLIENT_ID": "7vi3jfs4t8htrbgd9i7dhms6ib"
   },
-  "base_api": "http://localhost:3333",
+  "base_api": "http://localhost:3000",
   "cognito_public_key_url": "https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_sSaN6wbbJ/.well-known/jwks.json"
 }

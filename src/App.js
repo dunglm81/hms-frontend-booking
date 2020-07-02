@@ -16,9 +16,10 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Contact from './components/pages/Contact';
 import ContactManagerment from './components/pages/ContactManagerment/ContactManagerment';
-import CreateBooking from './components/pages/CreateBooking';
+import CreateBooking from './components/pages/CreateBookingComponent/CreateBooking';
 import ReservationDetail from './components/pages/ReservationDetail';
 import ReservationReport from './components/pages/ReservationReport';
+import ViewBooking from './components/pages/ViewBookingComponent/ViewBooking';
 import ProductAdmin from './components/ProductAdmin';
 import Products from './components/Products';
 
@@ -94,6 +95,7 @@ class App extends Component {
               <Route exact path="/contact" render={(props) => <Contact {...props} />} />
               <Route exact path="/createbooking" render={(props) => <CreateBooking {...props} />} />
               <Route exact path="/contactmanagerment" render={(props) => <ContactManagerment {...props} />} />
+              <Route exact path="/viewbooking" render={(props) => <ViewBooking {...props} />} />
 
               <Route exact path="/reservationreport" render={(props) => <ReservationReport {...props} />} />
               <Route path="/reservationdetail" render={(props) => <ReservationDetail {...props} />} />

@@ -1,0 +1,40 @@
+.sectionOne {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sectionOne > div {
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 10px;
+    background-color: rgb(220, 220, 220);
+}
+
+.note {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 15px 0;
+}
+
+.note > div:nth-child(2) {
+    min-width: 300px;
+    height: 100px;
+    background-color: rgb(220, 220, 220);
+    padding: 10px;
+}
+
+.devider {
+    margin: 10px 0;
+    width: 100%;
+    height: 3px;
+    background-color: rgb(220, 220, 220);
+}
+
+.closeBtnCustom {
+    float: left;
+    margin-right: 10px;
+    cursor: pointer;
+}
