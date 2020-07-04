@@ -1,0 +1,9 @@
+.modalCustom > div > span {
+    min-width: 100px;
+}
+.validateCustom {
+    margin-bottom: 1px;
+    font-style: italic;
+    color: red;
+    font-size: 0.8em;
+}

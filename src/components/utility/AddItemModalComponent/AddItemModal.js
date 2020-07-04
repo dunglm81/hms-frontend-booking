@@ -2,42 +2,47 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
+import styles from './AddItemModal.module.css';
+
 class AddItemModal extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
-            typeModal: '',
             fieldArr: [],
-            title: '',
-            date: '',
-            money: '',
-            account: '',
-            service: '',
-            quantity: '',
-            unitprice: ''
+            title: ''
         }
     }
 
-    static getDerivedStateFromProps(props, state) {
+    componentDidMount() {
+        this.updateStateObj(this.props.typeModal);
+    }
+
+    updateStateObj(typeModal) {
         let title = '';
-        let fieldArr = [];
-        switch (props.typeModal) {
+        let fieldArr = '';
+
+        switch (typeModal) {
             case 'transactions':
                 title = 'Thêm giao dịch thanh toán';
                 fieldArr = [
                     {
                         key: 'date',
-                        keyAlt: 'Ngày'
+                        keyAlt: 'Ngày',
+                        value: '',
+                        validate: true
                     },
                     {
                         key: 'money',
-                        keyAlt: 'Số tiền'
+                        keyAlt: 'Số tiền',
+                        value: '',
+                        validate: true
                     },
                     {
                         key: 'account',
-                        keyAlt: 'Tài khoản'
+                        keyAlt: 'Tài khoản',
+                        value: '',
+                        validate: true
                     }
                 ]
                 break;
@@ -46,31 +51,66 @@ class AddItemModal extends React.Component {
                 fieldArr = [
                     {
                         key: 'service',
-                        keyAlt: 'Tên dịch vụ'
+                        keyAlt: 'Tên dịch vụ',
+                        value: '',
+                        validate: true
                     },
                     {
                         key: 'quantity',
-                        keyAlt: 'Số lượng'
+                        keyAlt: 'Số lượng',
+                        value: '',
+                        validate: true
                     },
                     {
                         key: 'unitprice',
-                        keyAlt: 'Đơn giá'
+                        keyAlt: 'Đơn giá',
+                        value: '',
+                        validate: true
                     }
                 ]
                 break;
             default:
         }
-        return {
-            typeModal: props.typeModal,
-            fieldArr: fieldArr,
-            title: title
-        }
+        this.setState({
+            title: title,
+            fieldArr: fieldArr
+        })
     }
 
-    handleChangeInput(event) {
+    handleChangeInput(event, index) {
+        let arr = JSON.parse(JSON.stringify(this.state.fieldArr));
+        arr[index].value = event.target.value;
         this.setState({
-            [event.target.name]: event.target.value
-        });
+            fieldArr: arr
+        })
+    }
+
+    checkValidate() {
+        let isValidate = true;
+        let arr = JSON.parse(JSON.stringify(this.state.fieldArr));
+
+        switch (this.props.typeModal) {
+            case 'transactions':
+                const regexDate = /^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$/;
+                arr[0].validate = regexDate.test(arr[0].value);
+                arr[1].validate = (arr[1].value);
+                arr[2].validate = (arr[2].value);
+                break;
+            case 'otherService':
+                arr[0].validate = (arr[0].value);
+                arr[1].validate = (arr[1].value);
+                arr[2].validate = (arr[2].value);
+                break;
+            default:
+        }
+        isValidate = arr[0].validate && arr[1].validate && arr[2].validate;
+        if (!isValidate) {
+            this.setState({
+                fieldArr: arr
+            })
+        }
+
+        return isValidate;
     }
 
     render() {
@@ -90,14 +130,26 @@ class AddItemModal extends React.Component {
                 <Modal.Body>
                     {
                         (this.state.fieldArr || []).map((item, index) => {
+                            let typeInput = 'text';
+                            switch (item.key) {
+                                case 'date':
+                                    typeInput = 'date'
+                                    break;
+                                case 'money':
+                                    typeInput = 'number';
+                                default:
+                            }
                             return (
-                                <div className="input-group mb-3" key={index}>
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text">{item.keyAlt}:</span>
+                                <div key={index}>
+                                    {item.validate ? null : <p className={styles.validateCustom}>{item.keyAlt} không hợp lệ</p>}
+                                    <div className={styles.modalCustom + ' input-group mb-3'}>
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text">{item.keyAlt}:</span>
+                                        </div>
+                                        <input onChange={(e) => {
+                                            this.handleChangeInput(e, index)
+                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} required />
                                     </div>
-                                    <input onChange={(e) => {
-                                        this.handleChangeInput(e)
-                                    }} type={(item.key === 'date') ? 'date' : 'text'} className="form-control" value={this.state[item.key]} name={item.key} required />
                                 </div>
                             )
                         })
@@ -109,16 +161,13 @@ class AddItemModal extends React.Component {
                         this.props.inOnHide()
                     }}>Hủy</Button>
                     <Button variant="primary" onClick={() => {
-                        this.props.inOnHide(this.state)
-                        this.setState({
-                            title: '',
-                            date: '',
-                            money: '',
-                            account: '',
-                            service: '',
-                            quantity: '',
-                            unitprice: ''
-                        })
+                        if (this.checkValidate()) {
+                            this.props.inOnHide(this.state)
+                            this.setState({
+                                title: '',
+                                fieldArr: []
+                            })
+                        }
                     }}>Thêm</Button>
                 </Modal.Footer>
             </Modal>

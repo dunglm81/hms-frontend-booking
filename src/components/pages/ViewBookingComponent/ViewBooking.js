@@ -62,55 +62,58 @@ class ViewBooking extends React.Component {
     }
 
     getDataFromServer() {
-        const params = queryString.parse(this.props.location.search);
-        if (params.booking_id) {
-            this.requestData('booking_detail', params.booking_id);
-            this.requestData('booking_total_value', params.booking_id);
-            this.requestData('booking_total_payment', params.booking_id);
-            this.requestData('booking_room_item', params.booking_id);
-            this.requestData('booking_other_service', params.booking_id);
-            this.requestData('booking_payment_transaction', params.booking_id);
-        }
+        this.requestData('booking_detail');
+        this.requestData('booking_total_value');
+        this.requestData('booking_total_payment');
+        this.requestData('booking_room_item');
+        this.requestData('booking_other_service');
+        this.requestData('booking_payment_transaction');
     }
 
-    requestData(path, bookingId) {
-        const param = `?booking_id=${bookingId}`
-        api_instance.get(`api/${path}${param}`)
-            .then((response) => {
-                if (response.status === 200 && response.data) {
-                    this.setFieldState(response.data, path);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+    requestData(path) {
+        const booking_id = queryString.parse(this.props.location.search).booking_id;
+        if (booking_id) {
+            const param = `?booking_id=${booking_id || 1}`
+            api_instance.get(`api/${path}${param}`)
+                .then((response) => {
+                    if (response.status === 200 && response.data) {
+                        this.setFieldState(response.data, path);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+
     }
 
     deleteItem(typeModal, itemId) {
-        const param = `?booking_id=${(this.props.booking_id || 1)}`
-        let path = '';
-        switch (typeModal) {
-            case 'transactions':
-                path = 'booking_payment_transaction';
-                break;
-            case 'otherService':
-                path = 'booking_other_service';
-                break;
-            default:
+        const booking_id = queryString.parse(this.props.location.search).booking_id;
+        if (booking_id) {
+            const param = `?booking_id=${(booking_id || 1)}&item_id=${itemId}`
+            let path = '';
+            switch (typeModal) {
+                case 'transactions':
+                    path = 'booking_payment_transaction';
+                    break;
+                case 'otherService':
+                    path = 'booking_other_service';
+                    break;
+                default:
+            }
+
+            api_instance.delete(`api/${path}${param}`)
+                .then((response) => {
+                    this.requestData(path);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         }
-
-        api_instance.delete(`api/${path}${param}`)
-            .then((response) => {
-                this.requestData(path);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
     }
 
     addItem(typeModal, state) {
-        const param = `?booking_id=${(this.props.booking_id || 1)}`
+        const param = `?booking_id=${(this.state.booking_id || 1)}`
         let path = '';
         switch (typeModal) {
             case 'transactions':
@@ -132,7 +135,7 @@ class ViewBooking extends React.Component {
     }
 
     editItem(state) {
-        const param = `?booking_id=${(this.props.booking_id || 1)}`
+        const param = `?booking_id=${(this.state.booking_id || 1)}`
         api_instance.post(`api/booking_room_item${param}`, state)
             .then((response) => {
                 this.requestData('booking_room_item');
@@ -347,7 +350,7 @@ class ViewBooking extends React.Component {
                                                                     </div >
                                                                     <div className={styles.tdRoomCustom}>
                                                                         <div>ĐG:</div>
-                                                                        <div>{item2.unit_price.toLocaleString()}</div>
+                                                                        <div>{(item2.unit_price || 0).toLocaleString()}</div>
                                                                     </div>
                                                                 </td>
                                                             )
@@ -394,8 +397,8 @@ class ViewBooking extends React.Component {
                                                         </div>
                                                         {item.service_name}</th>
                                                     <td key="quantity">{item.quantity}</td>
-                                                    <td key="unit">{item.unit_price.toLocaleString()}</td>
-                                                    <td key="totalvalue">{(item.quantity * item.unit_price).toLocaleString()}</td>
+                                                    <td key="unit">{(item.unit_price || 0).toLocaleString()}</td>
+                                                    <td key="totalvalue">{(item.quantity * item.unit_price || 0).toLocaleString()}</td>
                                                 </tr>
                                             )
                                         })
@@ -431,7 +434,7 @@ class ViewBooking extends React.Component {
                                             return (
                                                 <tr key={index}>
                                                     <td key="date">{item.payment_date}</td>
-                                                    <td key="money">{item.payment_value.toLocaleString()}</td>
+                                                    <td key="money">{(item.payment_value || 0).toLocaleString()}</td>
                                                     <td key="account">{item.payment_account_name}</td>
                                                     <td key="remove">
                                                         <div className={styles.closeBtnCustom} onClick={() => {
@@ -453,9 +456,11 @@ class ViewBooking extends React.Component {
                 <ConfirmModal inShow={this.state.confirmModalData.show} typeModal={this.state.confirmModalData.typeModal} inOnHide={(isConfirm) => {
                     this.displayConfirmModal(isConfirm, this.state.confirmModalData.typeModal, this.state.confirmModalData.itemId, false);
                 }} />
-                <AddItemModal inShow={this.state.addItemModalData.show} typeModal={this.state.addItemModalData.typeModal} inOnHide={(state) => {
+                {this.state.addItemModalData.show ? <AddItemModal inShow={this.state.addItemModalData.show} typeModal={this.state.addItemModalData.typeModal} inOnHide={(state) => {
                     this.displayAddItemModal(this.state.addItemModalData.typeModal, false, state);
-                }}></AddItemModal>
+                }}></AddItemModal> : null}
+
+
                 <EditRoomServiceModal inShow={this.state.editRoomServiceData.show} data={this.state.roomService} inOnHide={(state) => {
                     this.displayEditRoomServiceModal(false, state);
                 }}></EditRoomServiceModal>
