@@ -1,0 +1,6 @@
+.modalCustom {
+    max-width: 1000px;
+}
+.tdCustom > div > input {
+    min-width: 110px;
+}

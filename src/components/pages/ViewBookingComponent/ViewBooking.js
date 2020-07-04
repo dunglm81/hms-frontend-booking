@@ -1,6 +1,5 @@
 import queryString from 'query-string';
 import React from 'react';
-import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
@@ -269,11 +268,11 @@ class ViewBooking extends React.Component {
     render() {
         return (
             <>
-                <Container>
+                <Container className="mt-3">
                     <Row>
-                        <Col>
-                            <h1>View Booking</h1>
-                        </Col>
+                        <div className="d-flex flex-row">
+                            <h2>View Booking</h2>
+                        </div>
                     </Row>
                     <Row className="p-3">
                         <div className={styles.sectionOne}>
@@ -321,7 +320,7 @@ class ViewBooking extends React.Component {
                             <h5 className="mb-0">Dịch vụ phòng ở</h5>
                             <button className="btn btn-primary ml-4" onClick={() => {
                                 this.displayEditRoomServiceModal(true);
-                            }}>Edit</button>
+                            }}>Chỉnh sửa</button>
                         </div>
 
                         <div className="table-responsive mt-3">
@@ -342,8 +341,14 @@ class ViewBooking extends React.Component {
                                                         this.state.roomService.data[item1].map((item2, index2) => {
                                                             return (
                                                                 <td key={index2}>
-                                                                    <div>Số lượng: {item2.quantity}</div>
-                                                                    <div>Đơn giá: {item2.unit_price.toLocaleString()}</div>
+                                                                    <div className={styles.tdRoomCustom}>
+                                                                        <div>SL:</div>
+                                                                        <div>{item2.quantity}</div>
+                                                                    </div >
+                                                                    <div className={styles.tdRoomCustom}>
+                                                                        <div>ĐG:</div>
+                                                                        <div>{item2.unit_price.toLocaleString()}</div>
+                                                                    </div>
                                                                 </td>
                                                             )
                                                         })
@@ -363,7 +368,7 @@ class ViewBooking extends React.Component {
                             <h5 className="mb-0">Dịch vụ khác</h5>
                             <button className="btn btn-primary ml-4" onClick={() => {
                                 this.displayAddItemModal('otherService', true);
-                            }}>Add</button>
+                            }}>Thêm</button>
                         </div>
 
                         <div className="table-responsive mt-3">
@@ -407,7 +412,7 @@ class ViewBooking extends React.Component {
                             <h5 className="mb-0">Các giao dịch thanh toán</h5>
                             <button className="btn btn-primary ml-4" onClick={() => {
                                 this.displayAddItemModal('transactions', true);
-                            }}>Add</button>
+                            }}>Thêm</button>
                         </div>
 
                         <div className="table-responsive mt-3">

@@ -38,3 +38,14 @@
     margin-right: 10px;
     cursor: pointer;
 }
+
+.tdRoomCustom {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.tdRoomCustom > div:nth-child(1) {
+    min-width: 25px;
+    margin-right: 10px;
+}

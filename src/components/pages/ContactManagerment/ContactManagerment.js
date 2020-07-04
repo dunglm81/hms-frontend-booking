@@ -97,26 +97,14 @@ class ContactManagerment extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    <div>
-                        <input type="text" placeholder='Enter name you wish to Search.' onChange={this.handleChangeAutoCompleteInput} />
-                        {this.state.showAutocomplete && this.state.autocompleteData.length > 0 ?
-                            <div className={styles.datalistPopup}>
-                                {this.state.autocompleteData.map((item) => {
-                                    return (
-                                        <div>{item.contact_name}</div>
-                                    )
-                                })}
-                            </div>
-                            : null}
-                    </div>
-                </Row>
-                <Row>
                     <Col>
                         <div className="table-responsive">
                             <table className="table table-sm table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Ngày</th>
+                                        <th scope="col">Họ tên</th>
+                                        <th scope="col">Số điện thoại</th>
+                                        <th scope="col">Email</th>
                                     </tr>
                                 </thead>
                                 <tbody>

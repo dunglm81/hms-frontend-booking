@@ -216,6 +216,16 @@ class CreateBooking extends Component {
         }
     }
 
+    handleOnBlurInput() {
+        setTimeout(() => {
+            if (this.state.showAutocomplete) {
+                this.setState({
+                    showAutocomplete: false
+                })
+            }
+        }, 300)
+    }
+
     render() {
         return (
             <Container>
@@ -225,7 +235,7 @@ class CreateBooking extends Component {
                         <div className={styles.inputGroup}>
                             <div className={styles.inputGroupOne}>
                                 <div>Khách hàng:</div>
-                                <input type="text" className="" onChange={this.handleChangeAutoCompleteInput} value={this.state.autoCompleteValue} />
+                                <input type="text" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoCompleteValue} />
                                 {this.state.showAutocomplete && this.state.autocompleteData.length > 0 ?
                                     <div className={styles.datalistPopup}>
                                         {(this.state.autocompleteData || []).map((item, idx) => {
@@ -282,10 +292,10 @@ class CreateBooking extends Component {
                                                             {item1[item.service_name]}
                                                             {(index3 > 0 && index3 < item.data.length - 1) ? <div>
                                                                 <div className={styles.tdCustom}>
-                                                                    <div>SL:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'quantity', item1.using_date, item.service_id)} name={item.service_name} value={item1.quantity} />
+                                                                    <div>SL:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'quantity', item1.using_date, item.service_id)} name={item.service_name} value={item1.quantity} />
                                                                 </div>
                                                                 <div className={styles.tdCustom}>
-                                                                    <div>ĐG:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} />
+                                                                    <div>ĐG:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} />
                                                                 </div>
                                                                 <div className={styles.tdCustom}>
                                                                     <div>MT:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'description', item1.using_date, item.service_id)} name={item.service_name} />

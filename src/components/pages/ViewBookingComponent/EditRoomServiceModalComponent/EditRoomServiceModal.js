@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-let obj = {};
+import styles from './EditRoomServiceModal.module.css';
 
 class EditRoomServiceModal extends React.Component {
 
@@ -35,7 +35,7 @@ class EditRoomServiceModal extends React.Component {
             <Modal
                 show={this.props.inShow}
                 onHide={this.props.inOnHide}
-                dialogClassName="modal-90w"
+                dialogClassName={styles.modalCustom}
                 aria-labelledby="example-custom-modal-styling-title"
             >
                 <Modal.Header closeButton>
@@ -62,7 +62,7 @@ class EditRoomServiceModal extends React.Component {
                                                 {
                                                     this.props.data.data[item1].map((item2, index2) => {
                                                         return (
-                                                            <td key={index2}>
+                                                            <td key={index2} className={styles.tdCustom}>
                                                                 <div>Số lượng:
                                                                 <input onChange={(e) => {
                                                                         this.handleChangeInput(e, 'quantity', item2.booking_service_id);

@@ -10,7 +10,9 @@ class Pagination extends React.Component {
             currentPage: 0,
             rowPerPage: 0,
             button: null,
-            activeIdx: -1
+            activeIdx: -1,
+            showDotOne: false,
+            showDotTwo: false
         }
     }
 
@@ -19,17 +21,26 @@ class Pagination extends React.Component {
         const currentPage = parseInt(props.data.currentPage);
         let buttonArr = [];
         let activeIdx = 0;
+        let showDotOne = false;
+        let showDotTwo = false;
 
         if (totalPage >= 7) {
             if (currentPage <= 4) {
-                buttonArr = ['1', '2', '3', '4', '5', '6', '7', '...'];
+                buttonArr = ['1', '2', '3', '4', '5', '6', '7'];
                 activeIdx = currentPage - 1;
+                showDotOne = false;
+                showDotTwo = true;
             } else if (currentPage >= totalPage - 3) {
-                buttonArr = ['...', (totalPage - 6) + '', (totalPage - 5) + '', (totalPage - 4) + '', (totalPage - 3) + '', (totalPage - 2) + '', (totalPage - 1) + '', totalPage + ''];
-                activeIdx = 7 - (totalPage - currentPage);
+                buttonArr = [(totalPage - 6) + '', (totalPage - 5) + '', (totalPage - 4) + '', (totalPage - 3) + '', (totalPage - 2) + '', (totalPage - 1) + '', totalPage + ''];
+                activeIdx = 6 - (totalPage - currentPage);
+                showDotOne = true;
+                showDotTwo = false;
+
             } else {
-                buttonArr = ['...', (currentPage - 3) + '', (currentPage - 2) + '', (currentPage - 1) + '', currentPage + '', (currentPage + 1) + '', (currentPage + 2) + '', (currentPage + 3) + '', '...'];
-                activeIdx = 4;
+                buttonArr = [(currentPage - 3) + '', (currentPage - 2) + '', (currentPage - 1) + '', currentPage + '', (currentPage + 1) + '', (currentPage + 2) + '', (currentPage + 3) + ''];
+                activeIdx = 3;
+                showDotOne = true;
+                showDotTwo = true;
             }
         } else {
             for (let i = 0; i < totalPage; i++) {
@@ -44,7 +55,9 @@ class Pagination extends React.Component {
             currentPage: parseInt(props.data.currentPage),
             rowPerPage: parseInt(props.data.rowPerPage),
             activeIdx: activeIdx,
-            button: buttonArr
+            button: buttonArr,
+            showDotOne: showDotOne,
+            showDotTwo: showDotTwo
         }
     }
 
@@ -56,15 +69,18 @@ class Pagination extends React.Component {
 
     render() {
         return (
-            <ul className="pagination " key="pagination1">
+            <ul className="pagination ">
                 <li className="page-item" onClick={() => {
                     this.moveToCurrentPage(this.state.currentPage - 1);
                 }}><a className="page-link">Previous</a></li>
+                {this.state.showDotOne ? <li className="page-item"><a className="page-link">...</a></li> : null}
+
                 {this.state.button.map((item, idx) => {
-                    return <li key={idx} className={'page-item ' + (this.state.activeIdx === idx ? 'active' : '')} key={item} onClick={() => {
+                    return <li key={idx} className={'page-item ' + (this.state.activeIdx === idx ? 'active' : '')} onClick={() => {
                         this.moveToCurrentPage(item);
                     }}><a className="page-link">{item}</a></li>
                 })}
+                {this.state.showDotTwo ? <li className="page-item"><a className="page-link">...</a></li> : null}
                 <li className="page-item" onClick={() => {
                     this.moveToCurrentPage(this.state.currentPage + 1);
                 }}><a className="page-link">Next</a></li>
