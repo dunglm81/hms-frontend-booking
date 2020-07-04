@@ -1,12 +1,122 @@
+.inputGroup {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+    background-color: rgb(240, 240, 240);
+    margin-bottom: 20px;
+    padding: 20px;
+    min-width: 850px;
+}
+
+.inputGroupOne {
+    display: flex;
+    flex-flow: row nowrap;
+    max-width: 60%;
+    padding: 10px 0;
+    position: relative;
+}
+
+.inputGroupOne > input {
+    flex: 1;
+    height: 38px;
+    min-width: 300px;
+    position: relative;
+}
+
+.inputGroupOne > div {
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.inputGroupTwo {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    max-width: 70%;
+    padding: 10px 0;
+    max-height: 58px;
+}
+
+.inputGroupTwo > div {
+    display: flex;
+    flex-flow: row nowrap;
+}
+.inputGroupTwo > div > input {
+    height: 38px;
+    min-width: 150px;
+}
+.inputGroupTwo > div > div {
+    display: flex;
+    align-items: center;
+}
+.inputGroupTwo > div > div {
+    min-width: 100px;
+}
+.inputGroupTwo > div:nth-child(2) > div {
+    justify-content: flex-end;
+}
+
+.inputGroupThree {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    max-height: 58px;
+    max-width: 60%;
+}
+
+.inputGroupThree > div {
+    min-width: 100px;
+}
+.inputGroupThree > input {
+    height: 38px;
+    flex: 1;
+}
+
 .datalistPopup {
     z-index: 1000;
     position: absolute;
     background-color: white;
     padding: 10px;
-    border: 1px solid rgb(215, 215, 215);
+    border: 1px solid rgb(200, 200, 200);
+    display: flex;
+    flex-flow: column nowrap;
+    top: 50px;
+    left: 100px;
 }
 
 .datalistItem {
     height: 40px;
-    max-width: 400px;
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    width: 100%;
+}
+
+.datalistItem:hover {
+    background-color: blue;
+    color: white;
+    cursor: pointer;
+}
+
+.thCustom {
+    min-width: 105px;
+}
+
+.tdCustom {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.tdCustom > div {
+    min-width: 30px;
+}
+
+.tdCustom > input {
+    max-width: 90px;
+    min-width: 90px;
+    margin-left: 10px;
+    margin-bottom: 5px;
 }

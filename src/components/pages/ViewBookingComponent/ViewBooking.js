@@ -1,3 +1,4 @@
+import queryString from 'query-string';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -62,16 +63,19 @@ class ViewBooking extends React.Component {
     }
 
     getDataFromServer() {
-        this.requestData('booking_detail');
-        this.requestData('booking_total_value');
-        this.requestData('booking_total_payment');
-        this.requestData('booking_room_item');
-        this.requestData('booking_other_service');
-        this.requestData('booking_payment_transaction');
+        const params = queryString.parse(this.props.location.search);
+        if (params.booking_id) {
+            this.requestData('booking_detail', params.booking_id);
+            this.requestData('booking_total_value', params.booking_id);
+            this.requestData('booking_total_payment', params.booking_id);
+            this.requestData('booking_room_item', params.booking_id);
+            this.requestData('booking_other_service', params.booking_id);
+            this.requestData('booking_payment_transaction', params.booking_id);
+        }
     }
 
-    requestData(path) {
-        const param = `?booking_id=${(this.props.booking_id || 1)}`
+    requestData(path, bookingId) {
+        const param = `?booking_id=${bookingId}`
         api_instance.get(`api/${path}${param}`)
             .then((response) => {
                 if (response.status === 200 && response.data) {
@@ -122,6 +126,17 @@ class ViewBooking extends React.Component {
         api_instance.put(`api/${path}${param}`, state)
             .then((response) => {
                 this.requestData(path);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    editItem(state) {
+        const param = `?booking_id=${(this.props.booking_id || 1)}`
+        api_instance.post(`api/booking_room_item${param}`, state)
+            .then((response) => {
+                this.requestData('booking_room_item');
             })
             .catch((error) => {
                 console.log(error);
@@ -199,6 +214,7 @@ class ViewBooking extends React.Component {
                 data: object
             }
         })
+
     }
 
     removeDuplicateData(data) {

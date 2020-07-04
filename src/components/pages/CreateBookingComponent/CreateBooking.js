@@ -9,7 +9,7 @@ import styles from './CreateBooking.module.css';
 class CreateBooking extends Component {
     constructor(props) {
         super(props);
-        let from_date = new Date("2020-06-11");
+        let from_date = new Date();
         let tmp = new Date(from_date);
         let to_date = new Date(tmp.setDate(from_date.getDate() + 2));
 
@@ -24,7 +24,7 @@ class CreateBooking extends Component {
             autoCompleteValue: '',
             contactId: -1,
             description: '',
-            bookingArr: []
+            showTable: false
         }
     }
 
@@ -44,10 +44,6 @@ class CreateBooking extends Component {
 
     handleSearchByDate = (event) => {
         event.preventDefault();
-        this.requestData();
-    }
-
-    componentDidMount() {
         this.requestData();
     }
 
@@ -76,16 +72,22 @@ class CreateBooking extends Component {
     }
 
     requestData() {
-        var get_params = `?from_date=${this.state.fromDate}&to_date=${this.state.toDate}`;
+        const fromDate = new Date(this.state.fromDate);
+        const tmp = fromDate.setDate(fromDate.getDate() - 1);
+        const yesterday = new Date(tmp).toISOString().slice(0, 10);
+        const get_params = `?from_date=${yesterday}&to_date=${this.state.toDate}`;
+
         api_instance.get(`api/room_service_booking_status${get_params}`)
             .then((response) => {
                 if (response.status === 200) {
-                    const data = response.data;
+                    let data = response.data;
+                    data = this.createBookingArr(data);
                     if (data) {
                         this.setState({
                             titleArr: data[1],
                             typeArr: data[3],
-                            bodyArr: data[0]
+                            bodyArr: data[0],
+                            showTable: true
                         });
                     }
                 }
@@ -95,22 +97,55 @@ class CreateBooking extends Component {
             });
     }
 
-    handleBookingDataInput(event, typeInput, date, serviceId) {
-        let arr = [...this.state.bookingArr];
-        const idx = arr.findIndex(item => item.service_id === serviceId && item.using_date === date);
-        if (idx === -1) {
-            arr.push({
-                service_id: serviceId,
-                using_date: date,
-                [typeInput]: event.target.value
-            })
-        } else {
-            arr[idx][typeInput] = event.target.value;
-        }
+    createBookingArr(data) {
+        const usingDateArr = data[1];
+        const arr = usingDateArr.map(item => {
+            return {
+                using_date: item,
+                quantity: 0,
+                unit_price: 0,
+                description: ''
+            };
+        })
 
-        this.setState({
-            bookingArr: arr
-        });
+        data[3] = data[3].map(item => {
+            item.data = arr.map(item1 => {
+                const idx1 = data[0].findIndex(item2 => item2.date === item1.using_date);
+                if (idx1 !== -1) {
+                    item1[item.service_name] = data[0][idx1][item.service_name];
+                }
+                return item1;
+            })
+            return item;
+        })
+        return data;
+    }
+
+    handleBookingDataInput(event, typeInput, date, serviceId) {
+        let arr = JSON.parse(JSON.stringify(this.state.typeArr));
+        const idx = arr.findIndex(item => item.service_id === serviceId);
+
+        if (idx !== -1) {
+            let dataArr = arr[idx].data;
+            const idx1 = dataArr.findIndex(item1 => item1.using_date === date);
+            if (idx1 !== -1) {
+                dataArr = dataArr.map((item2, idx2) => {
+                    if (idx2 > 0 && idx2 < dataArr.length - 1) {
+                        if (typeInput === 'quantity' && idx2 >= idx1) {
+                            item2.quantity = event.target.value;
+                        } else if (idx2 === idx1) {
+                            item2[typeInput] = event.target.value;
+                        }
+                    }
+                    return item2;
+                });
+            }
+
+            arr[idx].data = dataArr;
+            this.setState({
+                typeArr: arr
+            });
+        }
     }
 
     handleChangeDate(value, typeDate) {
@@ -125,17 +160,36 @@ class CreateBooking extends Component {
             checkin_date: this.state.fromDate,
             checkout_date: this.state.toDate,
             description: this.state.description,
-            booking_room_items: this.state.bookingArr
+            booking_room_items: this.convertBookingArr()
         }
         this.createBookingRequest(submitObj);
+    }
+
+    convertBookingArr() {
+        let arr = JSON.parse(JSON.stringify(this.state.typeArr));
+        const bookingRoomItems = arr.reduce((finalList, item) => {
+            const bookingRoomItem = item.data.filter((item1, idx1) => 0 < idx1 && idx1 < item.data.length - 1)
+                .map(item1 => {
+                    return {
+                        service_id: item.service_id,
+                        using_date: item1.using_date,
+                        quantity: item1.quantity,
+                        unit_price: item1.unit_price,
+                        description: item1.description
+                    }
+                })
+            finalList = [...finalList, ...bookingRoomItem];
+            return finalList;
+        }, []);
+        return bookingRoomItems;
     }
 
     createBookingRequest(data) {
         api_instance.post(`api/new_booking`, data)
             .then((response) => {
-                if (response.status === 200) {
+                if (response.status === 200 && response.data) {
                     setTimeout(() => {
-                        this.props.history.push('/viewbooking');
+                        this.props.history.push(`/viewbooking?booking_id=${response.data.booking_id}`);
                     }, 1000);
                 }
             })
@@ -167,43 +221,53 @@ class CreateBooking extends Component {
             <Container>
                 <Row>
                     <Col>
-                        <h1>Tạo booking</h1>
-                        <div className="mb-3">
-                            <div className="d-flex flex-row align-items-center mr-2">Khách hàng:</div>
-                            <input type="text" className="" onChange={this.handleChangeAutoCompleteInput} value={this.state.autoCompleteValue} />
-                            {this.state.showAutocomplete && this.state.autocompleteData.length > 0 ?
-                                <div className={styles.datalistPopup}>
-                                    {(this.state.autocompleteData || []).map((item, idx) => {
-                                        return (
-                                            <div key={idx} onClick={() => {
-                                                this.handleSelectAutoCompleteItem(item);
-                                            }}>{item.contact_name}</div>
-                                        )
-                                    })}
+                        <h2>Tạo booking</h2>
+                        <div className={styles.inputGroup}>
+                            <div className={styles.inputGroupOne}>
+                                <div>Khách hàng:</div>
+                                <input type="text" className="" onChange={this.handleChangeAutoCompleteInput} value={this.state.autoCompleteValue} />
+                                {this.state.showAutocomplete && this.state.autocompleteData.length > 0 ?
+                                    <div className={styles.datalistPopup}>
+                                        {(this.state.autocompleteData || []).map((item, idx) => {
+                                            return (
+                                                <div key={idx} className={styles.datalistItem} onClick={() => {
+                                                    this.handleSelectAutoCompleteItem(item);
+                                                }}>{item.contact_name}</div>
+                                            )
+                                        })}
+                                    </div>
+                                    : null}
+                            </div>
+                            <div className={styles.inputGroupTwo}>
+                                <div>
+                                    <div>Ngày đến:</div>
+                                    <input type="date" name="from_date" onChange={(e) => this.handleChangeDate(e.target.value, 'fromDate')} value={this.state.fromDate} required />
                                 </div>
-                                : null}
-                        </div>
+                                <div>
+                                    <div className="mr-2">Ngày đi:</div>
+                                    <input type="date" name="to_date" onChange={(e) => this.handleChangeDate(e.target.value, 'toDate')} value={this.state.toDate} required />
+                                </div>
 
-                        <div className="input-group mb-3">
-                            <div className="d-flex flex-row align-items-center mr-2">Ngày đến:</div>
-                            <input type="date" className="" name="from_date" placeholder="Chọn ngày" onChange={(e) => this.handleChangeDate(e.target.value, 'fromDate')} value={this.state.fromDate} required />
-                            <div className="d-flex flex-row align-items-center mr-2 ml-5">Ngày đi:</div>
-                            <input type="date" className="" name="to_date" placeholder="Chọn ngày" onChange={(e) => this.handleChangeDate(e.target.value, 'toDate')} value={this.state.toDate} required />
-                            <button className="btn btn-primary ml-3" onClick={this.handleSearchByDate}>Xem dữ liệu</button>
-                        </div>
-                        <div className="input-group mb-3">
-                            <div className="d-flex flex-row align-items-center mr-2">Ghi chú:</div>
-                            <input type="text" className="" onChange={this.handleChangeNoteInput} />
+
+                                <button className="btn btn-primary ml-3" onClick={this.handleSearchByDate}>Xem dữ liệu</button>
+                            </div>
+
+                            {this.state.showTable ?
+                                <div className={styles.inputGroupThree}>
+                                    <div>Ghi chú:</div>
+                                    <input type="text" className="" onChange={this.handleChangeNoteInput} />
+                                </div> : null}
                         </div>
                     </Col>
                 </Row>
-                <Row>
+
+                {this.state.showTable ? <Row>
                     <div className="table-responsive">
                         <table className="table table-sm table-hover">
                             <thead>
                                 <tr>
                                     <th scope="col"></th>
-                                    {(this.state.titleArr || []).map((item, index1) => { return <th scope="col" key={index1}>{item}</th> })}
+                                    {(this.state.titleArr || []).map((item, index1) => { return <th className={styles.thCustom} scope="col" key={index1}>{item}</th> })}
                                 </tr>
                             </thead>
                             <tbody>
@@ -212,17 +276,20 @@ class CreateBooking extends Component {
                                         return (
                                             <tr key={index2}>
                                                 <th scope="row">{item.service_name}</th>
-                                                {(this.state.bodyArr || []).map((item1, index3) => {
+                                                {(item.data || []).map((item1, index3) => {
                                                     return (
                                                         <td key={index3}>
                                                             {item1[item.service_name]}
-                                                            {(index3 > 0 && index3 < this.state.bodyArr.length - 1) ? <div>
-                                                                <div>SL:</div>
-                                                                <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'quantity', item1.date, item.service_id)} name={item.service_name} />
-                                                                <div>ĐG:</div>
-                                                                <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.date, item.service_id)} name={item.service_name} />
-                                                                <div>Miêu tả:</div>
-                                                                <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'description', item1.date, item.service_id)} name={item.service_name} />
+                                                            {(index3 > 0 && index3 < item.data.length - 1) ? <div>
+                                                                <div className={styles.tdCustom}>
+                                                                    <div>SL:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'quantity', item1.using_date, item.service_id)} name={item.service_name} value={item1.quantity} />
+                                                                </div>
+                                                                <div className={styles.tdCustom}>
+                                                                    <div>ĐG:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} />
+                                                                </div>
+                                                                <div className={styles.tdCustom}>
+                                                                    <div>MT:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'description', item1.using_date, item.service_id)} name={item.service_name} />
+                                                                </div>
                                                             </div> : null}
                                                         </td>
                                                     )
@@ -233,9 +300,12 @@ class CreateBooking extends Component {
                                 }
                             </tbody>
                         </table>
+                    </div>
+                    <div className="d-flex justify-content-center w-100 mt-3">
                         <button className="btn btn-primary" onClick={this.handleInputData}>Lưu dữ liệu</button>
                     </div>
-                </Row>
+
+                </Row> : null}
             </Container>
         )
     }

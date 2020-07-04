@@ -14,25 +14,20 @@ class EditRoomServiceModal extends React.Component {
     }
 
     handleChangeInput(event, fieldType, itemId) {
-        const idx = this.state.data.findIndex(item => item.id === itemId);
+        const dataArr = this.state.data;
+        const idx = dataArr.findIndex(item => item.id === itemId);
         if (idx === -1) {
-            obj.id = itemId;
+            dataArr.push({
+                id: itemId,
+                [fieldType]: event.target.value
+            })
+        } else {
+            dataArr[idx][fieldType] = event.target.value;
         }
-        obj[fieldType] = event.target.value
 
-        this.setState(prevState => {
-            let data = [];
-            if (idx === -1) {
-                data = prevState.data.concat(obj);
-            } else {
-                data = prevState.data.map((item1) => {
-                    return (item1.id === itemId) ? obj : item1
-                })
-            }
-            return {
-                data
-            };
-        })
+        this.setState({
+            data: dataArr
+        });
     }
 
     render() {
@@ -96,7 +91,10 @@ class EditRoomServiceModal extends React.Component {
                         this.props.inOnHide()
                     }}>Hủy</Button>
                     <Button variant="primary" onClick={() => {
-                        this.props.inOnHide(this.state)
+                        this.props.inOnHide(this.state);
+                        this.setState({
+                            data: []
+                        })
                     }}>Lưu</Button>
                 </Modal.Footer>
             </Modal>

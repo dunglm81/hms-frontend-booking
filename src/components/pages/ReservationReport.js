@@ -32,7 +32,7 @@ class ReservationReport extends Component {
   requestData() {
     var get_params = `?from_date=${this.state.from_date}&to_date=${this.state.to_date}`;
 
-    api_instance.get(`room_service_booking_status${get_params}`)
+    api_instance.get(`api/room_service_booking_status${get_params}`)
       .then((response) => {
         if (response.status === 200) {
           this.setState({
