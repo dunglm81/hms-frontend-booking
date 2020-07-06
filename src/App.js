@@ -14,7 +14,7 @@ import Welcome from './components/auth/Welcome';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import Navbar from './components/Navbar';
-import Contact from './components/pages/Contact';
+import Contact from './components/pages/ContactComponent/Contact';
 import ContactManagerment from './components/pages/ContactManagerment/ContactManagerment';
 import CreateBooking from './components/pages/CreateBookingComponent/CreateBooking';
 import ReservationDetail from './components/pages/ReservationDetail';

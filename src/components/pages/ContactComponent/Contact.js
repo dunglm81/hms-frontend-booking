@@ -3,8 +3,8 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import api_instance from '../../utils/api';
-import AlertMessage from '../utility/AlertMessage';
+import api_instance from '../../../utils/api';
+import AlertMessage from '../../utility/AlertMessage';
 
 
 class Contact extends Component {

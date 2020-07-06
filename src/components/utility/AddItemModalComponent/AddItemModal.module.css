@@ -1,5 +1,6 @@
 .modalCustom > div > span {
-    min-width: 100px;
+    width: 110px;
+    justify-content: flex-end;
 }
 .validateCustom {
     margin-bottom: 1px;

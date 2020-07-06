@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 import api_instance from '../../../utils/api';
+import AddItemModal from '../../utility/AddItemModalComponent/AddItemModal';
 import styles from './CreateBooking.module.css';
 
 class CreateBooking extends Component {
@@ -27,7 +28,8 @@ class CreateBooking extends Component {
             autoPhoneValue: '',
             contactId: -1,
             description: '',
-            showTable: false
+            showTable: false,
+            showAddContactModal: false
         }
     }
 
@@ -275,123 +277,143 @@ class CreateBooking extends Component {
         }, 300)
     }
 
-    routeToCreateNewContact() {
-        this.props.history.push(`/contact`);
+    createNewContact() {
+        this.setState({
+            showAddContactModal: true
+        })
+    }
+
+    displayAddContactModal(display, submitObj) {
+        if (submitObj) {
+            this.setState({
+                autoNameValue: submitObj.contact_name || '',
+                autoPhoneValue: submitObj.phone_1 || ''
+            });
+        }
+
+        this.setState({
+            showAddContactModal: display
+        })
     }
 
     render() {
         return (
-            <Container>
-                <Row>
-                    <Col>
-                        <h2>Tạo booking</h2>
-                        <div className={styles.inputGroup}>
-                            <div className={styles.inputGroupZero}>
-                                <div>Số điện thoại:</div>
-                                <input className="form-control" type="text" pattern="[0-9]*" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoPhoneValue} name="phone" />
-                                {this.state.showAutoPhone && this.state.autoPhoneData.length > 0 ?
-                                    <div className={styles.phoneListPopup}>
-                                        {(this.state.autoPhoneData || []).map((item, idx) => {
-                                            return (
-                                                <div key={idx} className={styles.datalistItem} onClick={() => {
-                                                    this.handleSelectAutoCompleteItem(item);
-                                                }}>
-                                                    <div>{item.phone_1 || item.phone_2}</div>
-                                                    <div>{item.contact_name}</div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                    : null}
-                                <button className="btn btn-primary" onClick={() => { this.routeToCreateNewContact() }}>Tạo KH mới</button>
-                            </div>
-                            <div className={styles.inputGroupOne}>
-                                <div>Khách hàng:</div>
-                                <input className="form-control" type="text" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoNameValue} name="name" />
-                                {this.state.showAutoName && this.state.autoNameData.length > 0 ?
-                                    <div className={styles.nameListPopup}>
-                                        {(this.state.autoNameData || []).map((item, idx) => {
-                                            return (
-                                                <div key={idx} className={styles.datalistItem} onClick={() => {
-                                                    this.handleSelectAutoCompleteItem(item);
-                                                }}>
-                                                    <div title={item.contact_name}>{item.contact_name}</div>
-                                                    <div>{item.phone_1 || item.phone_2}</div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                    : null}
-                            </div>
-                            <div className={styles.inputGroupTwo}>
-                                <div>
-                                    <div>Ngày đến:</div>
-                                    <input className="form-control" type="date" name="from_date" onChange={(e) => this.handleChangeDate(e.target.value, 'fromDate')} value={this.state.fromDate} required />
+            <>
+                <Container>
+                    <Row>
+                        <Col>
+                            <h2>Tạo booking</h2>
+                            <div className={styles.inputGroup}>
+                                <div className={styles.inputGroupZero}>
+                                    <div>Số điện thoại:</div>
+                                    <input className="form-control" type="text" pattern="[0-9]*" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoPhoneValue} name="phone" />
+                                    {this.state.showAutoPhone && this.state.autoPhoneData.length > 0 ?
+                                        <div className={styles.phoneListPopup}>
+                                            {(this.state.autoPhoneData || []).map((item, idx) => {
+                                                return (
+                                                    <div key={idx} className={styles.datalistItem} onClick={() => {
+                                                        this.handleSelectAutoCompleteItem(item);
+                                                    }}>
+                                                        <div>{item.phone_1 || item.phone_2}</div>
+                                                        <div>{item.contact_name}</div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                        : null}
+                                    <button className="btn btn-primary" onClick={() => { this.createNewContact() }}>Tạo KH mới</button>
                                 </div>
-                                <div>
-                                    <div className="mr-2">Ngày đi:</div>
-                                    <input className="form-control" type="date" name="to_date" onChange={(e) => this.handleChangeDate(e.target.value, 'toDate')} value={this.state.toDate} required />
+                                <div className={styles.inputGroupOne}>
+                                    <div>Khách hàng:</div>
+                                    <input className="form-control" type="text" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoNameValue} name="name" />
+                                    {this.state.showAutoName && this.state.autoNameData.length > 0 ?
+                                        <div className={styles.nameListPopup}>
+                                            {(this.state.autoNameData || []).map((item, idx) => {
+                                                return (
+                                                    <div key={idx} className={styles.datalistItem} onClick={() => {
+                                                        this.handleSelectAutoCompleteItem(item);
+                                                    }}>
+                                                        <div title={item.contact_name}>{item.contact_name}</div>
+                                                        <div>{item.phone_1 || item.phone_2}</div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                        : null}
+                                </div>
+                                <div className={styles.inputGroupTwo}>
+                                    <div>
+                                        <div>Ngày đến:</div>
+                                        <input className="form-control" type="date" name="from_date" onChange={(e) => this.handleChangeDate(e.target.value, 'fromDate')} value={this.state.fromDate} required />
+                                    </div>
+                                    <div>
+                                        <div className="mr-2">Ngày đi:</div>
+                                        <input className="form-control" type="date" name="to_date" onChange={(e) => this.handleChangeDate(e.target.value, 'toDate')} value={this.state.toDate} required />
+                                    </div>
+
+
+                                    <button className="btn btn-primary ml-4" onClick={this.handleSearchByDate}>Xem dữ liệu</button>
                                 </div>
 
-
-                                <button className="btn btn-primary ml-4" onClick={this.handleSearchByDate}>Xem dữ liệu</button>
+                                {this.state.showTable ?
+                                    <div className={styles.inputGroupThree}>
+                                        <div>Ghi chú:</div>
+                                        <input type="text" className="form-control" onChange={this.handleChangeNoteInput} />
+                                    </div> : null}
                             </div>
+                        </Col>
+                    </Row>
 
-                            {this.state.showTable ?
-                                <div className={styles.inputGroupThree}>
-                                    <div>Ghi chú:</div>
-                                    <input type="text" className="form-control" onChange={this.handleChangeNoteInput} />
-                                </div> : null}
+                    {this.state.showTable ? <Row>
+                        <div className="table-responsive">
+                            <table className="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        {(this.state.titleArr || []).map((item, index1) => { return <th className={styles.thCustom} scope="col" key={index1}>{item}</th> })}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        (this.state.typeArr || []).map((item, index2) => {
+                                            return (
+                                                <tr key={index2}>
+                                                    <th scope="row">{item.service_name}</th>
+                                                    {(item.data || []).map((item1, index3) => {
+                                                        return (
+                                                            <td key={index3}>
+                                                                {item1[item.service_name]}
+                                                                {(index3 > 0 && index3 < item.data.length - 1) ? <div>
+                                                                    <div className={styles.tdCustom}>
+                                                                        <div>SL:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'quantity', item1.using_date, item.service_id)} name={item.service_name} value={item1.quantity} />
+                                                                    </div>
+                                                                    <div className={styles.tdCustom}>
+                                                                        <div>ĐG:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} />
+                                                                    </div>
+                                                                    <div className={styles.tdCustom}>
+                                                                        <div>MT:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'description', item1.using_date, item.service_id)} name={item.service_name} />
+                                                                    </div>
+                                                                </div> : null}
+                                                            </td>
+                                                        )
+                                                    })}
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </table>
                         </div>
-                    </Col>
-                </Row>
+                        <div className="d-flex justify-content-center w-100 mt-3">
+                            <button className="btn btn-primary" onClick={this.handleInputData}>Lưu dữ liệu</button>
+                        </div>
 
-                {this.state.showTable ? <Row>
-                    <div className="table-responsive">
-                        <table className="table table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col"></th>
-                                    {(this.state.titleArr || []).map((item, index1) => { return <th className={styles.thCustom} scope="col" key={index1}>{item}</th> })}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    (this.state.typeArr || []).map((item, index2) => {
-                                        return (
-                                            <tr key={index2}>
-                                                <th scope="row">{item.service_name}</th>
-                                                {(item.data || []).map((item1, index3) => {
-                                                    return (
-                                                        <td key={index3}>
-                                                            {item1[item.service_name]}
-                                                            {(index3 > 0 && index3 < item.data.length - 1) ? <div>
-                                                                <div className={styles.tdCustom}>
-                                                                    <div>SL:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'quantity', item1.using_date, item.service_id)} name={item.service_name} value={item1.quantity} />
-                                                                </div>
-                                                                <div className={styles.tdCustom}>
-                                                                    <div>ĐG:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} />
-                                                                </div>
-                                                                <div className={styles.tdCustom}>
-                                                                    <div>MT:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'description', item1.using_date, item.service_id)} name={item.service_name} />
-                                                                </div>
-                                                            </div> : null}
-                                                        </td>
-                                                    )
-                                                })}
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="d-flex justify-content-center w-100 mt-3">
-                        <button className="btn btn-primary" onClick={this.handleInputData}>Lưu dữ liệu</button>
-                    </div>
-
-                </Row> : null}
-            </Container>
+                    </Row> : null}
+                </Container>
+                {this.state.showAddContactModal ? <AddItemModal typeModal="newContact" inShow={this.state.showAddContactModal} inOnHide={(state) => {
+                    this.displayAddContactModal(false, state);
+                }}></AddItemModal> : null}
+            </>
         )
     }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
+import api_instance from '../../../utils/api';
 import styles from './AddItemModal.module.css';
 
 class AddItemModal extends React.Component {
@@ -10,7 +11,8 @@ class AddItemModal extends React.Component {
         super(props);
         this.state = {
             fieldArr: [],
-            title: ''
+            title: '',
+            customerType: ['Cá nhân', 'Doanh nghiệp']
         }
     }
 
@@ -21,6 +23,7 @@ class AddItemModal extends React.Component {
     updateStateObj(typeModal) {
         let title = '';
         let fieldArr = '';
+        let customerType = this.state.customerType[0];
 
         switch (typeModal) {
             case 'transactions':
@@ -51,7 +54,7 @@ class AddItemModal extends React.Component {
                 fieldArr = [
                     {
                         key: 'service',
-                        keyAlt: 'Tên dịch vụ',
+                        keyAlt: 'Dịch vụ',
                         value: '',
                         validate: true
                     },
@@ -65,6 +68,35 @@ class AddItemModal extends React.Component {
                         key: 'unitprice',
                         keyAlt: 'Đơn giá',
                         value: '',
+                        validate: true
+                    }
+                ]
+                break;
+            case 'newContact':
+                title = 'Thêm khách hàng mới';
+                fieldArr = [
+                    {
+                        key: 'name',
+                        keyAlt: 'Tên KH',
+                        value: '',
+                        validate: true
+                    },
+                    {
+                        key: 'phone',
+                        keyAlt: 'Điện thoại',
+                        value: '',
+                        validate: true
+                    },
+                    {
+                        key: 'mail',
+                        keyAlt: 'Email',
+                        value: '',
+                        validate: true
+                    },
+                    {
+                        key: 'category',
+                        keyAlt: 'Loại KH',
+                        value: customerType,
                         validate: true
                     }
                 ]
@@ -85,6 +117,25 @@ class AddItemModal extends React.Component {
         })
     }
 
+    submitNewContact() {
+        const submitData = {
+            contact_name: this.state.fieldArr[0].value,
+            phone_1: this.state.fieldArr[1].value,
+            email: this.state.fieldArr[2].value,
+            customerType: this.state.fieldArr[3].value
+        }
+
+        api_instance.post(`api/new_contact`, this.state.fieldArr)
+            .then((response) => {
+                if (response.status === 200) {
+                    this.props.inOnHide(submitData)
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
     checkValidate() {
         let isValidate = true;
         let arr = JSON.parse(JSON.stringify(this.state.fieldArr));
@@ -101,16 +152,31 @@ class AddItemModal extends React.Component {
                 arr[1].validate = (arr[1].value);
                 arr[2].validate = (arr[2].value);
                 break;
+            case 'newContact':
+                const regexMail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                arr[0].validate = (arr[0].value);
+                arr[1].validate = (arr[1].value);
+                arr[2].validate = regexMail.test(arr[2].value)
+                break;
             default:
         }
         isValidate = arr[0].validate && arr[1].validate && arr[2].validate;
-        if (!isValidate) {
+
+        if (isValidate) {
+            if (this.props.typeModal === 'newContact') {
+                this.submitNewContact();
+            } else {
+                this.props.inOnHide(this.state)
+                this.setState({
+                    title: '',
+                    fieldArr: []
+                })
+            }
+        } else {
             this.setState({
                 fieldArr: arr
             })
         }
-
-        return isValidate;
     }
 
     render() {
@@ -136,6 +202,7 @@ class AddItemModal extends React.Component {
                                     typeInput = 'date'
                                     break;
                                 case 'money':
+                                case 'phone':
                                     typeInput = 'number';
                                 default:
                             }
@@ -146,9 +213,16 @@ class AddItemModal extends React.Component {
                                         <div className="input-group-prepend">
                                             <span className="input-group-text">{item.keyAlt}:</span>
                                         </div>
-                                        <input onChange={(e) => {
+                                        {item.key !== 'category' ? <input onChange={(e) => {
                                             this.handleChangeInput(e, index)
-                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} required />
+                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} required /> :
+                                            <select className="form-control" name="category" onChange={(e) => {
+                                                this.handleChangeInput(e, index)
+                                            }}>
+                                                {(this.state.customerType.map((item1, index1) => {
+                                                    return <option key={index1}>{item1}</option>
+                                                }))}
+                                            </select>}
                                     </div>
                                 </div>
                             )
@@ -161,13 +235,7 @@ class AddItemModal extends React.Component {
                         this.props.inOnHide()
                     }}>Hủy</Button>
                     <Button variant="primary" onClick={() => {
-                        if (this.checkValidate()) {
-                            this.props.inOnHide(this.state)
-                            this.setState({
-                                title: '',
-                                fieldArr: []
-                            })
-                        }
+                        this.checkValidate();
                     }}>Thêm</Button>
                 </Modal.Footer>
             </Modal>
