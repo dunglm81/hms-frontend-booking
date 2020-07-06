@@ -8,26 +8,35 @@ class EditRoomServiceModal extends React.Component {
 
     constructor(props) {
         super(props);
+
+        const dateArr = props.data.dateArr || [];
+        const roomArr = props.data.roomArr || [];
+        const data = props.data.data || {};
+
         this.state = {
-            data: []
+            dateArr: dateArr,
+            roomArr: roomArr,
+            data: data
         }
     }
 
-    handleChangeInput(event, fieldType, itemId) {
-        const dataArr = this.state.data;
-        const idx = dataArr.findIndex(item => item.id === itemId);
-        if (idx === -1) {
-            dataArr.push({
-                id: itemId,
-                [fieldType]: event.target.value
+    handleChangeInput(event, fieldType, index) {
+        let data = JSON.parse(JSON.stringify(this.state.data));
+        let dataArr = data[event.target.name];
+        if (dataArr) {
+            dataArr = dataArr.map((item, idx) => {
+                if (fieldType === 'quantity' && idx >= index) {
+                    item.quantity = event.target.value;
+                } else if (idx === index) {
+                    item[fieldType] = event.target.value;
+                }
+                return item;
             })
-        } else {
-            dataArr[idx][fieldType] = event.target.value;
-        }
 
-        this.setState({
-            data: dataArr
-        });
+            this.setState({
+                data: data
+            })
+        }
     }
 
     render() {
@@ -50,28 +59,28 @@ class EditRoomServiceModal extends React.Component {
                             <thead>
                                 <tr>
                                     <th scope="col"></th>
-                                    {this.props.data.dateArr.map((item, index) => { return <th scope="col" key={index}>{item}</th> })}
+                                    {this.state.dateArr.map((item, index) => { return <th scope="col" key={index}>{item}</th> })}
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    this.props.data.roomArr.map((item1, index1) => {
+                                    this.state.roomArr.map((item1, index1) => {
                                         return (
                                             <tr key={index1}>
                                                 <th scope="row">{item1}</th>
                                                 {
-                                                    this.props.data.data[item1].map((item2, index2) => {
+                                                    this.state.data[item1].map((item2, index2) => {
                                                         return (
                                                             <td key={index2} className={styles.tdCustom}>
                                                                 <div>Số lượng:
                                                                 <input onChange={(e) => {
-                                                                        this.handleChangeInput(e, 'quantity', item2.booking_service_id);
-                                                                    }} type="number" className="form-control" defaultValue={item2.quantity} />
+                                                                        this.handleChangeInput(e, 'quantity', index2);
+                                                                    }} type="number" className="form-control" value={item2.quantity} name={item1} />
                                                                 </div>
                                                                 <div>Đơn giá:
                                                                 <input onChange={(e) => {
-                                                                        this.handleChangeInput(e, 'unit_price', item2.booking_service_id);
-                                                                    }} type="number" className="form-control" defaultValue={item2.unit_price} />
+                                                                        this.handleChangeInput(e, 'unit_price', index2);
+                                                                    }} type="number" className="form-control" value={item2.unit_price} name={item1} />
                                                                 </div>
                                                             </td>
                                                         )
@@ -91,10 +100,12 @@ class EditRoomServiceModal extends React.Component {
                         this.props.inOnHide()
                     }}>Hủy</Button>
                     <Button variant="primary" onClick={() => {
-                        this.props.inOnHide(this.state);
-                        this.setState({
-                            data: []
-                        })
+                        this.props.inOnHide(this.state.data);
+                        this.state = {
+                            dateArr: [],
+                            roomArr: [],
+                            data: {}
+                        }
                     }}>Lưu</Button>
                 </Modal.Footer>
             </Modal>

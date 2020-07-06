@@ -19,9 +19,12 @@ class CreateBooking extends Component {
             bodyArr: [],
             fromDate: from_date.toISOString().slice(0, 10),
             toDate: to_date.toISOString().slice(0, 10),
-            autocompleteData: [],
-            showAutocomplete: false,
-            autoCompleteValue: '',
+            autoNameData: [],
+            autoPhoneData: [],
+            showAutoName: false,
+            showAutoPhone: false,
+            autoNameValue: '',
+            autoPhoneValue: '',
             contactId: -1,
             description: '',
             showTable: false
@@ -29,17 +32,37 @@ class CreateBooking extends Component {
     }
 
     handleChangeAutoCompleteInput = (event) => {
+        const type = event.target.name;
         const value = event.target.value;
-        this.setState({
-            autoCompleteValue: value
-        })
-        if (value.length > 6) {
-            this.getCustomer(value);
-        } else {
-            this.setState({
-                showAutocomplete: false
-            })
+
+        switch (type) {
+            case 'name':
+                this.setState({
+                    autoNameValue: value
+                })
+                if (value.length > 6) {
+                    this.getCustomer(value, 'contact_name');
+                } else {
+                    this.setState({
+                        showAutoName: false
+                    })
+                }
+                break;
+            case 'phone':
+                this.setState({
+                    autoPhoneValue: value
+                })
+                if (value.length > 1) {
+                    this.getCustomer(value, 'contact_phone');
+                } else {
+                    this.setState({
+                        showAutoPhone: false
+                    })
+                }
+                break;
+            default:
         }
+
     }
 
     handleSearchByDate = (event) => {
@@ -47,28 +70,53 @@ class CreateBooking extends Component {
         this.requestData();
     }
 
-    getCustomer(name) {
-        var get_params = `?contact_name=${name}&current_page=1&page_size=20`;
+    getCustomer(value, path) {
+        var get_params = `?${path}=${value}&current_page=1&page_size=20`;
 
-        api_instance.get(`api/search_contact_by_name_paging${get_params}`)
-            .then((response) => {
-                if (response.status === 200) {
-                    if (response.data[4].length > 0) {
-                        this.setState({
-                            autocompleteData: response.data[4],
-                            showAutocomplete: true
-                        });
-                    } else {
-                        this.setState({
-                            showAutocomplete: false
-                        })
-                    }
+        switch (path) {
+            case 'contact_name':
+                api_instance.get(`api/search_contact_by_name_paging${get_params}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            if (response.data[4].length > 0) {
+                                this.setState({
+                                    autoNameData: response.data[4],
+                                    showAutoName: true
+                                });
+                            } else {
+                                this.setState({
+                                    showAutoName: false
+                                })
+                            }
 
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                break;
+            case 'contact_phone':
+                api_instance.get(`api/search_contact_by_phone_paging${get_params}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            if (response.data[4].length > 0) {
+                                this.setState({
+                                    autoPhoneData: response.data[4],
+                                    showAutoPhone: true
+                                });
+                            } else {
+                                this.setState({
+                                    showAutoPhone: false
+                                })
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                break;
+            default:
+        }
     }
 
     requestData() {
@@ -201,8 +249,10 @@ class CreateBooking extends Component {
     handleSelectAutoCompleteItem(item) {
         if (item && item.contact_id) {
             this.setState({
-                showAutocomplete: false,
-                autoCompleteValue: item.contact_name,
+                showAutoName: false,
+                showAutoPhone: false,
+                autoNameValue: item.contact_name,
+                autoPhoneValue: item.phone_1 || item.phone_2,
                 contactId: item.contact_id
             })
         }
@@ -218,12 +268,15 @@ class CreateBooking extends Component {
 
     handleOnBlurInput() {
         setTimeout(() => {
-            if (this.state.showAutocomplete) {
-                this.setState({
-                    showAutocomplete: false
-                })
-            }
+            this.setState({
+                showAutoName: false,
+                showAutoPhone: false
+            })
         }, 300)
+    }
+
+    routeToCreateNewContact() {
+        this.props.history.push(`/contact`);
     }
 
     render() {
@@ -233,16 +286,38 @@ class CreateBooking extends Component {
                     <Col>
                         <h2>Tạo booking</h2>
                         <div className={styles.inputGroup}>
-                            <div className={styles.inputGroupOne}>
-                                <div>Khách hàng:</div>
-                                <input type="text" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoCompleteValue} />
-                                {this.state.showAutocomplete && this.state.autocompleteData.length > 0 ?
-                                    <div className={styles.datalistPopup}>
-                                        {(this.state.autocompleteData || []).map((item, idx) => {
+                            <div className={styles.inputGroupZero}>
+                                <div>Số điện thoại:</div>
+                                <input className="form-control" type="text" pattern="[0-9]*" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoPhoneValue} name="phone" />
+                                {this.state.showAutoPhone && this.state.autoPhoneData.length > 0 ?
+                                    <div className={styles.phoneListPopup}>
+                                        {(this.state.autoPhoneData || []).map((item, idx) => {
                                             return (
                                                 <div key={idx} className={styles.datalistItem} onClick={() => {
                                                     this.handleSelectAutoCompleteItem(item);
-                                                }}>{item.contact_name}</div>
+                                                }}>
+                                                    <div>{item.phone_1 || item.phone_2}</div>
+                                                    <div>{item.contact_name}</div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                    : null}
+                                <button className="btn btn-primary" onClick={() => { this.routeToCreateNewContact() }}>Tạo KH mới</button>
+                            </div>
+                            <div className={styles.inputGroupOne}>
+                                <div>Khách hàng:</div>
+                                <input className="form-control" type="text" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoNameValue} name="name" />
+                                {this.state.showAutoName && this.state.autoNameData.length > 0 ?
+                                    <div className={styles.nameListPopup}>
+                                        {(this.state.autoNameData || []).map((item, idx) => {
+                                            return (
+                                                <div key={idx} className={styles.datalistItem} onClick={() => {
+                                                    this.handleSelectAutoCompleteItem(item);
+                                                }}>
+                                                    <div title={item.contact_name}>{item.contact_name}</div>
+                                                    <div>{item.phone_1 || item.phone_2}</div>
+                                                </div>
                                             )
                                         })}
                                     </div>
@@ -251,21 +326,21 @@ class CreateBooking extends Component {
                             <div className={styles.inputGroupTwo}>
                                 <div>
                                     <div>Ngày đến:</div>
-                                    <input type="date" name="from_date" onChange={(e) => this.handleChangeDate(e.target.value, 'fromDate')} value={this.state.fromDate} required />
+                                    <input className="form-control" type="date" name="from_date" onChange={(e) => this.handleChangeDate(e.target.value, 'fromDate')} value={this.state.fromDate} required />
                                 </div>
                                 <div>
                                     <div className="mr-2">Ngày đi:</div>
-                                    <input type="date" name="to_date" onChange={(e) => this.handleChangeDate(e.target.value, 'toDate')} value={this.state.toDate} required />
+                                    <input className="form-control" type="date" name="to_date" onChange={(e) => this.handleChangeDate(e.target.value, 'toDate')} value={this.state.toDate} required />
                                 </div>
 
 
-                                <button className="btn btn-primary ml-3" onClick={this.handleSearchByDate}>Xem dữ liệu</button>
+                                <button className="btn btn-primary ml-4" onClick={this.handleSearchByDate}>Xem dữ liệu</button>
                             </div>
 
                             {this.state.showTable ?
                                 <div className={styles.inputGroupThree}>
                                     <div>Ghi chú:</div>
-                                    <input type="text" className="" onChange={this.handleChangeNoteInput} />
+                                    <input type="text" className="form-control" onChange={this.handleChangeNoteInput} />
                                 </div> : null}
                         </div>
                     </Col>

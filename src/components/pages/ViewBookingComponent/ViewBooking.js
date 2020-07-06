@@ -90,7 +90,7 @@ class ViewBooking extends React.Component {
     deleteItem(typeModal, itemId) {
         const booking_id = queryString.parse(this.props.location.search).booking_id;
         if (booking_id) {
-            const param = `?booking_id=${(booking_id || 1)}&item_id=${itemId}`
+            const param = `?booking_id=${(booking_id || 1)}&item_id=${itemId}`;
             let path = '';
             switch (typeModal) {
                 case 'transactions':
@@ -113,36 +113,43 @@ class ViewBooking extends React.Component {
     }
 
     addItem(typeModal, state) {
-        const param = `?booking_id=${(this.state.booking_id || 1)}`
-        let path = '';
-        switch (typeModal) {
-            case 'transactions':
-                path = 'booking_payment_transaction';
-                break;
-            case 'otherService':
-                path = 'booking_other_service';
-                break;
-            default:
+        const booking_id = queryString.parse(this.props.location.search).booking_id;
+        if (booking_id) {
+            const param = `?booking_id=${booking_id}`;
+            let path = '';
+            switch (typeModal) {
+                case 'transactions':
+                    path = 'booking_payment_transaction';
+                    break;
+                case 'otherService':
+                    path = 'booking_other_service';
+                    break;
+                default:
+            }
+
+            api_instance.put(`api/${path}${param}`, state)
+                .then((response) => {
+                    this.requestData(path);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         }
 
-        api_instance.put(`api/${path}${param}`, state)
-            .then((response) => {
-                this.requestData(path);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
     }
 
     editItem(state) {
-        const param = `?booking_id=${(this.state.booking_id || 1)}`
-        api_instance.post(`api/booking_room_item${param}`, state)
-            .then((response) => {
-                this.requestData('booking_room_item');
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        const booking_id = queryString.parse(this.props.location.search).booking_id;
+        if (booking_id) {
+            const param = `?booking_id=${booking_id}`;
+            api_instance.post(`api/booking_room_item${param}`, state)
+                .then((response) => {
+                    this.requestData('booking_room_item');
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
     }
 
     setFieldState(data, type) {
@@ -258,7 +265,7 @@ class ViewBooking extends React.Component {
 
     displayEditRoomServiceModal(display, state) {
         if (state) {
-            console.log("TVT go to edit item, state = " + JSON.stringify(state));
+            this.editItem(state);
         }
 
         this.setState({
@@ -453,17 +460,17 @@ class ViewBooking extends React.Component {
                     </Row>
 
                 </Container>
-                <ConfirmModal inShow={this.state.confirmModalData.show} typeModal={this.state.confirmModalData.typeModal} inOnHide={(isConfirm) => {
+                {this.state.confirmModalData.show ? <ConfirmModal inShow={this.state.confirmModalData.show} typeModal={this.state.confirmModalData.typeModal} inOnHide={(isConfirm) => {
                     this.displayConfirmModal(isConfirm, this.state.confirmModalData.typeModal, this.state.confirmModalData.itemId, false);
-                }} />
+                }} /> : null}
+
                 {this.state.addItemModalData.show ? <AddItemModal inShow={this.state.addItemModalData.show} typeModal={this.state.addItemModalData.typeModal} inOnHide={(state) => {
                     this.displayAddItemModal(this.state.addItemModalData.typeModal, false, state);
                 }}></AddItemModal> : null}
 
-
-                <EditRoomServiceModal inShow={this.state.editRoomServiceData.show} data={this.state.roomService} inOnHide={(state) => {
+                {this.state.editRoomServiceData.show ? <EditRoomServiceModal inShow={this.state.editRoomServiceData.show} data={this.state.roomService} inOnHide={(state) => {
                     this.displayEditRoomServiceModal(false, state);
-                }}></EditRoomServiceModal>
+                }}></EditRoomServiceModal> : null}
             </>
         )
     }

@@ -8,6 +8,7 @@
     min-width: 850px;
 }
 
+.inputGroupZero,
 .inputGroupOne {
     display: flex;
     flex-flow: row nowrap;
@@ -16,6 +17,7 @@
     position: relative;
 }
 
+.inputGroupZero > input,
 .inputGroupOne > input {
     flex: 1;
     height: 38px;
@@ -23,19 +25,23 @@
     position: relative;
 }
 
+.inputGroupZero > div,
 .inputGroupOne > div {
     min-width: 100px;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    margin-right: 10px;
 }
 
 .inputGroupTwo {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    max-width: 70%;
+    max-width: 60%;
     padding: 10px 0;
     max-height: 58px;
+    position: relative;
 }
 
 .inputGroupTwo > div {
@@ -49,12 +55,21 @@
 .inputGroupTwo > div > div {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    margin-right: 10px;
 }
 .inputGroupTwo > div > div {
     min-width: 100px;
 }
 .inputGroupTwo > div:nth-child(2) > div {
     justify-content: flex-end;
+}
+
+.inputGroupZero > button,
+.inputGroupTwo > button {
+    position: absolute;
+    right: -150px;
+    width: 120px;
 }
 
 .inputGroupThree {
@@ -67,13 +82,18 @@
 
 .inputGroupThree > div {
     min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 10px;
 }
 .inputGroupThree > input {
     height: 38px;
     flex: 1;
 }
 
-.datalistPopup {
+.phoneListPopup,
+.nameListPopup {
     z-index: 1000;
     position: absolute;
     background-color: white;
@@ -81,15 +101,17 @@
     border: 1px solid rgb(200, 200, 200);
     display: flex;
     flex-flow: column nowrap;
+    left: 110px;
     top: 50px;
-    left: 100px;
+    width: 100%;
 }
 
 .datalistItem {
     height: 40px;
-    min-width: 300px;
     display: flex;
     align-items: center;
+    flex-flow: row nowrap;
+    justify-content: space-between;
     padding: 0 10px;
     width: 100%;
 }
@@ -98,6 +120,17 @@
     background-color: blue;
     color: white;
     cursor: pointer;
+}
+
+.datalistItem > div {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 120px);
+}
+
+.datalistItem > div:nth-child(1) {
+    margin-right: 20px;
 }
 
 .thCustom {
