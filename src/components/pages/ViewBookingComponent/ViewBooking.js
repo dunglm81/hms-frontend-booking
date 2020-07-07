@@ -139,17 +139,42 @@ class ViewBooking extends React.Component {
     }
 
     editItem(state) {
-        const booking_id = queryString.parse(this.props.location.search).booking_id;
-        if (booking_id) {
-            const param = `?booking_id=${booking_id}`;
-            api_instance.post(`api/booking_room_item${param}`, state)
-                .then((response) => {
-                    this.requestData('booking_room_item');
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+        const submitData = {
+            booking_id: this.state.bookingDetail.bookingId,
+            checkin_date: this.state.bookingDetail.checkinDate,
+            checkout_date: this.state.bookingDetail.checkoutDate,
+            description: this.state.bookingDetail.description,
+            booking_room_items: this.getBookingRoomItems(state)
         }
+
+        api_instance.post(`api/update_booking`, submitData)
+            .then((response) => {
+                if (response.status === 200) {
+                    this.requestData('booking_room_item');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    getBookingRoomItems(data) {
+        let bookingRoomItems = [];
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                bookingRoomItems = [...bookingRoomItems, ...data[key]];
+            }
+        }
+
+        return bookingRoomItems.map(item => {
+            return {
+                service_id: item.service_id,
+                using_date: item.using_date,
+                quantity: item.quantity.toString(),
+                unit_price: item.unit_price.toString(),
+                description: item.description
+            }
+        });
     }
 
     setFieldState(data, type) {
