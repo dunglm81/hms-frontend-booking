@@ -100,7 +100,7 @@ class AddItemModal extends React.Component {
                         keyAlt: 'Đơn giá',
                         value: '',
                         validate: true,
-                        disabled: true
+                        disabled: false
                     },
                     {
                         key: 'date',
