@@ -12,38 +12,56 @@ class AddItemModal extends React.Component {
         this.state = {
             fieldArr: [],
             title: '',
-            customerType: ['Cá nhân', 'Doanh nghiệp']
+            accountArr: []
         }
     }
 
     componentDidMount() {
-        this.updateStateObj(this.props.typeModal, this.props.editData);
+        this.getAccountData();
+    }
+
+    getAccountData() {
+        api_instance.get(`api/all_payment_account`)
+            .then((response) => {
+                if (response.status === 200 && response.data) {
+                    this.setState({
+                        accountArr: response.data
+                    });
+                    this.updateStateObj(this.props.typeModal, this.props.editData);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                // this.updateStateObj(this.props.typeModal, this.props.editData);
+            })
     }
 
     updateStateObj(typeModal, editData) {
         let title = '';
         let fieldArr = '';
-        let customerType = this.state.customerType[0];
 
         switch (typeModal) {
             case 'transactions':
                 title = 'Thêm giao dịch thanh toán';
                 fieldArr = [
                     {
+                        key: 'account',
+                        keyAlt: 'Tài khoản',
+                        value: '',
+                        account_id: '',
+                        account_name: '',
+                        account_type: '',
+                        validate: true
+                    },
+                    {
                         key: 'date',
                         keyAlt: 'Ngày',
-                        value: '',
+                        value: new Date().toISOString().slice(0, 10),
                         validate: true
                     },
                     {
                         key: 'money',
                         keyAlt: 'Số tiền',
-                        value: '',
-                        validate: true
-                    },
-                    {
-                        key: 'account',
-                        keyAlt: 'Tài khoản',
                         value: '',
                         validate: true
                     }
@@ -94,12 +112,6 @@ class AddItemModal extends React.Component {
                         validate: true
                     },
                     {
-                        key: 'category',
-                        keyAlt: 'Loại KH',
-                        value: customerType,
-                        validate: true
-                    },
-                    {
                         key: 'contactId',
                         keyAlt: 'contactId',
                         value: '',
@@ -110,7 +122,7 @@ class AddItemModal extends React.Component {
                     fieldArr[0].value = editData.contact_name;
                     fieldArr[1].value = editData.phone_1 || editData.phone_2;
                     fieldArr[2].value = editData.email || '';
-                    fieldArr[4].value = editData.contact_id || '';
+                    fieldArr[3].value = editData.contact_id || '';
                 }
                 break;
             default:
@@ -123,7 +135,21 @@ class AddItemModal extends React.Component {
 
     handleChangeInput(event, index) {
         let arr = JSON.parse(JSON.stringify(this.state.fieldArr));
-        arr[index].value = event.target.value;
+        if (event.target.name === 'money') {
+            // arr[index].value = event.target.value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            arr[index].value = event.target.value;
+        } else {
+            arr[index].value = event.target.value;
+            if (event.target.name === 'account') {
+                const idx = this.state.accountArr.findIndex(item => item.account_name === event.target.value);
+                if (idx !== -1) {
+                    arr[index].account_id = this.state.accountArr[idx].account_id;
+                    arr[index].account_name = this.state.accountArr[idx].account_name;
+                    arr[index].account_type = this.state.accountArr[idx].account_type;
+                }
+            }
+        }
+
         this.setState({
             fieldArr: arr
         })
@@ -134,8 +160,7 @@ class AddItemModal extends React.Component {
             contact_name: this.state.fieldArr[0].value,
             phone_1: this.state.fieldArr[1].value,
             email: this.state.fieldArr[2].value,
-            customerType: this.state.fieldArr[3].value,
-            contact_id: this.state.fieldArr[4].value
+            contact_id: this.state.fieldArr[3].value
         }
 
         api_instance.post(`api/new_contact`, this.state.fieldArr)
@@ -156,8 +181,8 @@ class AddItemModal extends React.Component {
         switch (this.props.typeModal) {
             case 'transactions':
                 const regexDate = /^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$/;
-                arr[0].validate = regexDate.test(arr[0].value);
-                arr[1].validate = (arr[1].value);
+                arr[0].validate = true;
+                arr[1].validate = regexDate.test(arr[1].value);
                 arr[2].validate = (arr[2].value);
                 break;
             case 'otherService':
@@ -179,7 +204,7 @@ class AddItemModal extends React.Component {
             if (this.props.typeModal === 'newContact') {
                 this.submitNewContact();
             } else {
-                this.props.inOnHide(this.state)
+                this.props.inOnHide(this.state.fieldArr);
                 this.setState({
                     title: '',
                     fieldArr: []
@@ -214,7 +239,6 @@ class AddItemModal extends React.Component {
                                 case 'date':
                                     typeInput = 'date'
                                     break;
-                                case 'money':
                                 case 'phone':
                                     typeInput = 'number';
                                 default:
@@ -229,14 +253,14 @@ class AddItemModal extends React.Component {
                                         <div className="input-group-prepend">
                                             <span className="input-group-text">{item.keyAlt}:</span>
                                         </div>
-                                        {item.key !== 'category' ? <input onChange={(e) => {
+                                        {item.key !== 'account' ? <input onChange={(e) => {
                                             this.handleChangeInput(e, index)
                                         }} type={typeInput} className="form-control" value={item.value} name={item.key} required /> :
-                                            <select className="form-control" name="category" onChange={(e) => {
+                                            <select className="form-control" name="account" onChange={(e) => {
                                                 this.handleChangeInput(e, index)
                                             }}>
-                                                {(this.state.customerType.map((item1, index1) => {
-                                                    return <option key={index1}>{item1}</option>
+                                                {(this.state.accountArr.map((item1, index1) => {
+                                                    return <option key={index1}>{item1.account_name}</option>
                                                 }))}
                                             </select>}
                                     </div>

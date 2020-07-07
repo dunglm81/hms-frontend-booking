@@ -113,29 +113,38 @@ class ViewBooking extends React.Component {
     }
 
     addItem(typeModal, state) {
-        const booking_id = queryString.parse(this.props.location.search).booking_id;
-        if (booking_id) {
-            const param = `?booking_id=${booking_id}`;
-            let path = '';
-            switch (typeModal) {
-                case 'transactions':
-                    path = 'booking_payment_transaction';
-                    break;
-                case 'otherService':
-                    path = 'booking_other_service';
-                    break;
-                default:
-            }
-
-            api_instance.put(`api/${path}${param}`, state)
-                .then((response) => {
-                    this.requestData(path);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+        let path = '';
+        switch (typeModal) {
+            case 'transactions':
+                path = 'new_booking_payment';
+                api_instance.post(`api/${path}`, this.getNewPaymentBody(state))
+                    .then((response) => {
+                        if (response.status === 200) {
+                            this.requestData('booking_payment_transaction');
+                            this.requestData('booking_total_value');
+                            this.requestData('booking_total_payment');
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                break;
+            case 'otherService':
+                path = 'booking_other_service';
+                break;
+            default:
         }
+    }
 
+    getNewPaymentBody(data) {
+        return {
+            booking_id: this.state.bookingDetail.bookingId.toString(),
+            payment_account_id: data[0].account_id,
+            payment_account_name: data[0].account_name,
+            payment_account_type: data[0].account_type,
+            payment_value: data[2].value,
+            payment_date: data[1].value
+        };
     }
 
     editItem(state) {
