@@ -58,9 +58,9 @@ class AddItemModal extends React.Component {
                         key: 'account',
                         keyAlt: 'Tài khoản',
                         value: '',
-                        account_id: '',
-                        account_name: '',
-                        account_type: '',
+                        account_id: this.state.dropdownArr[0].account_id,
+                        account_name: this.state.dropdownArr[0].account_name,
+                        account_type: this.state.dropdownArr[0].account_type,
                         validate: true
                     },
                     {
@@ -85,9 +85,9 @@ class AddItemModal extends React.Component {
                         keyAlt: 'Dịch vụ',
                         value: '',
                         validate: true,
-                        service_id: '',
-                        service_name: '',
-                        service_price: ''
+                        service_id: this.state.dropdownArr[0].service_id,
+                        service_name: this.state.dropdownArr[0].service_name,
+                        service_price: this.state.dropdownArr[0].service_price
                     },
                     {
                         key: 'quantity',
@@ -99,7 +99,8 @@ class AddItemModal extends React.Component {
                         key: 'unitprice',
                         keyAlt: 'Đơn giá',
                         value: '',
-                        validate: true
+                        validate: true,
+                        disabled: true
                     },
                     {
                         key: 'date',
@@ -159,22 +160,28 @@ class AddItemModal extends React.Component {
     }
 
     handleChangeInput(event, index) {
+        console.log("TVT go to change input, name = " + event.target.name);
         let arr = JSON.parse(JSON.stringify(this.state.fieldArr));
         if (event.target.name === 'money') {
             // arr[index].value = event.target.value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             arr[index].value = event.target.value;
         } else {
+            console.log("TVT go to !== money");
             arr[index].value = event.target.value;
             if (event.target.name === 'account') {
+                console.log("TVT go to account");
                 const idx = this.state.dropdownArr.findIndex(item => item.account_name === event.target.value);
                 if (idx !== -1) {
+                    console.log("TVT go to idx !== -1");
                     arr[index].account_id = this.state.dropdownArr[idx].account_id;
                     arr[index].account_name = this.state.dropdownArr[idx].account_name;
                     arr[index].account_type = this.state.dropdownArr[idx].account_type;
                 }
             } else if (event.target.name === 'service') {
+                console.log("TVT go to name service");
                 const idx = this.state.dropdownArr.findIndex(item => item.service_name === event.target.value);
                 if (idx !== -1) {
+                    console.log("TVT go to index !== -1");
                     arr[index].service_id = this.state.dropdownArr[idx].service_id;
                     arr[index].service_name = this.state.dropdownArr[idx].service_name;
                     arr[index].service_price = this.state.dropdownArr[idx].service_price;
@@ -242,7 +249,8 @@ class AddItemModal extends React.Component {
                 this.props.inOnHide(this.state.fieldArr);
                 this.setState({
                     title: '',
-                    fieldArr: []
+                    fieldArr: [],
+                    dropdownArr: []
                 })
             }
         } else {
@@ -290,7 +298,7 @@ class AddItemModal extends React.Component {
                                         </div>
                                         {item.key !== 'account' && item.key !== 'service' ? <input onChange={(e) => {
                                             this.handleChangeInput(e, index)
-                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} /> :
+                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} disabled={ item.disabled ? 'disabled' : ''}/> :
                                             <select className="form-control" name={item.key} onChange={(e) => {
                                                 this.handleChangeInput(e, index)
                                             }}>

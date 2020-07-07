@@ -138,6 +138,8 @@ class ViewBooking extends React.Component {
             default:
         }
 
+        console.log("TVT submitData = " + JSON.stringify(submitData));
+
         api_instance.post(`api/${path}`, submitData)
             .then((response) => {
                 if (response.status === 200) {
