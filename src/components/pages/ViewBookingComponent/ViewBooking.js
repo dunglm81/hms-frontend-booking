@@ -94,7 +94,18 @@ class ViewBooking extends React.Component {
             let path = '';
             switch (typeModal) {
                 case 'transactions':
-                    path = 'booking_payment_transaction';
+                    path = 'cancel_booking_payment';
+                    api_instance.get(`api/${path}?payment_transaction_id=${itemId}`)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                this.requestData('booking_payment_transaction');
+                                this.requestData('booking_total_value');
+                                this.requestData('booking_total_payment');
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
                     break;
                 case 'otherService':
                     path = 'booking_other_service';
@@ -102,37 +113,54 @@ class ViewBooking extends React.Component {
                 default:
             }
 
-            api_instance.delete(`api/${path}${param}`)
-                .then((response) => {
-                    this.requestData(path);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+            // api_instance.delete(`api/${path}${param}`)
+            //     .then((response) => {
+            //         this.requestData(path);
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //     })
         }
     }
 
     addItem(typeModal, state) {
         let path = '';
+        let submitData = {};
         switch (typeModal) {
             case 'transactions':
                 path = 'new_booking_payment';
-                api_instance.post(`api/${path}`, this.getNewPaymentBody(state))
-                    .then((response) => {
-                        if (response.status === 200) {
-                            this.requestData('booking_payment_transaction');
-                            this.requestData('booking_total_value');
-                            this.requestData('booking_total_payment');
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
+                submitData = this.getNewPaymentBody(state);
                 break;
             case 'otherService':
-                path = 'booking_other_service';
+                path = 'insert_booking_simple_service_item';
+                submitData = this.getNewOtherServiceBody(state);
                 break;
             default:
+        }
+
+        api_instance.post(`api/${path}`, submitData)
+            .then((response) => {
+                if (response.status === 200) {
+                    this.requestData('booking_payment_transaction');
+                    this.requestData('booking_other_service');
+                    this.requestData('booking_total_value');
+                    this.requestData('booking_total_payment');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    getNewOtherServiceBody(data) {
+        return {
+            booking_id: this.state.bookingDetail.bookingId.toString(),
+            service_id: data[0].service_id,
+            service_name: data[0].service_name,
+            quantity: data[1].value,
+            unit_price: data[2].value,
+            using_date: data[3].value,
+            description: data[4].value
         }
     }
 

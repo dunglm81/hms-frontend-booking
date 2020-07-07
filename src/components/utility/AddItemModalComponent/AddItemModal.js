@@ -12,27 +12,37 @@ class AddItemModal extends React.Component {
         this.state = {
             fieldArr: [],
             title: '',
-            accountArr: []
+            dropdownArr: []
         }
     }
 
     componentDidMount() {
-        this.getAccountData();
+        this.getDropdownData();
     }
 
-    getAccountData() {
-        api_instance.get(`api/all_payment_account`)
+    getDropdownData() {
+        let path = '';
+        switch (this.props.typeModal) {
+            case 'transactions':
+                path = `api/all_payment_account`;
+                break;
+            case 'otherService':
+                path = `api/get_all_other_service`;
+                break;
+            default:
+        }
+        api_instance.get(path)
             .then((response) => {
                 if (response.status === 200 && response.data) {
+                    console.log("TVT responseData = " + JSON.stringify(response.data));
                     this.setState({
-                        accountArr: response.data
-                    });
+                        dropdownArr: response.data
+                    })
                     this.updateStateObj(this.props.typeModal, this.props.editData);
                 }
             })
             .catch((error) => {
                 console.log(error);
-                // this.updateStateObj(this.props.typeModal, this.props.editData);
             })
     }
 
@@ -74,7 +84,10 @@ class AddItemModal extends React.Component {
                         key: 'service',
                         keyAlt: 'Dịch vụ',
                         value: '',
-                        validate: true
+                        validate: true,
+                        service_id: '',
+                        service_name: '',
+                        service_price: ''
                     },
                     {
                         key: 'quantity',
@@ -85,6 +98,18 @@ class AddItemModal extends React.Component {
                     {
                         key: 'unitprice',
                         keyAlt: 'Đơn giá',
+                        value: '',
+                        validate: true
+                    },
+                    {
+                        key: 'date',
+                        keyAlt: 'Ngày',
+                        value: new Date().toISOString().slice(0, 10),
+                        validate: true
+                    },
+                    {
+                        key: 'description',
+                        keyAlt: 'Miêu tả',
                         value: '',
                         validate: true
                     }
@@ -141,11 +166,18 @@ class AddItemModal extends React.Component {
         } else {
             arr[index].value = event.target.value;
             if (event.target.name === 'account') {
-                const idx = this.state.accountArr.findIndex(item => item.account_name === event.target.value);
+                const idx = this.state.dropdownArr.findIndex(item => item.account_name === event.target.value);
                 if (idx !== -1) {
-                    arr[index].account_id = this.state.accountArr[idx].account_id;
-                    arr[index].account_name = this.state.accountArr[idx].account_name;
-                    arr[index].account_type = this.state.accountArr[idx].account_type;
+                    arr[index].account_id = this.state.dropdownArr[idx].account_id;
+                    arr[index].account_name = this.state.dropdownArr[idx].account_name;
+                    arr[index].account_type = this.state.dropdownArr[idx].account_type;
+                }
+            } else if (event.target.name === 'service') {
+                const idx = this.state.dropdownArr.findIndex(item => item.service_name === event.target.value);
+                if (idx !== -1) {
+                    arr[index].service_id = this.state.dropdownArr[idx].service_id;
+                    arr[index].service_name = this.state.dropdownArr[idx].service_name;
+                    arr[index].service_price = this.state.dropdownArr[idx].service_price;
                 }
             }
         }
@@ -176,19 +208,21 @@ class AddItemModal extends React.Component {
 
     checkValidate() {
         let isValidate = true;
+        const regexDate = /^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$/;
         let arr = JSON.parse(JSON.stringify(this.state.fieldArr));
 
         switch (this.props.typeModal) {
             case 'transactions':
-                const regexDate = /^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$/;
                 arr[0].validate = true;
                 arr[1].validate = regexDate.test(arr[1].value);
                 arr[2].validate = (arr[2].value);
                 break;
             case 'otherService':
-                arr[0].validate = (arr[0].value);
+                arr[0].validate = true;
                 arr[1].validate = (arr[1].value);
                 arr[2].validate = (arr[2].value);
+                arr[3].validate = regexDate.test(arr[3].value);
+                arr[4].validate = true;
                 break;
             case 'newContact':
                 const regexMail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -204,6 +238,7 @@ class AddItemModal extends React.Component {
             if (this.props.typeModal === 'newContact') {
                 this.submitNewContact();
             } else {
+                console.log("TVT this.state.fieldArr = " + JSON.stringify(this.state.fieldArr));
                 this.props.inOnHide(this.state.fieldArr);
                 this.setState({
                     title: '',
@@ -243,7 +278,7 @@ class AddItemModal extends React.Component {
                                     typeInput = 'number';
                                 default:
                             }
-                            if (index === 4 && this.props.typeModal === 'newContact') {
+                            if (index === 3 && this.props.typeModal === 'newContact') {
                                 return null;
                             }
                             return (
@@ -253,14 +288,14 @@ class AddItemModal extends React.Component {
                                         <div className="input-group-prepend">
                                             <span className="input-group-text">{item.keyAlt}:</span>
                                         </div>
-                                        {item.key !== 'account' ? <input onChange={(e) => {
+                                        {item.key !== 'account' && item.key !== 'service' ? <input onChange={(e) => {
                                             this.handleChangeInput(e, index)
-                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} required /> :
-                                            <select className="form-control" name="account" onChange={(e) => {
+                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} /> :
+                                            <select className="form-control" name={item.key} onChange={(e) => {
                                                 this.handleChangeInput(e, index)
                                             }}>
-                                                {(this.state.accountArr.map((item1, index1) => {
-                                                    return <option key={index1}>{item1.account_name}</option>
+                                                {(this.state.dropdownArr.map((item1, index1) => {
+                                                    return <option key={index1}>{item1.account_name || item1.service_name}</option>
                                                 }))}
                                             </select>}
                                     </div>
