@@ -17,10 +17,10 @@ class AddItemModal extends React.Component {
     }
 
     componentDidMount() {
-        this.updateStateObj(this.props.typeModal);
+        this.updateStateObj(this.props.typeModal, this.props.editData);
     }
 
-    updateStateObj(typeModal) {
+    updateStateObj(typeModal, editData) {
         let title = '';
         let fieldArr = '';
         let customerType = this.state.customerType[0];
@@ -98,8 +98,20 @@ class AddItemModal extends React.Component {
                         keyAlt: 'Loại KH',
                         value: customerType,
                         validate: true
+                    },
+                    {
+                        key: 'contactId',
+                        keyAlt: 'contactId',
+                        value: '',
+                        validate: true
                     }
                 ]
+                if (editData) {
+                    fieldArr[0].value = editData.contact_name;
+                    fieldArr[1].value = editData.phone_1 || editData.phone_2;
+                    fieldArr[2].value = editData.email || '';
+                    fieldArr[4].value = editData.contact_id || '';
+                }
                 break;
             default:
         }
@@ -122,7 +134,8 @@ class AddItemModal extends React.Component {
             contact_name: this.state.fieldArr[0].value,
             phone_1: this.state.fieldArr[1].value,
             email: this.state.fieldArr[2].value,
-            customerType: this.state.fieldArr[3].value
+            customerType: this.state.fieldArr[3].value,
+            contact_id: this.state.fieldArr[4].value
         }
 
         api_instance.post(`api/new_contact`, this.state.fieldArr)
@@ -206,6 +219,9 @@ class AddItemModal extends React.Component {
                                     typeInput = 'number';
                                 default:
                             }
+                            if (index === 4 && this.props.typeModal === 'newContact') {
+                                return null;
+                            }
                             return (
                                 <div key={index}>
                                     {item.validate ? null : <p className={styles.validateCustom}>{item.keyAlt} không hợp lệ</p>}
@@ -236,7 +252,7 @@ class AddItemModal extends React.Component {
                     }}>Hủy</Button>
                     <Button variant="primary" onClick={() => {
                         this.checkValidate();
-                    }}>Thêm</Button>
+                    }}>{(this.props.editData ? 'Lưu' : 'Thêm')}</Button>
                 </Modal.Footer>
             </Modal>
         )

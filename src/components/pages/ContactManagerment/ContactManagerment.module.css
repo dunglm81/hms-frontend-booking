@@ -1,12 +1,50 @@
+.functionsGroup {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    background-color: rgb(240, 240, 240);
+    padding: 20px;
+    position: relative;
+}
+
+.functionsGroup > input {
+    max-width: 500px;
+    position: relative;
+}
+
 .datalistPopup {
     z-index: 1000;
     position: absolute;
     background-color: white;
     padding: 10px;
     border: 1px solid rgb(215, 215, 215);
+    top: 60px;
 }
 
 .datalistItem {
     height: 40px;
-    max-width: 400px;
+    display: flex;
+    align-items: center;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding: 0 10px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
+
+.datalistItem:hover {
+    background-color: blue;
+    color: white;
+    cursor: pointer;
+}
+
+.trCustom > td:nth-child(4) > div {
+    display: none;
+    cursor: pointer;
+}
+.trCustom:hover > td:nth-child(4) > div {
+    display: block;
+}
+
