@@ -16,6 +16,8 @@ class ConfirmModal extends React.Component {
             case 'otherService':
                 title = 'Xóa dịch vụ';
                 break;
+            case 'cancelBooking':
+                title = 'Hủy Booking';
             default:
         }
         return title;
@@ -30,6 +32,8 @@ class ConfirmModal extends React.Component {
             case 'otherService':
                 description = 'Bạn chắc chắn muốn xóa dịch vụ này?';
                 break;
+            case 'cancelBooking':
+                description = 'Bạn chắc chắn muốn hủy Booking này?';
             default:
         }
         return description;

@@ -21,7 +21,9 @@ class ViewBooking extends React.Component {
                 name: '',
                 checkinDate: '',
                 checkoutDate: '',
-                description: ''
+                description: '',
+                status: '',
+                statusAlt: ''
             },
             totalValue: {
                 bookingId: 0,
@@ -100,16 +102,22 @@ class ViewBooking extends React.Component {
             case 'otherService':
                 path = `cancel_booking_other_service_item?booking_service_id=${itemId}`;
                 break;
+            case 'cancelBooking':
+                path = `cancel_booking?booking_id=${itemId}`;
             default:
         }
 
         api_instance.get(`api/${path}`)
             .then((response) => {
                 if (response.status === 200) {
-                    this.requestData('booking_payment_transaction');
-                    this.requestData('booking_other_service');
-                    this.requestData('booking_total_value');
-                    this.requestData('booking_total_payment');
+                    if (typeModal !== 'cancelBooking') {
+                        this.requestData('booking_payment_transaction');
+                        this.requestData('booking_other_service');
+                        this.requestData('booking_total_value');
+                        this.requestData('booking_total_payment');
+                    } else {
+                        this.requestData('booking_detail');
+                    }
                 }
             })
             .catch((error) => {
@@ -213,6 +221,14 @@ class ViewBooking extends React.Component {
         switch (type) {
             case 'booking_detail':
                 const obj = data[0]
+                let statusAlt = '';
+                if (obj.booking_status === 'valid') {
+                    statusAlt = 'Hiệu lực';
+                } else if (obj.booking_status === 'cancel') {
+                    statusAlt = 'Hủy';
+                } else if (obj.booking_status === 'based_line') {
+                    statusAlt = 'Chốt';
+                }
                 this.setState({
                     bookingDetail: {
                         bookingId: obj.booking_id,
@@ -221,7 +237,9 @@ class ViewBooking extends React.Component {
                         name: obj.contact_name,
                         checkinDate: obj.checkin_date,
                         checkoutDate: obj.checkout_date,
-                        description: obj.description
+                        description: obj.description,
+                        status: obj.booking_status,
+                        statusAlt: statusAlt
                     }
                 })
                 break;
@@ -390,6 +408,20 @@ class ViewBooking extends React.Component {
                             <div>Tổng giao dịch thanh toán:</div>
                             <div className="ml-2">{(this.state.totalPayment.value || 0).toLocaleString()}</div>
                         </div>
+                        <div className="ml-auto d-flex flex-row flex-nowrap align-items-center">
+                            <div>Trạng thái: <b>{this.state.bookingDetail.statusAlt}</b></div>
+
+                            {(this.state.bookingDetail.status === 'valid') ? <div onClick={() => {
+                                this.displayConfirmModal(false, 'cancelBooking', this.state.bookingDetail.bookingId, true);
+                            }}>
+                                <button className="btn btn-primary ml-5">Hủy</button>
+                            </div> : null}
+
+                            {(this.state.bookingDetail.status === 'valid') ? <div>
+                                <button className="btn btn-primary ml-2">Chốt</button>
+                            </div> : null}
+                        </div>
+
                     </Row>
                     <div className={styles.devider}></div>
 
