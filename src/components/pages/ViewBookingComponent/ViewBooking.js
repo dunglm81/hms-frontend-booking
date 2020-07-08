@@ -179,7 +179,6 @@ class ViewBooking extends React.Component {
                 if (response.status === 200) {
                     this.requestData('booking_room_item');
                     this.requestData('booking_total_value');
-                    this.requestData('booking_total_payment');
                 }
             })
             .catch((error) => {
@@ -480,6 +479,7 @@ class ViewBooking extends React.Component {
                         </div>
 
                         <div className="table-responsive mt-3">
+                        <div className="mb-2">Tổng giao dịch thanh toán: {(this.state.totalPayment.value || 0).toLocaleString()}</div>
                             <table className="table table-sm table-hover">
                                 <thead>
                                     <tr>
