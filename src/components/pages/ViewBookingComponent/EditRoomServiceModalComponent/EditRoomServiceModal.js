@@ -101,11 +101,11 @@ class EditRoomServiceModal extends React.Component {
                     }}>Hủy</Button>
                     <Button variant="primary" onClick={() => {
                         this.props.inOnHide(this.state.data);
-                        this.state = {
+                        this.setState({
                             dateArr: [],
                             roomArr: [],
                             data: {}
-                        }
+                        })
                     }}>Lưu</Button>
                 </Modal.Footer>
             </Modal>

@@ -450,7 +450,7 @@ class ViewBooking extends React.Component {
                                                 <tr key={index}>
                                                     <th scope="row">
                                                         <div className={styles.closeBtnCustom} onClick={() => {
-                                                            this.displayConfirmModal(false, 'otherService', item.service_id, true);
+                                                            this.displayConfirmModal(false, 'otherService', item.booking_service_id, true);
                                                         }}>
                                                             <i className="fa fa-times" aria-hidden="true"></i>
                                                         </div>
