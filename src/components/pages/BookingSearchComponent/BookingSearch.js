@@ -59,6 +59,10 @@ class BookingSearch extends React.Component {
             })
     }
 
+    viewBookingDetail(bookingId) {
+        this.props.history.push(`/viewbooking?booking_id=${bookingId}`);
+    }
+
     render() {
         return (
             <>
@@ -111,7 +115,7 @@ class BookingSearch extends React.Component {
                                     {
                                         (this.state.resultArr || []).map((item, index) => {
                                             return (
-                                                <tr key={index}>
+                                                <tr className={styles.trCustom} key={index} onClick={() => { this.viewBookingDetail(item.booking_id) }}>
                                                     <td>{item.contact_name}</td>
                                                     <td>{item.contact_phone}</td>
                                                     <td>{item.checkin_date}</td>
