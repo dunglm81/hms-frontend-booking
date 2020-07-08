@@ -178,6 +178,8 @@ class ViewBooking extends React.Component {
             .then((response) => {
                 if (response.status === 200) {
                     this.requestData('booking_room_item');
+                    this.requestData('booking_total_value');
+                    this.requestData('booking_total_payment');
                 }
             })
             .catch((error) => {
