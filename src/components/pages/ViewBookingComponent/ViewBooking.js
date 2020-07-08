@@ -88,39 +88,29 @@ class ViewBooking extends React.Component {
     }
 
     deleteItem(typeModal, itemId) {
-        const booking_id = queryString.parse(this.props.location.search).booking_id;
-        if (booking_id) {
-            const param = `?booking_id=${(booking_id || 1)}&item_id=${itemId}`;
-            let path = '';
-            switch (typeModal) {
-                case 'transactions':
-                    path = 'cancel_booking_payment';
-                    api_instance.get(`api/${path}?payment_transaction_id=${itemId}`)
-                        .then((response) => {
-                            if (response.status === 200) {
-                                this.requestData('booking_payment_transaction');
-                                this.requestData('booking_total_value');
-                                this.requestData('booking_total_payment');
-                            }
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        })
-                    break;
-                case 'otherService':
-                    path = 'booking_other_service';
-                    break;
-                default:
-            }
-
-            // api_instance.delete(`api/${path}${param}`)
-            //     .then((response) => {
-            //         this.requestData(path);
-            //     })
-            //     .catch((error) => {
-            //         console.log(error);
-            //     })
+        let path = '';
+        switch (typeModal) {
+            case 'transactions':
+                path = `cancel_booking_payment?payment_transaction_id=${itemId}`;
+                break;
+            case 'otherService':
+                path = `cancel_booking_other_service_item?booking_service_id=${itemId}`;
+                break;
+            default:
         }
+
+        api_instance.get(`api/${path}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    this.requestData('booking_payment_transaction');
+                    this.requestData('booking_other_service');
+                    this.requestData('booking_total_value');
+                    this.requestData('booking_total_payment');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     addItem(typeModal, state) {
