@@ -7,6 +7,7 @@ import api_instance from '../../../utils/api';
 import AddItemModal from '../../utility/AddItemModalComponent/AddItemModal';
 import ConfirmModal from '../../utility/ConfirmModalComponent/ConfirmModal';
 import EditRoomServiceModal from './EditRoomServiceModalComponent/EditRoomServiceModal';
+import UpdateDescriptionModal from './UpdateDescriptionModalComponent/UpdateDescriptionModal';
 import styles from './ViewBooking.module.css';
 
 class ViewBooking extends React.Component {
@@ -52,6 +53,9 @@ class ViewBooking extends React.Component {
                 typeModal: ''
             },
             editRoomServiceData: {
+                show: false
+            },
+            updateDescriptionModalData: {
                 show: false
             }
         }
@@ -328,6 +332,17 @@ class ViewBooking extends React.Component {
         })
     }
 
+    displayUpdateDescriptionModal(display, description) {
+        if (description) {
+            this.requestData('booking_detail');
+        }
+        this.setState({
+            updateDescriptionModalData: {
+                show: display
+            }
+        })
+    }
+
     render() {
         return (
             <>
@@ -360,10 +375,10 @@ class ViewBooking extends React.Component {
                                 <div className="ml-2">{this.state.bookingDetail.checkoutDate}</div>
                             </div>
                         </div>
-                        {this.state.bookingDetail.description ? <div className={styles.note}>
-                            <div>Ghi chú:</div>
+                        <div className={styles.note}>
+                            <div><div>Ghi chú:</div><div className="ml-2" onClick={() => { this.displayUpdateDescriptionModal(true) }}><i className="fas fa-edit"></i></div></div>
                             <div>{this.state.bookingDetail.description}</div>
-                        </div> : null}
+                        </div>
 
                     </Row>
                     <Row className="p-3">
@@ -479,7 +494,7 @@ class ViewBooking extends React.Component {
                         </div>
 
                         <div className="table-responsive mt-3">
-                        <div className="mb-2">Tổng giao dịch thanh toán: {(this.state.totalPayment.value || 0).toLocaleString()}</div>
+                            <div className="mb-2">Tổng giao dịch thanh toán: {(this.state.totalPayment.value || 0).toLocaleString()}</div>
                             <table className="table table-sm table-hover">
                                 <thead>
                                     <tr>
@@ -525,6 +540,10 @@ class ViewBooking extends React.Component {
                 {this.state.editRoomServiceData.show ? <EditRoomServiceModal inShow={this.state.editRoomServiceData.show} data={this.state.roomService} inOnHide={(state) => {
                     this.displayEditRoomServiceModal(false, state);
                 }}></EditRoomServiceModal> : null}
+
+                {this.state.updateDescriptionModalData.show ? <UpdateDescriptionModal inShow={this.state.updateDescriptionModalData.show} inOnHide={(state) => {
+                    this.displayUpdateDescriptionModal(false, state);
+                }} data={this.state.bookingDetail}></UpdateDescriptionModal> : null}
             </>
         )
     }
