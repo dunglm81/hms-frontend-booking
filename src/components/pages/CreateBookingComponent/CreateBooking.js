@@ -181,8 +181,8 @@ class CreateBooking extends Component {
             if (idx1 !== -1) {
                 dataArr = dataArr.map((item2, idx2) => {
                     if (idx2 > 0 && idx2 < dataArr.length - 1) {
-                        if (typeInput === 'quantity' && idx2 >= idx1) {
-                            item2.quantity = event.target.value;
+                        if ((typeInput === 'quantity' || typeInput === 'unit_price') && idx2 >= idx1) {
+                            item2[typeInput] = event.target.value;
                         } else if (idx2 === idx1) {
                             item2[typeInput] = event.target.value;
                         }
@@ -388,7 +388,7 @@ class CreateBooking extends Component {
                                                                         <div>SL:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'quantity', item1.using_date, item.service_id)} name={item.service_name} value={item1.quantity} />
                                                                     </div>
                                                                     <div className={styles.tdCustom}>
-                                                                        <div>ĐG:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} />
+                                                                        <div>ĐG:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} value={item1.unit_price} />
                                                                     </div>
                                                                     <div className={styles.tdCustom}>
                                                                         <div>MT:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'description', item1.using_date, item.service_id)} name={item.service_name} />

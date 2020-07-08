@@ -34,7 +34,6 @@ class AddItemModal extends React.Component {
         api_instance.get(path)
             .then((response) => {
                 if (response.status === 200 && response.data) {
-                    console.log("TVT responseData = " + JSON.stringify(response.data));
                     this.setState({
                         dropdownArr: response.data
                     })
@@ -52,15 +51,18 @@ class AddItemModal extends React.Component {
 
         switch (typeModal) {
             case 'transactions':
+                const accountId = (this.state.dropdownArr[0] ? this.state.dropdownArr[0].account_id : '');
+                const accountName = (this.state.dropdownArr[0] ? this.state.dropdownArr[0].account_name : '');
+                const accountType = (this.state.dropdownArr[0] ? this.state.dropdownArr[0].account_type : '');
                 title = 'Thêm giao dịch thanh toán';
                 fieldArr = [
                     {
                         key: 'account',
                         keyAlt: 'Tài khoản',
                         value: '',
-                        account_id: this.state.dropdownArr[0].account_id,
-                        account_name: this.state.dropdownArr[0].account_name,
-                        account_type: this.state.dropdownArr[0].account_type,
+                        account_id: accountId,
+                        account_name: accountName,
+                        account_type: accountType,
                         validate: true
                     },
                     {
@@ -78,6 +80,9 @@ class AddItemModal extends React.Component {
                 ]
                 break;
             case 'otherService':
+                const serviceId = (this.state.dropdownArr[0] ? this.state.dropdownArr[0].service_id : '');
+                const serviceName = (this.state.dropdownArr[0] ? this.state.dropdownArr[0].service_name : '');
+                const servicePrice = (this.state.dropdownArr[0] ? this.state.dropdownArr[0].service_price : '');
                 title = 'Thêm dịch vụ';
                 fieldArr = [
                     {
@@ -85,9 +90,9 @@ class AddItemModal extends React.Component {
                         keyAlt: 'Dịch vụ',
                         value: '',
                         validate: true,
-                        service_id: this.state.dropdownArr[0].service_id,
-                        service_name: this.state.dropdownArr[0].service_name,
-                        service_price: this.state.dropdownArr[0].service_price
+                        service_id: serviceId,
+                        service_name: serviceName,
+                        service_price: servicePrice
                     },
                     {
                         key: 'quantity',
@@ -100,7 +105,7 @@ class AddItemModal extends React.Component {
                         keyAlt: 'Đơn giá',
                         value: '',
                         validate: true,
-                        disabled: false
+                        disabled: true
                     },
                     {
                         key: 'date',
@@ -298,7 +303,7 @@ class AddItemModal extends React.Component {
                                         </div>
                                         {item.key !== 'account' && item.key !== 'service' ? <input onChange={(e) => {
                                             this.handleChangeInput(e, index)
-                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} disabled={ item.disabled ? 'disabled' : ''}/> :
+                                        }} type={typeInput} className="form-control" value={item.value} name={item.key} disabled={item.disabled ? 'disabled' : ''} /> :
                                             <select className="form-control" name={item.key} onChange={(e) => {
                                                 this.handleChangeInput(e, index)
                                             }}>

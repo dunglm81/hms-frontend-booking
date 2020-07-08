@@ -25,8 +25,8 @@ class EditRoomServiceModal extends React.Component {
         let dataArr = data[event.target.name];
         if (dataArr) {
             dataArr = dataArr.map((item, idx) => {
-                if (fieldType === 'quantity' && idx >= index) {
-                    item.quantity = event.target.value;
+                if ((fieldType === 'quantity' || fieldType === 'unit_price') && idx >= index) {
+                    item[fieldType] = event.target.value;
                 } else if (idx === index) {
                     item[fieldType] = event.target.value;
                 }
