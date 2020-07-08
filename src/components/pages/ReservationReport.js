@@ -83,7 +83,9 @@ class ReservationReport extends Component {
         <Row>
           <Col>
             Kết quả tìm kiếm từ ngày {this.state.from_date} đến ngày {this.state.to_date}
-            <LeftColumnTableList header={this.state.searchData[2]} data={this.state.searchData[0]} />
+            <LeftColumnTableList header={this.state.searchData[2]} data={this.state.searchData[0]} searchBooking={(date) => {
+              this.props.history.push(`/booking_search?search_type=room_night&&search_value=${date}`);
+            }} />
           </Col>
         </Row>
       </Container>

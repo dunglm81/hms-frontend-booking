@@ -1,3 +1,4 @@
+import queryString from 'query-string';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -18,6 +19,19 @@ class BookingSearch extends React.Component {
             checkout: '',
             active_field: '',
             resultArr: []
+        }
+    }
+
+    componentDidMount() {
+        const params = queryString.parse(this.props.location.search);
+        if (params.search_type && params.search_value) {
+            this.searchBooking(params.search_type, params.search_value)
+                .then(() => {
+                    this.setState({
+                        active_field: params.search_type,
+                        [params.search_type]: params.search_value
+                    })
+                })
         }
     }
 
@@ -43,20 +57,23 @@ class BookingSearch extends React.Component {
         }
     }
 
-    searchBooking() {
-        const searchType = this.state.active_field;
-        const searchValue = this.state[searchType];
-        api_instance.get(`/api/booking_search?search_type=${searchType}&search_value=${searchValue}`)
-            .then((response) => {
-                if (response.status === 200) {
-                    this.setState({
-                        resultArr: response.data
-                    })
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+    searchBooking(searchType, searchValue) {
+        return new Promise((resolve) => {
+            searchType = searchType ? searchType : this.state.active_field;
+            searchValue = searchValue ? searchValue : this.state[searchType];
+            api_instance.get(`/api/booking_search?search_type=${searchType}&search_value=${searchValue}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        this.setState({
+                            resultArr: response.data
+                        })
+                        resolve();
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        })
     }
 
     viewBookingDetail(bookingId) {

@@ -1,11 +1,8 @@
 import React from 'react';
 
 const LeftColumnTableList = (props) => {
-  console.log("inside table list:");
-  console.log(props.header);
-  console.log(props.data);
   return (
-    <div className="table-responsive">
+    <div className="table-responsive" searchBooking={props.searchBooking}>
       <table className="table table-sm table-hover">
         <thead>
           <tr>
@@ -14,12 +11,14 @@ const LeftColumnTableList = (props) => {
           </tr>
         </thead>
         <tbody>
-          {props.data.map((item) => {
+          {props.data.map((item, idx) => {
             return (
-              <tr key={item.date}>
+              <tr key={idx} onClick={() => {
+                props.searchBooking(item.date);
+              }}>
                 <th scope="row">{item.date}</th>
-                {props.header.map((hd) => {
-                  return item[hd] !== 0 ? <td key={item.date + item[hd]}>{item[hd]}</td> : <td></td>
+                {props.header.map((hd, idx1) => {
+                  return item[hd] !== 0 ? <td key={idx1}>{item[hd]}</td> : <td key={idx1}></td>
                 })}
               </tr>
             )
