@@ -1,0 +1,22 @@
+.inputGroup {
+    background-color: rgb(240, 240, 240);
+    margin-bottom: 20px;
+    padding: 20px;
+    min-width: 850px;
+}
+
+.inputGroup > div {
+    padding: 10px;
+    min-width: 300px;
+}
+
+.inputGroup button {
+    height: 38px;
+    width: 200px;
+}
+
+.inputGroup > div:nth-child(n) > div {
+    min-width: 110px;
+    margin-right: 10px;
+    text-align: right;
+}
