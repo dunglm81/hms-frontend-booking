@@ -7,12 +7,12 @@
 
 .inputGroup > div {
     padding: 10px;
-    min-width: 300px;
+    min-width: 350px;
 }
 
 .inputGroup button {
     height: 38px;
-    width: 200px;
+    width: 210px;
 }
 
 .inputGroup > div:nth-child(n) > div {

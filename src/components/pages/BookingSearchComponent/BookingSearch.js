@@ -61,18 +61,20 @@ class BookingSearch extends React.Component {
         return new Promise((resolve) => {
             searchType = searchType ? searchType : this.state.active_field;
             searchValue = searchValue ? searchValue : this.state[searchType];
-            api_instance.get(`/api/booking_search?search_type=${searchType}&search_value=${searchValue}`)
-                .then((response) => {
-                    if (response.status === 200) {
-                        this.setState({
-                            resultArr: response.data
-                        })
-                        resolve();
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+            if (searchType && searchValue) {
+                api_instance.get(`/api/booking_search?search_type=${searchType}&search_value=${searchValue}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            this.setState({
+                                resultArr: response.data
+                            })
+                            resolve();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+            }
         })
     }
 

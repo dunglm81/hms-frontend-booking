@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import queryString from 'query-string';
 import React from 'react';
 import Container from 'react-bootstrap/Container';
@@ -118,6 +119,8 @@ class ViewBooking extends React.Component {
                     } else {
                         this.requestData('booking_detail');
                     }
+                } else if (response.status === 202) {
+                    alert('Vui lòng hủy tất cả các giao dịch thanh toán trước khi hủy booking này!')
                 }
             })
             .catch((error) => {
@@ -394,7 +397,7 @@ class ViewBooking extends React.Component {
                             </div>
                         </div>
                         <div className={styles.note}>
-                            <div><div>Ghi chú:</div><div className="ml-2" onClick={() => { this.displayUpdateDescriptionModal(true) }}><i className="fas fa-edit"></i></div></div>
+                            <div><div>Ghi chú:</div><div className="ml-2" onClick={() => { this.displayUpdateDescriptionModal(true) }}><FontAwesomeIcon icon="edit" /></div></div>
                             <div>{this.state.bookingDetail.description}</div>
                         </div>
 
@@ -500,7 +503,7 @@ class ViewBooking extends React.Component {
                                                         <div className={styles.closeBtnCustom} onClick={() => {
                                                             this.displayConfirmModal(false, 'otherService', item.booking_service_id, true);
                                                         }}>
-                                                            <i className="fa fa-times" aria-hidden="true"></i>
+                                                            <FontAwesomeIcon icon="times" />
                                                         </div>
                                                         {item.service_name}</th>
                                                     <td key="quantity">{item.quantity}</td>
@@ -548,7 +551,7 @@ class ViewBooking extends React.Component {
                                                         <div className={styles.closeBtnCustom} onClick={() => {
                                                             this.displayConfirmModal(false, 'transactions', item.payment_transaction_id, true);
                                                         }}>
-                                                            <i className="fa fa-times" aria-hidden="true"></i>
+                                                            <FontAwesomeIcon icon="times" />
                                                         </div>
                                                     </td>
                                                 </tr>

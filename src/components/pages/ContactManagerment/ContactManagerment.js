@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -199,7 +200,7 @@ class ContactManagerment extends React.Component {
                                                     <td>{item.phone_1}</td>
                                                     <td>{item.email}</td>
                                                     <td onClick={() => this.editContactItem(item)}>
-                                                        <div><i className="fas fa-edit"></i></div>
+                                                        <div><FontAwesomeIcon icon="edit" /></div>
                                                     </td>
                                                 </tr>
                                             )
