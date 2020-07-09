@@ -238,7 +238,7 @@ class ViewBooking extends React.Component {
                         checkinDate: obj.checkin_date,
                         checkoutDate: obj.checkout_date,
                         description: obj.description,
-                        status: obj.booking_status,
+                        status: 'valid',
                         statusAlt: statusAlt
                     }
                 })
@@ -414,7 +414,7 @@ class ViewBooking extends React.Component {
                             {(this.state.bookingDetail.status === 'valid') ? <div onClick={() => {
                                 this.displayConfirmModal(false, 'cancelBooking', this.state.bookingDetail.bookingId, true);
                             }}>
-                                <button className="btn btn-primary ml-5">Hủy</button>
+                                <button className="btn btn-warning ml-5">Hủy</button>
                             </div> : null}
 
                             {(this.state.bookingDetail.status === 'valid') ? <div>

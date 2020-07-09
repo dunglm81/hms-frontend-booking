@@ -1,8 +1,23 @@
 import React from 'react';
 
 const LeftColumnTableList = (props) => {
+
+  function custom(day) {
+    let color = '';
+    if (day === 5) {
+      color = '#C8E6C9'
+    } else if (day === 6) {
+      color = '#FFF9C4'
+    }
+
+    return {
+      'cursor': 'pointer',
+      'background-color': color
+    }
+  }
+
   return (
-    <div className="table-responsive" searchBooking={props.searchBooking}>
+    <div className="table-responsive" searchbooking={props.searchbooking}>
       <table className="table table-sm table-hover">
         <thead>
           <tr>
@@ -12,9 +27,10 @@ const LeftColumnTableList = (props) => {
         </thead>
         <tbody>
           {props.data.map((item, idx) => {
+            const day = new Date(item.date).getDay();
             return (
-              <tr key={idx} onClick={() => {
-                props.searchBooking(item.date);
+              <tr style={custom(day)} key={idx} onClick={() => {
+                props.searchbooking(item.date);
               }}>
                 <th scope="row">{item.date}</th>
                 {props.header.map((hd, idx1) => {
