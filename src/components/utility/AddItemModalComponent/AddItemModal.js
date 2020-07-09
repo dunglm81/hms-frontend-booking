@@ -14,7 +14,6 @@ class AddItemModal extends React.Component {
             title: '',
             dropdownArr: []
         }
-        console.log("TVT props = " + JSON.stringify(props));
     }
 
     componentDidMount() {

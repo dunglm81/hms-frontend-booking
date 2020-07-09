@@ -428,9 +428,9 @@ class ViewBooking extends React.Component {
                     <Row className="p-3">
                         <div className="d-flex flex-row align-items-center">
                             <h5 className="mb-0">Dịch vụ phòng ở</h5>
-                            <button className="btn btn-primary ml-4" onClick={() => {
+                            {(this.state.bookingDetail.status === 'valid' ? <button className="btn btn-primary ml-4" onClick={() => {
                                 this.displayEditRoomServiceModal(true);
-                            }}>Chỉnh sửa</button>
+                            }}>Chỉnh sửa</button> : null)}
                         </div>
 
                         <div className="table-responsive mt-3">
@@ -476,9 +476,9 @@ class ViewBooking extends React.Component {
                     <Row className="p-3">
                         <div className="d-flex flex-row align-items-center">
                             <h5 className="mb-0">Dịch vụ khác</h5>
-                            <button className="btn btn-primary ml-4" onClick={() => {
+                            {(this.state.bookingDetail.status === 'valid' ? <button className="btn btn-primary ml-4" onClick={() => {
                                 this.displayAddItemModal('otherService', true);
-                            }}>Thêm</button>
+                            }}>Thêm</button> : null)}
                         </div>
 
                         <div className="table-responsive mt-3">
@@ -520,9 +520,9 @@ class ViewBooking extends React.Component {
                     <Row className="p-3">
                         <div className="d-flex flex-row align-items-center">
                             <h5 className="mb-0">Các giao dịch thanh toán</h5>
-                            <button className="btn btn-primary ml-4" onClick={() => {
+                            {(this.state.bookingDetail.status === 'valid') ? <button className="btn btn-primary ml-4" onClick={() => {
                                 this.displayAddItemModal('transactions', true);
-                            }}>Thêm</button>
+                            }}>Thêm</button> : null}
                         </div>
 
                         <div className="table-responsive mt-3">
