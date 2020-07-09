@@ -14,10 +14,15 @@ class AddItemModal extends React.Component {
             title: '',
             dropdownArr: []
         }
+        console.log("TVT props = " + JSON.stringify(props));
     }
 
     componentDidMount() {
-        this.getDropdownData();
+        if (this.props.typeModal === 'newContact') {
+            this.updateStateObj(this.props.typeModal, this.props.editData);
+        } else {
+            this.getDropdownData();
+        }
     }
 
     getDropdownData() {
@@ -37,7 +42,7 @@ class AddItemModal extends React.Component {
                     this.setState({
                         dropdownArr: response.data
                     })
-                    this.updateStateObj(this.props.typeModal, this.props.editData);
+                    this.updateStateObj(this.props.typeModal);
                 }
             })
             .catch((error) => {
@@ -151,7 +156,7 @@ class AddItemModal extends React.Component {
                 ]
                 if (editData) {
                     fieldArr[0].value = editData.contact_name;
-                    fieldArr[1].value = editData.phone_1 || editData.phone_2;
+                    fieldArr[1].value = (editData.phone_1 || editData.phone_2).replace(/\s/g, '');
                     fieldArr[2].value = editData.email || '';
                     fieldArr[3].value = editData.contact_id || '';
                 }
@@ -169,6 +174,8 @@ class AddItemModal extends React.Component {
         if (event.target.name === 'money') {
             // arr[index].value = event.target.value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             arr[index].value = event.target.value;
+        } else if (event.target.name === 'phone') {
+            arr[index].value = event.target.value.replace(/\s/g, '').replace(/[^0-9\-]/g, '');
         } else {
             arr[index].value = event.target.value;
             if (event.target.name === 'account') {
@@ -233,9 +240,10 @@ class AddItemModal extends React.Component {
                 break;
             case 'newContact':
                 const regexMail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                const regexPhone = /^[0-9\-]*$/;
                 arr[0].validate = (arr[0].value);
-                arr[1].validate = (arr[1].value);
-                arr[2].validate = regexMail.test(arr[2].value)
+                arr[1].validate = regexPhone.test(arr[1].value);
+                arr[2].validate = true;
                 break;
             default:
         }
@@ -281,8 +289,6 @@ class AddItemModal extends React.Component {
                                 case 'date':
                                     typeInput = 'date'
                                     break;
-                                case 'phone':
-                                    typeInput = 'number';
                                 default:
                             }
                             if (index === 3 && this.props.typeModal === 'newContact') {

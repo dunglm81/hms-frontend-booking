@@ -238,7 +238,7 @@ class ViewBooking extends React.Component {
                         checkinDate: obj.checkin_date,
                         checkoutDate: obj.checkout_date,
                         description: obj.description,
-                        status: 'valid',
+                        status: obj.booking_status,
                         statusAlt: statusAlt
                     }
                 })
