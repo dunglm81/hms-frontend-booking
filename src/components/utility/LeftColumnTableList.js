@@ -15,10 +15,7 @@ const customStyle = (day) => {
 }
 
 class LeftColumnTableList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+  
   render() {
     return (
       <div className="table-responsive">

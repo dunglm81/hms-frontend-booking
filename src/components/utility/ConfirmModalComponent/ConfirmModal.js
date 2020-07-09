@@ -3,9 +3,6 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 class ConfirmModal extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     renderSwitchTitle() {
         let title = '';
@@ -18,6 +15,7 @@ class ConfirmModal extends React.Component {
                 break;
             case 'cancelBooking':
                 title = 'Hủy Booking';
+                break;
             default:
         }
         return title;
@@ -34,6 +32,7 @@ class ConfirmModal extends React.Component {
                 break;
             case 'cancelBooking':
                 description = 'Bạn chắc chắn muốn hủy Booking này?';
+                break;
             default:
         }
         return description;

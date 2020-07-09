@@ -31,7 +31,7 @@ class ContactManagerment extends React.Component {
     }
 
     componentDidMount() {
-        this.requestData('', 1, 50);
+        this.requestData('', 1, 20);
     }
 
     requestData(name, currentPage, pageSize, isAutoComplete) {
@@ -79,7 +79,7 @@ class ContactManagerment extends React.Component {
     }
 
     handleCurrentPage = (currentPage) => {
-        this.requestData('Nguyễn', currentPage, 50);
+        this.requestData('', currentPage, 20);
     }
 
     handleChangeAutoCompleteInput = (event) => {
@@ -106,7 +106,7 @@ class ContactManagerment extends React.Component {
     }
 
     filterByName() {
-        this.requestData(this.state.autocompleteValue, 1, 50)
+        this.requestData(this.state.autocompleteValue, 1, 20)
     }
 
     handleSelectAutoCompleteItem(item) {

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styles from './Pagination.module.css';
+
 class Pagination extends React.Component {
 
     constructor(props) {
@@ -69,21 +71,21 @@ class Pagination extends React.Component {
 
     render() {
         return (
-            <ul className="pagination ">
+            <ul className={styles.paginationCustom + ' pagination'}>
                 <li className="page-item" onClick={() => {
                     this.moveToCurrentPage(this.state.currentPage - 1);
-                }}><a className="page-link">Previous</a></li>
-                {this.state.showDotOne ? <li className="page-item"><a className="page-link">...</a></li> : null}
+                }}><div className="page-link">Previous</div></li>
+                {this.state.showDotOne ? <li className="page-item" disabled><div className="page-link">...</div></li> : null}
 
                 {this.state.button.map((item, idx) => {
                     return <li key={idx} className={'page-item ' + (this.state.activeIdx === idx ? 'active' : '')} onClick={() => {
                         this.moveToCurrentPage(item);
-                    }}><a className="page-link">{item}</a></li>
+                    }}><div className="page-link">{item}</div></li>
                 })}
-                {this.state.showDotTwo ? <li className="page-item"><a className="page-link">...</a></li> : null}
+                {this.state.showDotTwo ? <li className="page-item" disabled><div className="page-link">...</div></li> : null}
                 <li className="page-item" onClick={() => {
                     this.moveToCurrentPage(this.state.currentPage + 1);
-                }}><a className="page-link">Next</a></li>
+                }}><div className="page-link">Next</div></li>
             </ul>
         )
     }

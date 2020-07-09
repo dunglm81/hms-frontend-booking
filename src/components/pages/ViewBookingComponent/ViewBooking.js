@@ -118,6 +118,7 @@ class ViewBooking extends React.Component {
                 break;
             case 'cancelBooking':
                 path = `cancel_booking?booking_id=${itemId}`;
+                break;
             default:
         }
 

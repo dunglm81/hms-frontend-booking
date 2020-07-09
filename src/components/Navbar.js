@@ -34,7 +34,7 @@ export default class Navbar extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#"><img src="qh-logo.png" width="100px" alt="Quản lý ks Queen" loading="lazy" /></a>
+        <a className="navbar-brand" href="/"><img src="qh-logo.png" width="100px" alt="Quản lý ks Queen" loading="lazy" /></a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -42,10 +42,10 @@ export default class Navbar extends Component {
         <div id="navbarSupportedContent" className="collapse navbar-collapse">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
+              <a className="nav-link" href="/">Home <span className="sr-only">(current)</span></a>
             </li>
             <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a className="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Lễ tân
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -62,10 +62,10 @@ export default class Navbar extends Component {
               </div>
             </li>
             <li className="nav-item">
-              <a className="nav-link disabled" href="#" tabIndex="-1" aria-disabled="true">Nhà hàng</a>
+              <a className="nav-link disabled" href="/" tabIndex="-1" aria-disabled="true">Nhà hàng</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link disabled" href="#" tabIndex="-1" aria-disabled="true">Báo cáo</a>
+              <a className="nav-link disabled" href="/" tabIndex="-1" aria-disabled="true">Báo cáo</a>
             </li>
           </ul>
 
