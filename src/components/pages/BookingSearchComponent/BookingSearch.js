@@ -122,7 +122,7 @@ class BookingSearch extends React.Component {
                     {this.state.showTable ? <Row>
                         <div className="table-responsive">
                             <table className="table table-sm table-hover table-bordered">
-                                <thead>
+                                <thead className="thead-light">
                                     <tr>
                                         <th scope="col">Tên khách hàng</th>
                                         <th scope="col">Số ĐT</th>

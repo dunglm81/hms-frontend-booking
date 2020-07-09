@@ -96,14 +96,8 @@
 .nameListPopup {
     z-index: 1000;
     position: absolute;
-    background-color: white;
-    padding: 10px;
-    border: 1px solid rgb(200, 200, 200);
-    display: flex;
-    flex-flow: column nowrap;
     left: 110px;
     top: 50px;
-    width: 100%;
 }
 
 .datalistItem {
@@ -112,7 +106,6 @@
     align-items: center;
     flex-flow: row nowrap;
     justify-content: space-between;
-    padding: 0 10px;
     width: 100%;
 }
 

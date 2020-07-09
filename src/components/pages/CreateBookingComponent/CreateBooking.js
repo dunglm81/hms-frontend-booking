@@ -308,10 +308,10 @@ class CreateBooking extends Component {
                                     <div>Số điện thoại:</div>
                                     <input className="form-control" type="text" pattern="[0-9]*" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoPhoneValue} name="phone" />
                                     {this.state.showAutoPhone && this.state.autoPhoneData.length > 0 ?
-                                        <div className={styles.phoneListPopup}>
+                                        <div className={styles.phoneListPopup + ' list-group'}>
                                             {(this.state.autoPhoneData || []).map((item, idx) => {
                                                 return (
-                                                    <div key={idx} className={styles.datalistItem} onClick={() => {
+                                                    <div key={idx} className={styles.datalistItem + ' list-group-item'} onClick={() => {
                                                         this.handleSelectAutoCompleteItem(item);
                                                     }}>
                                                         <div>{item.phone_1 || item.phone_2}</div>
@@ -327,10 +327,10 @@ class CreateBooking extends Component {
                                     <div>Khách hàng:</div>
                                     <input className="form-control" type="text" onBlur={() => { this.handleOnBlurInput() }} onChange={this.handleChangeAutoCompleteInput} value={this.state.autoNameValue} name="name" />
                                     {this.state.showAutoName && this.state.autoNameData.length > 0 ?
-                                        <div className={styles.nameListPopup}>
+                                        <div className={styles.nameListPopup + ' list-group'}>
                                             {(this.state.autoNameData || []).map((item, idx) => {
                                                 return (
-                                                    <div key={idx} className={styles.datalistItem} onClick={() => {
+                                                    <div key={idx} className={styles.datalistItem + ' list-group-item'} onClick={() => {
                                                         this.handleSelectAutoCompleteItem(item);
                                                     }}>
                                                         <div title={item.contact_name}>{item.contact_name}</div>
@@ -367,7 +367,7 @@ class CreateBooking extends Component {
                     {this.state.showTable ? <Row>
                         <div className="table-responsive">
                             <table className="table table-sm table-hover table-bordered">
-                                <thead>
+                                <thead className="thead-light">
                                     <tr>
                                         <th scope="col"></th>
                                         {(this.state.titleArr || []).map((item, index1) => { return <th className={styles.thCustom} scope="col" key={index1}>{item}</th> })}

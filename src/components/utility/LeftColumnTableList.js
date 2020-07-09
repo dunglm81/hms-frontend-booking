@@ -1,26 +1,12 @@
 import React from 'react';
 
-const customStyle = (day) => {
-  let color = '';
-  if (day === 5) {
-    color = '#C8E6C9'
-  } else if (day === 6) {
-    color = '#FFF9C4'
-  }
-
-  return {
-    'cursor': 'pointer',
-    'backgroundColor': color
-  }
-}
-
 class LeftColumnTableList extends React.Component {
-  
+
   render() {
     return (
       <div className="table-responsive">
         <table className="table table-sm table-hover table-bordered">
-          <thead>
+          <thead className="thead-light">
             <tr>
               <th scope="col">Ngày</th>
               {this.props.header.map((item) => { return <th scope="col" key={item}>{item}</th> })}
@@ -30,7 +16,7 @@ class LeftColumnTableList extends React.Component {
             {this.props.data.map((item, idx) => {
               const day = new Date(item.date).getDay();
               return (
-                <tr style={customStyle(day)} key={idx} onClick={() => {
+                <tr className={(day === 5 ? 'table-info' : '') + (day === 6 ? 'table-warning' : '')} key={idx} onClick={() => {
                   this.props.searchBooking(item.date);
                 }}>
                   <th scope="row">{item.date}</th>

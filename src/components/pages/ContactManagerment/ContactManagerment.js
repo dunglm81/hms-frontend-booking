@@ -184,7 +184,7 @@ class ContactManagerment extends React.Component {
                         <Col>
                             <div className="table-responsive">
                                 <table className="table table-sm table-hover table-bordered">
-                                    <thead>
+                                    <thead className="thead-light">
                                         <tr>
                                             <th scope="col">Họ tên</th>
                                             <th scope="col">Số điện thoại</th>
