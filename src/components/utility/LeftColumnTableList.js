@@ -19,7 +19,7 @@ class LeftColumnTableList extends React.Component {
   render() {
     return (
       <div className="table-responsive">
-        <table className="table table-sm table-hover">
+        <table className="table table-sm table-hover table-bordered">
           <thead>
             <tr>
               <th scope="col">Ngày</th>

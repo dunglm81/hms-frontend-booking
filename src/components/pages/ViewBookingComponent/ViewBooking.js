@@ -456,7 +456,7 @@ class ViewBooking extends React.Component {
                         </div>
 
                         <div className="table-responsive mt-3">
-                            <table className="table table-sm table-hover">
+                            <table className="table table-sm table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th scope="col"></th>
@@ -504,7 +504,7 @@ class ViewBooking extends React.Component {
                         </div>
 
                         <div className="table-responsive mt-3">
-                            <table className="table table-sm table-hover">
+                            <table className="table table-sm table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th scope="col"></th>
@@ -549,7 +549,7 @@ class ViewBooking extends React.Component {
 
                         <div className="table-responsive mt-3">
                             <div className="mb-2">Tổng giao dịch thanh toán: {(this.state.totalPayment.value || 0).toLocaleString()}</div>
-                            <table className="table table-sm table-hover">
+                            <table className="table table-sm table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th scope="col">Ngày</th>
