@@ -11,6 +11,19 @@ import EditRoomServiceModal from './EditRoomServiceModalComponent/EditRoomServic
 import UpdateDescriptionModal from './UpdateDescriptionModalComponent/UpdateDescriptionModal';
 import styles from './ViewBooking.module.css';
 
+const customStyle = (checkValue) => {
+    let color = '';
+    if (checkValue) {
+        color = '#C8E6C9'
+    } else {
+        color = 'transparent'
+    }
+
+    return {
+        'backgroundColor': color
+    }
+}
+
 class ViewBooking extends React.Component {
     constructor(props) {
         super(props);
@@ -397,20 +410,25 @@ class ViewBooking extends React.Component {
                             </div>
                         </div>
                         <div className={styles.note}>
-                            <div><div>Ghi chú:</div><div className="ml-2" onClick={() => { this.displayUpdateDescriptionModal(true) }}><FontAwesomeIcon icon="edit" /></div></div>
+                            <div>
+                                <div>Ghi chú:</div>
+                                {(this.state.bookingDetail.status === 'valid') ? <div className="ml-2" onClick={() => { this.displayUpdateDescriptionModal(true) }}><FontAwesomeIcon icon="edit" /></div> : null}
+                            </div>
                             <div>{this.state.bookingDetail.description}</div>
                         </div>
-
                     </Row>
                     <Row className="p-3">
-                        <div className="d-flex flex-row mr-5">
-                            <div>Tổng dịch vụ sử dụng:</div>
-                            <div className="ml-2">{(this.state.totalValue.value || 0).toLocaleString()}</div>
+                        <div className="d-flex flex-row flex-nowrap p-2" style={customStyle(this.state.totalValue.value === this.state.totalPayment.value)}>
+                            <div className="d-flex flex-row mr-5 align-items-center">
+                                <div>Tổng dịch vụ sử dụng:</div>
+                                <div className="ml-2"><b>{(this.state.totalValue.value || 0).toLocaleString()}</b></div>
+                            </div>
+                            <div className="d-flex flex-row align-items-center">
+                                <div>Tổng giao dịch thanh toán:</div>
+                                <div className="ml-2"><b>{(this.state.totalPayment.value || 0).toLocaleString()}</b></div>
+                            </div>
                         </div>
-                        <div className="d-flex flex-row">
-                            <div>Tổng giao dịch thanh toán:</div>
-                            <div className="ml-2">{(this.state.totalPayment.value || 0).toLocaleString()}</div>
-                        </div>
+
                         <div className="ml-auto d-flex flex-row flex-nowrap align-items-center">
                             <div>Trạng thái: <b>{this.state.bookingDetail.statusAlt}</b></div>
 
