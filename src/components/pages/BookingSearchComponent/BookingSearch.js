@@ -82,6 +82,29 @@ class BookingSearch extends React.Component {
         this.props.history.push(`/viewbooking?booking_id=${bookingId}`);
     }
 
+    downloadFile() {
+        console.log("TVT go to download file function");
+        api_instance.get(`api/download_testfile`)
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log("TVT go to return data successful!");
+                    const blob = new Blob([response.data], { type: 'application/pdf' });
+                    const url = window.URL.createObjectURL(blob);
+                    const element = document.createElement('a');
+                    element.setAttribute('href', url);
+                    element.setAttribute('download', 'testfilenao.pdf');
+                    element.style.display = 'none';
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                    console.log("TVT go to end of download progress");
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
     render() {
         return (
             <>
@@ -113,6 +136,10 @@ class BookingSearch extends React.Component {
                                 <div className={'d-flex flex-row flex-nowrap align-items-center'}>
                                     <div></div>
                                     <button className="btn btn-primary" onClick={() => { this.searchBooking() }}>Truy vấn</button>
+                                </div>
+                                <div className={'d-flex flex-row flex-nowrap align-items-center'}>
+                                    <div></div>
+                                    <button className="btn btn-primary" onClick={() => { this.downloadFile() }}>Test Download File</button>
                                 </div>
 
                             </div>
