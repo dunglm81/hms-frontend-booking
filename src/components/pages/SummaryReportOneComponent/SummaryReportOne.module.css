@@ -1,0 +1,27 @@
+.functionsGroup {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    border: 1px solid rgb(220, 220, 220);
+    margin: 5px 0 30px 0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.functionsDate {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    align-items: center;
+}
+.functionsDate div {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    white-space: nowrap;
+    margin-right: 5px;
+}
+.functionsDate > div {
+    margin-right: 30px;
+}

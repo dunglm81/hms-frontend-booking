@@ -11,22 +11,19 @@ import ForgotPasswordVerification from './components/auth/ForgotPasswordVerifica
 import LogIn from './components/auth/LogIn';
 import Register from './components/auth/Register';
 import Welcome from './components/auth/Welcome';
-import Footer from './components/Footer';
 import Home from './components/Home';
-import Navbar from './components/Navbar';
 import BookingSearch from './components/pages/BookingSearchComponent/BookingSearch';
 import Contact from './components/pages/ContactComponent/Contact';
 import ContactManagerment from './components/pages/ContactManagerment/ContactManagerment';
 import CreateBooking from './components/pages/CreateBookingComponent/CreateBooking';
 import ReservationDetail from './components/pages/ReservationDetail';
 import ReservationReport from './components/pages/ReservationReport';
+import SummaryReportOne from './components/pages/SummaryReportOneComponent/SummaryReportOne';
 import ViewBooking from './components/pages/ViewBookingComponent/ViewBooking';
 import ProductAdmin from './components/ProductAdmin';
 import Products from './components/Products';
 
-
 library.add(faEdit);
-
 
 class App extends Component {
 
@@ -54,10 +51,8 @@ class App extends Component {
     try {
       const session = await Auth.currentSession();
       this.setAuthStatus(true);
-      //console.log(session);
       this.setUserSession(session);
       const user = await Auth.currentAuthenticatedUser();
-      //console.log(user);
       this.setUser(user);
     } catch (error) {
       if (error !== 'No current user') {
@@ -69,19 +64,11 @@ class App extends Component {
   }
 
   render() {
-    const authProps = {
-      isAuthenticated: this.state.isAuthenticated,
-      user: this.state.user,
-      setAuthStatus: this.setAuthStatus,
-      setUser: this.setUser
-    }
-
     return (
       !this.state.isAuthenticating &&
       <div className="App">
         <Router>
           <div>
-            <Navbar auth={authProps} />
             <Switch>
               <Route exact path="/" render={(props) => <Home {...props} auth={authProps} />} />
               <Route exact path="/products" render={(props) => <Products {...props} auth={authProps} />} />
@@ -98,12 +85,11 @@ class App extends Component {
               <Route exact path="/contactmanagerment" render={(props) => <ContactManagerment {...props} />} />
               <Route exact path="/viewbooking" render={(props) => <ViewBooking {...props} />} />
               <Route exact path="/booking_search" render={(props) => <BookingSearch {...props} />} />
+              <Route exact path="/summary_report_01" render={(props) => <SummaryReportOne {...props} />} />
 
               <Route exact path="/reservationreport" render={(props) => <ReservationReport {...props} />} />
               <Route path="/reservationdetail" render={(props) => <ReservationDetail {...props} />} />
-
             </Switch>
-            <Footer />
           </div>
         </Router>
       </div>
