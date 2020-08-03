@@ -72,9 +72,10 @@ class Pagination extends React.Component {
     render() {
         return (
             <ul className={styles.paginationCustom + ' pagination'}>
-                <li className="page-item" onClick={() => {
-                    this.moveToCurrentPage(this.state.currentPage - 1);
-                }}><div className="page-link">Previous</div></li>
+                <li className={"page-item " + (parseInt(this.state.currentPage <= 1) ? styles.disabledCustom : '')}
+                    onClick={() => { this.moveToCurrentPage(this.state.currentPage - 1); }}>
+                    <div className="page-link">Previous</div>
+                </li>
                 {this.state.showDotOne ? <li className="page-item" disabled><div className="page-link">...</div></li> : null}
 
                 {this.state.button.map((item, idx) => {
@@ -83,9 +84,10 @@ class Pagination extends React.Component {
                     }}><div className="page-link">{item}</div></li>
                 })}
                 {this.state.showDotTwo ? <li className="page-item" disabled><div className="page-link">...</div></li> : null}
-                <li className="page-item" onClick={() => {
-                    this.moveToCurrentPage(this.state.currentPage + 1);
-                }}><div className="page-link">Next</div></li>
+                <li className="page-item"
+                    onClick={() => { this.moveToCurrentPage(this.state.currentPage + 1); }}>
+                    <div className="page-link">Next</div>
+                </li>
             </ul>
         )
     }

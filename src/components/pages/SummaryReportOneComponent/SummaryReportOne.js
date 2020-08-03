@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -18,7 +17,30 @@ class SummaryReportOne extends React.Component {
         this.state = {
             from_date: fromDate.toISOString().slice(0, 10),
             to_date: toDate.toISOString().slice(0, 10),
+            isValidDate: true
         }
+    }
+
+    handleChangeDate(event) {
+        setTimeout(() => {
+            this.checkValidation();
+        });
+        this.updateState(event.target.name, event.target.value);
+    }
+
+    checkValidation() {
+        let isValidDate = false;
+        const fromDate = new Date(this.state.from_date);
+        const toDate = new Date(this.state.to_date);
+        isValidDate = toDate.getTime() >= fromDate.getTime() && ((toDate.getTime() - fromDate.getTime()) <= 432000000);
+        this.updateState('isValidDate', isValidDate);
+        return isValidDate;
+    }
+
+    updateState(key, value) {
+        this.setState({
+            [key]: value
+        });
     }
 
     render() {
@@ -31,11 +53,11 @@ class SummaryReportOne extends React.Component {
                             <div className={styles.functionsDate}>
                                 <div>
                                     <div>Từ ngày:</div>
-                                    <input className="form-control" type="date" name="from_date" onChange={(e) => this.handleChangeDate(e.target.value, 'fromDate')} value={this.state.from_date} />
+                                    <input className="form-control" type="date" name="from_date" onChange={(e) => this.handleChangeDate(e)} value={this.state.from_date} />
                                 </div>
                                 <div>
                                     <div className="mr-2">Đến ngày:</div>
-                                    <input className="form-control" type="date" name="to_date" onChange={(e) => this.handleChangeDate(e.target.value, 'toDate')} value={this.state.to_date} />
+                                    <input className="form-control" type="date" name="to_date" onChange={(e) => this.handleChangeDate(e)} value={this.state.to_date} />
                                 </div>
 
                                 <button className="btn btn-primary ml-4" onClick={this.handleSearchByDate}>Xem dữ liệu</button>
