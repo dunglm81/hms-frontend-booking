@@ -10,18 +10,40 @@
 }
 
 .functionsDate {
+    position: relative;
     display: flex;
     flex-flow: row nowrap;
     width: 100%;
     align-items: center;
 }
-.functionsDate div {
+.functionsDate > div:nth-child(1),
+.functionsDate > div:nth-child(2) {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
     white-space: nowrap;
+    margin-right: 30px;
+}
+
+.functionsDate > div:nth-child(1) > div,
+.functionsDate > div:nth-child(2) > div {
     margin-right: 5px;
 }
-.functionsDate > div {
+
+.functionsDate > div:nth-child(3) {
     margin-right: 30px;
+}
+
+.dropdownCustom div {
+    cursor: pointer;
+}
+
+.theadCustom th,
+.trCustom td {
+    white-space: nowrap;
+}
+
+.theadCustom th {
+    padding: 0 10px;
+    text-align: center;
 }

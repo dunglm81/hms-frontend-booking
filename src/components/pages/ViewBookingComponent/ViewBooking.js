@@ -104,7 +104,6 @@ class ViewBooking extends React.Component {
                     console.log(error);
                 })
         }
-
     }
 
     deleteItem(typeModal, itemId) {
