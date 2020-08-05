@@ -281,7 +281,7 @@ class SummaryReportOne extends React.Component {
                                             <tr key={index} className={styles.trCustom}>
                                                 {Object.keys(item).map((key, idx1) => {
                                                     return (
-                                                        <td key={idx1}>{item[key] || ''}</td>
+                                                        <td key={idx1}>{(item[key] || '').toLocaleString()}</td>
                                                     )
                                                 })}
                                             </tr>
