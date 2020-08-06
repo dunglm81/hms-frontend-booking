@@ -124,7 +124,7 @@ class SummaryReportOne extends React.Component {
         let isValidDate = false;
         const fromDate = new Date(this.state.from_date);
         const toDate = new Date(this.state.to_date);
-        isValidDate = toDate.getTime() >= fromDate.getTime() && ((toDate.getTime() - fromDate.getTime()) <= 432000000);
+        isValidDate = toDate.getTime() >= fromDate.getTime();
         this.updateState('isValidDate', isValidDate);
         return isValidDate;
     }
