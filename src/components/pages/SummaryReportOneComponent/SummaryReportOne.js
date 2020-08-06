@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 import api_instance from '../../../utils/api';
@@ -185,8 +184,9 @@ class SummaryReportOne extends React.Component {
         const requestOne = api_instance.get(`/api/booking_room_item?booking_id=${bookingId}`);
         const requestTwo = api_instance.get(`/api/booking_other_service?booking_id=${bookingId}`);
         const requestThree = api_instance.get(`/api/booking_payment_transaction?booking_id=${bookingId}`);
+        const requestFour = api_instance.get(`/api/booking_total_payment?booking_id=${bookingId}`);
 
-        axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...responses) => {
+        axios.all([requestOne, requestTwo, requestThree, requestFour]).then(axios.spread((...responses) => {
             if (responses && responses.length > 0) {
                 this.updateSearchData(bookingId, responses);
             }
@@ -199,7 +199,6 @@ class SummaryReportOne extends React.Component {
         let searchDataArr = JSON.parse(JSON.stringify(this.state.searchData));
         let roomServiceValue = 0;
         let otherServiceValue = 0;
-        let allPaymentValue = 0;
         const idx = searchDataArr.findIndex(item => item.booking_id === bookingId);
 
         if (idx !== -1) {
@@ -220,11 +219,16 @@ class SummaryReportOne extends React.Component {
 
             // Update payment accounts
             for (const item3 of this.state.paymentAccountArr) {
-                const idx3 = responses[2].data.findIndex(item4 => item4.payment_account_name === item3.account_name);
-                searchDataArr[idx][item3.account_name] = (idx3 !== -1) ? parseInt(responses[2].data[idx3].payment_value) : 0;
-                allPaymentValue = parseInt(allPaymentValue) + searchDataArr[idx][item3.account_name];
+                let paymentValue = 0;
+                responses[2].data = responses[2].data.map(item4 => {
+                    if (item4.payment_account_name === item3.account_name) {
+                        paymentValue = paymentValue + item4.payment_value;
+                    }
+                    return item4;
+                })
+                searchDataArr[idx][item3.account_name] = paymentValue
             }
-            searchDataArr[idx]['totalPayment'] = allPaymentValue;
+            searchDataArr[idx]['totalPayment'] = responses[3].data.total_payment;
 
             // Update state object
             this.updateState('searchData', searchDataArr);
@@ -232,7 +236,6 @@ class SummaryReportOne extends React.Component {
     }
 
     viewBookingDetail(bookingId) {
-        // this.props.history.push(`/viewbooking?booking_id=${bookingId}`);
         window.open(`/viewbooking?booking_id=${bookingId}`, "_blank");
     }
 
@@ -283,7 +286,7 @@ class SummaryReportOne extends React.Component {
                                 <tbody>
                                     {this.state.searchData.map((item, index) => {
                                         return (
-                                            <tr key={index} className={styles.trCustom} onClick={() => { this.viewBookingDetail(item.booking_id) }}>
+                                            <tr key={index} className={styles.trCustom + " " + (item.totalService !== item.totalPayment ? styles.alertItem : '')} onClick={() => { this.viewBookingDetail(item.booking_id) }}>
                                                 {Object.keys(item).map((key, idx1) => {
                                                     return (
                                                         <td key={idx1}>{(item[key] || '').toLocaleString()}</td>
