@@ -27,15 +27,15 @@ class SummaryReportOne extends React.Component {
             fieldArr: [
                 {
                     key: "bookingCode",
-                    value: "Mã Booking"
+                    value: "Booking"
                 },
                 {
                     key: "checkinDate",
-                    value: "Ngày checkin"
+                    value: "Checkin"
                 },
                 {
                     key: "checkoutDate",
-                    value: "Ngày checkout"
+                    value: "Checkout"
                 },
                 {
                     key: "customerName",
@@ -43,7 +43,7 @@ class SummaryReportOne extends React.Component {
                 },
                 {
                     key: "phoneNumber",
-                    value: "Số điện thoại"
+                    value: "Số ĐT"
                 },
                 {
                     key: "totalService",
@@ -231,9 +231,14 @@ class SummaryReportOne extends React.Component {
         }
     }
 
+    viewBookingDetail(bookingId) {
+        // this.props.history.push(`/viewbooking?booking_id=${bookingId}`);
+        window.open(`/viewbooking?booking_id=${bookingId}`, "_blank");
+    }
+
     render() {
         return (
-            <Container>
+            <div className="container-fluid">
                 <Row>
                     <Col>
                         <h4 className="p-3">Tổng hợp báo cáo 01</h4>
@@ -278,7 +283,7 @@ class SummaryReportOne extends React.Component {
                                 <tbody>
                                     {this.state.searchData.map((item, index) => {
                                         return (
-                                            <tr key={index} className={styles.trCustom}>
+                                            <tr key={index} className={styles.trCustom} onClick={() => { this.viewBookingDetail(item.booking_id) }}>
                                                 {Object.keys(item).map((key, idx1) => {
                                                     return (
                                                         <td key={idx1}>{(item[key] || '').toLocaleString()}</td>
@@ -292,7 +297,7 @@ class SummaryReportOne extends React.Component {
                         </div>
                     </Col>
                 </Row>
-            </Container>
+            </div>
         );
     }
 }

@@ -38,7 +38,10 @@
     cursor: pointer;
 }
 
-.theadCustom th,
+.trCustom {
+    cursor: pointer;
+}
+
 .trCustom td {
     white-space: nowrap;
 }
@@ -46,4 +49,6 @@
 .theadCustom th {
     padding: 0 10px;
     text-align: center;
+    vertical-align: middle !important;
+    min-width: 110px;
 }
