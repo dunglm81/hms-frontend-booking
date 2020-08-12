@@ -21,7 +21,7 @@ class Contact extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    api_instance.post('new_contact', this.state)
+    api_instance.post('/api/new_contact', this.state)
       .then((response) => {
         if (response.status === 200) {
           var message = response.data;
