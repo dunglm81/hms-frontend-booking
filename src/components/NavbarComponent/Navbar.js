@@ -1,6 +1,7 @@
-import "./Navbar.css";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { NAVBAR_DROPDOWN_ARR } from "../../utils/constants";
+import "./Navbar.css";
 
 export default class Navbar extends Component {
   render() {
@@ -34,6 +35,7 @@ export default class Navbar extends Component {
                   Home <span className="sr-only">(current)</span>
                 </a>
               </li>
+
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -47,46 +49,15 @@ export default class Navbar extends Component {
                   Lễ tân
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to="/reservationreport">
-                      Tình hình đặt phòng
-                    </Link>
-                  </li>
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to="/reservationdetail">
-                      Booking
-                    </Link>
-                  </li>
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to="/contact">
-                      Tạo KH
-                    </Link>
-                  </li>
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to="/createbooking">
-                      Tạo Booking
-                    </Link>
-                  </li>
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to="/contactmanagerment">
-                      QL Khách hàng
-                    </Link>
-                  </li>
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to="/viewbooking?booking_id=31">
-                      View Booking
-                    </Link>
-                  </li>
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to="/booking_search">
-                      Truy vấn Booking
-                    </Link>
-                  </li>
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to="/summary_report_01">
-                      Báo cáo 01
-                    </Link>
-                  </li>
+                  {NAVBAR_DROPDOWN_ARR.map((item, index) => {
+                    return (
+                      <li className="dropdown-item" key={index}>
+                        <Link className="nav-link" to={item.link}>
+                          {item.value}
+                        </Link>
+                      </li>
+                    );
+                  })}
                   <div className="dropdown-divider"></div>
                   <li className="dropdown-item">
                     <Link className="nav-link" to="/Search_booking">

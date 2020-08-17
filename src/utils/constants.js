@@ -38,3 +38,38 @@ export const REFRESH_TOKEN_URL = `authentication/renew_jwt`;
 export const REFRESH_TOKEN_TIME = ENVIRONMENT().refreshTokenTime;
 export const SRS_ACCESS_TOKEN = `srs-access-token`;
 export const SRS_USER = `srs-user`;
+
+export const NAVBAR_DROPDOWN_ARR = [
+  {
+    key: "reservationreport",
+    value: "Tình hình đặt phòng",
+    link: "/reservationreport"
+  },
+  {
+    key: "reservationdetail",
+    value: "Booking",
+    link: "/reservationdetail"
+  },
+  {
+    key: "createbooking",
+    value: "Tạo Booking",
+    link: "/createbooking"
+  },
+  {
+    key: "contactmanagerment",
+    value: "QL Khách hàng",
+    link: "/contactmanagerment"
+  },
+  {
+    key: "booking_search",
+    value: "Truy vấn Booking",
+    link: "/booking_search"
+  },
+  {
+    key: "summary_report_01",
+    value: "Báo cáo 01",
+    link: "/summary_report_01"
+  }
+];
+
+export const CREATE_NEW_CONTACT_URL = `/api/new_contact`;

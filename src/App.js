@@ -3,19 +3,19 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import React, { Component } from "react";
 import {
   BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
 
+
+  Redirect, Route,
+  Switch
+} from "react-router-dom";
 import ChangePassword from "./components/auth/ChangePassword";
 import ForgotPassword from "./components/auth/ForgotPassword";
+import Login from "./components/auth/LoginComponent/Login";
 import Register from "./components/auth/Register";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
 import Navbar from "./components/NavbarComponent/Navbar";
 import BookingSearch from "./components/pages/BookingSearchComponent/BookingSearch";
-import Contact from "./components/pages/ContactComponent/Contact";
 import ContactManagerment from "./components/pages/ContactManagerment/ContactManagerment";
 import CreateBooking from "./components/pages/CreateBookingComponent/CreateBooking";
 import ReservationDetail from "./components/pages/ReservationDetail";
@@ -25,8 +25,8 @@ import ViewBooking from "./components/pages/ViewBookingComponent/ViewBooking";
 import ProductAdmin from "./components/ProductAdmin";
 import Products from "./components/Products";
 import authService from "./services/auth.service";
-import Login from "./components/pages/LoginComponent/Login";
 import PrivateRoute from "./utils/PrivateRoute";
+
 
 library.add(faEdit);
 
@@ -60,8 +60,8 @@ class App extends Component {
                 {this.state.user && !this.state.isExpire ? (
                   <Redirect exact from="/" to="/home" />
                 ) : (
-                  <Redirect exact from="/" to="/login" />
-                )}
+                    <Redirect exact from="/" to="/login" />
+                  )}
                 <Route
                   exact
                   path="/login"
@@ -69,8 +69,8 @@ class App extends Component {
                     this.state.user && !this.state.isExpire ? (
                       <Redirect exact from="/" to="/home" />
                     ) : (
-                      <Login {...props} />
-                    )
+                        <Login {...props} />
+                      )
                   }
                 />
                 <Route
@@ -80,8 +80,8 @@ class App extends Component {
                     this.state.user && !this.state.isExpire ? (
                       <Redirect exact from="/" to="/home" />
                     ) : (
-                      <Register {...props} />
-                    )
+                        <Register {...props} />
+                      )
                   }
                 />
                 <Route
@@ -91,8 +91,8 @@ class App extends Component {
                     this.state.user && !this.state.isExpire ? (
                       <Redirect exact from="/" to="/home" />
                     ) : (
-                      <ForgotPassword {...props} />
-                    )
+                        <ForgotPassword {...props} />
+                      )
                   }
                 />
                 <Route
@@ -102,14 +102,13 @@ class App extends Component {
                     this.state.user && !this.state.isExpire ? (
                       <Redirect exact from="/" to="/home" />
                     ) : (
-                      <ChangePassword {...props} />
-                    )
+                        <ChangePassword {...props} />
+                      )
                   }
                 />
                 <PrivateRoute exact path="/home" component={Home} />
                 <PrivateRoute exact path="/products" component={Products} />
                 <PrivateRoute exact path="/admin" component={ProductAdmin} />
-                <PrivateRoute exact path="/contact" component={Contact} />
                 <PrivateRoute
                   exact
                   path="/createbooking"

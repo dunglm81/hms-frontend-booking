@@ -321,7 +321,7 @@ class CreateBooking extends Component {
                                             })}
                                         </div>
                                         : null}
-                                    <button className="btn btn-primary" onClick={() => { this.createNewContact() }}>Tạo KH mới</button>
+                                    {/* <button className="btn btn-primary" onClick={() => { this.createNewContact() }}>Tạo KH mới</button> */}
                                 </div>
                                 <div className={styles.inputGroupOne}>
                                     <div>Khách hàng:</div>
