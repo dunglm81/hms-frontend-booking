@@ -51,13 +51,15 @@ class AuthService {
         this.printError(error, false);
       }
     }
+    user = "tungtvt";
     return user;
   }
 
   isExpire() {
     const user = this.getUser();
     const now = new Date().getTime();
-    return user ? now > this.getUser().exp * 1000 : true;
+    return true;
+    // return user ? now > this.getUser().exp * 1000 : true;
   }
 
   isRefresh() {
