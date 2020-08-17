@@ -16,6 +16,9 @@ class ConfirmModal extends React.Component {
             case 'cancelBooking':
                 title = 'Hủy Booking';
                 break;
+            case 'baselineBooking':
+                title = 'Chốt Booking';
+                break;
             default:
         }
         return title;
@@ -32,6 +35,9 @@ class ConfirmModal extends React.Component {
                 break;
             case 'cancelBooking':
                 description = 'Bạn chắc chắn muốn hủy Booking này?';
+                break;
+            case 'baselineBooking':
+                description = 'Bạn chắc chắn muốn chốt Booking này?';
                 break;
             default:
         }
@@ -63,7 +69,7 @@ class ConfirmModal extends React.Component {
                     }}>Hủy</Button>
                     <Button variant="primary" onClick={() => {
                         this.props.inOnHide(true)
-                    }}>Xác nhận xóa</Button>
+                    }}>{this.props.typeModal === 'baselineBooking' ? "Xác nhận chốt" : "Xác nhận xóa"}</Button>
                 </Modal.Footer>
             </Modal>
         )

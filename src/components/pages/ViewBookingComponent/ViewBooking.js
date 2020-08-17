@@ -3,13 +3,13 @@ import queryString from 'query-string';
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-
 import api_instance from '../../../utils/api';
 import AddItemModal from '../../utility/AddItemModalComponent/AddItemModal';
 import ConfirmModal from '../../utility/ConfirmModalComponent/ConfirmModal';
 import EditRoomServiceModal from './EditRoomServiceModalComponent/EditRoomServiceModal';
 import UpdateDescriptionModal from './UpdateDescriptionModalComponent/UpdateDescriptionModal';
 import styles from './ViewBooking.module.css';
+
 
 const customStyle = (checkValue) => {
     let color = '';
@@ -106,7 +106,7 @@ class ViewBooking extends React.Component {
         }
     }
 
-    deleteItem(typeModal, itemId) {
+    handleRequest(typeModal, itemId) {
         let path = '';
         switch (typeModal) {
             case 'transactions':
@@ -118,13 +118,16 @@ class ViewBooking extends React.Component {
             case 'cancelBooking':
                 path = `cancel_booking?booking_id=${itemId}`;
                 break;
+            case 'baselineBooking':
+                path = `baseline_booking?booking_id=${itemId}`;
+                break;
             default:
         }
 
         api_instance.get(`api/${path}`)
             .then((response) => {
                 if (response.status === 200) {
-                    if (typeModal !== 'cancelBooking') {
+                    if (typeModal !== 'cancelBooking' && typeModal !== 'baselineBooking') {
                         this.requestData('booking_payment_transaction');
                         this.requestData('booking_other_service');
                         this.requestData('booking_total_value');
@@ -327,7 +330,7 @@ class ViewBooking extends React.Component {
 
     displayConfirmModal(isConfirm, typeModal, itemId, display) {
         if (isConfirm) {
-            this.deleteItem(typeModal, itemId);
+            this.handleRequest(typeModal, itemId);
         }
         typeModal = display ? typeModal : '';
         itemId = display ? itemId : -1;
@@ -438,7 +441,9 @@ class ViewBooking extends React.Component {
                                 <button className="btn btn-warning ml-5">Hủy</button>
                             </div> : null}
 
-                            {(this.state.bookingDetail.status === 'valid') ? <div>
+                            {(this.state.bookingDetail.status === 'valid') ? <div onClick={() => {
+                                this.displayConfirmModal(false, 'baselineBooking', this.state.bookingDetail.bookingId, true);
+                            }}>
                                 <button className="btn btn-primary ml-2">Chốt</button>
                             </div> : null}
                         </div>
@@ -518,11 +523,11 @@ class ViewBooking extends React.Component {
                                             return (
                                                 <tr key={index}>
                                                     <th scope="row">
-                                                        <div className={styles.closeBtnCustom} onClick={() => {
+                                                        {this.state.bookingDetail.status === 'valid' ? <div className={styles.closeBtnCustom} onClick={() => {
                                                             this.displayConfirmModal(false, 'otherService', item.booking_service_id, true);
                                                         }}>
                                                             <FontAwesomeIcon icon="times" />
-                                                        </div>
+                                                        </div> : null}
                                                         {item.service_name}</th>
                                                     <td key="quantity">{item.quantity}</td>
                                                     <td key="unit">{(item.unit_price || 0).toLocaleString()}</td>
@@ -565,13 +570,13 @@ class ViewBooking extends React.Component {
                                                     <td key="date">{item.payment_date}</td>
                                                     <td key="money">{(item.payment_value || 0).toLocaleString()}</td>
                                                     <td key="account">{item.payment_account_name}</td>
-                                                    <td key="remove">
+                                                    {this.state.bookingDetail.status === 'valid' ? <td key="remove">
                                                         <div className={styles.closeBtnCustom} onClick={() => {
                                                             this.displayConfirmModal(false, 'transactions', item.payment_transaction_id, true);
                                                         }}>
                                                             <FontAwesomeIcon icon="times" />
                                                         </div>
-                                                    </td>
+                                                    </td> : null}
                                                 </tr>
                                             )
                                         })

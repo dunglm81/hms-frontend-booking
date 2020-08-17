@@ -1,5 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
 import React, { Component } from "react";
 import {
   BrowserRouter as Router,
@@ -28,7 +28,7 @@ import authService from "./services/auth.service";
 import PrivateRoute from "./utils/PrivateRoute";
 
 
-library.add(faEdit);
+library.add(faEdit, faTimes);
 
 class App extends Component {
   state = {
