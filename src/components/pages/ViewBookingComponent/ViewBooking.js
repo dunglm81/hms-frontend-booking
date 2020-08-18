@@ -515,6 +515,7 @@ class ViewBooking extends React.Component {
                                         <th scope="col">Số lượng</th>
                                         <th scope="col">Đơn giá</th>
                                         <th scope="col">Thành tiền</th>
+                                        <th scope="col">Miêu tả</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -532,6 +533,7 @@ class ViewBooking extends React.Component {
                                                     <td key="quantity">{item.quantity}</td>
                                                     <td key="unit">{(item.unit_price || 0).toLocaleString()}</td>
                                                     <td key="totalvalue">{(item.quantity * item.unit_price || 0).toLocaleString()}</td>
+                                                    <td key="description">{item.description}</td>
                                                 </tr>
                                             )
                                         })

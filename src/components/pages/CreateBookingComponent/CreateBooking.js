@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-
 import api_instance from '../../../utils/api';
 import AddItemModal from '../../utility/AddItemModalComponent/AddItemModal';
 import styles from './CreateBooking.module.css';
+
 
 class CreateBooking extends Component {
     constructor(props) {
@@ -223,8 +223,8 @@ class CreateBooking extends Component {
                     return {
                         service_id: item.service_id,
                         using_date: item1.using_date,
-                        quantity: item1.quantity,
-                        unit_price: item1.unit_price,
+                        quantity: item1.quantity.toString(),
+                        unit_price: item1.unit_price.toString(),
                         description: item1.description
                     }
                 })

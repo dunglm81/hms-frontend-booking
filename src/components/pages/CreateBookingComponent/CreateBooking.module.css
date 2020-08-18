@@ -107,6 +107,7 @@
     flex-flow: row nowrap;
     justify-content: space-between;
     width: 100%;
+    min-width: 500px;
 }
 
 .datalistItem:hover {
