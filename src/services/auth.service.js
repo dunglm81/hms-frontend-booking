@@ -1,10 +1,10 @@
 import api_instance from "../utils/api";
 import Base64 from "../utils/Base64";
-import { SRS_ACCESS_TOKEN, SRS_USER, REFRESH_TOKEN_TIME, REFRESH_TOKEN_URL } from "../utils/constants";
+import { HMS_ACCESS_TOKEN, HMS_USER, REFRESH_TOKEN_TIME, REFRESH_TOKEN_URL } from "../utils/constants";
 
 class AuthService {
   getAccessToken() {
-    return localStorage.getItem(SRS_ACCESS_TOKEN);
+    return localStorage.getItem(HMS_ACCESS_TOKEN);
   }
 
   setAccessToken(token) {
@@ -12,8 +12,8 @@ class AuthService {
       const payload = token.split(".")[1];
       let userStr = Base64.decode(payload).toString();
       userStr = this.convertStr(userStr);
-      localStorage.setItem(SRS_ACCESS_TOKEN, token);
-      localStorage.setItem(SRS_USER, userStr);
+      localStorage.setItem(HMS_ACCESS_TOKEN, token);
+      localStorage.setItem(HMS_USER, userStr);
     }
   }
 
@@ -41,7 +41,7 @@ class AuthService {
 
   getUser() {
     let user = null;
-    let userStr = localStorage.getItem(SRS_USER);
+    let userStr = localStorage.getItem(HMS_USER);
     try {
       user = JSON.parse(userStr);
     } catch (error) {
@@ -51,15 +51,13 @@ class AuthService {
         this.printError(error, false);
       }
     }
-    user = "tungtvt";
     return user;
   }
 
   isExpire() {
     const user = this.getUser();
     const now = new Date().getTime();
-    return true;
-    // return user ? now > this.getUser().exp * 1000 : true;
+    return user ? now > this.getUser().exp * 1000 : true;
   }
 
   isRefresh() {
@@ -82,8 +80,8 @@ class AuthService {
   }
 
   logout() {
-    localStorage.removeItem(SRS_ACCESS_TOKEN);
-    localStorage.removeItem(SRS_USER);
+    localStorage.removeItem(HMS_ACCESS_TOKEN);
+    localStorage.removeItem(HMS_USER);
     window.location.href = `/login`;
   }
 }

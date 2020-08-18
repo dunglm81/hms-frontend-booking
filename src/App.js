@@ -1,31 +1,17 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
 import React, { Component } from "react";
-import {
-  BrowserRouter as Router,
-
-
-  Redirect, Route,
-  Switch
-} from "react-router-dom";
-import ChangePassword from "./components/auth/ChangePassword";
-import ForgotPassword from "./components/auth/ForgotPassword";
-import Login from "./components/auth/LoginComponent/Login";
-import Register from "./components/auth/Register";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
-import Home from "./components/Home";
 import Navbar from "./components/NavbarComponent/Navbar";
 import BookingSearch from "./components/pages/BookingSearchComponent/BookingSearch";
 import ContactManagerment from "./components/pages/ContactManagerment/ContactManagerment";
 import CreateBooking from "./components/pages/CreateBookingComponent/CreateBooking";
-import ReservationDetail from "./components/pages/ReservationDetail";
 import ReservationReport from "./components/pages/ReservationReport";
 import SummaryReportOne from "./components/pages/SummaryReportOneComponent/SummaryReportOne";
-import ViewBooking from "./components/pages/ViewBookingComponent/ViewBooking";
-import ProductAdmin from "./components/ProductAdmin";
-import Products from "./components/Products";
 import authService from "./services/auth.service";
-import PrivateRoute from "./utils/PrivateRoute";
+import { ENVIRONMENT, FE_SUB_URL } from "./utils/constants";
+import { log } from "./utils/util";
 
 
 library.add(faEdit, faTimes);
@@ -46,103 +32,59 @@ class App extends Component {
   async componentDidMount() {
     this.updateState("user", await authService.getUser());
     this.updateState("isExpire", await authService.isExpire());
+
+    console.log("TVT user = " + JSON.stringify(this.state.user));
+
+    if (!this.state.user) {
+      window.location.href = "/login";
+    } else {
+      log("this.state.user", this.state.user);
+      this.updateState("isAuthenticating", false);
+    }
     this.updateState("isAuthenticating", false);
   }
 
   render() {
     return (
-      !this.state.isAuthenticating && (
+      !this.state.isAuthenticating &&
+      this.state.user &&
+      !this.state.isExpire && (
         <div className="App">
           <Router>
             <div>
               <Navbar />
               <Switch>
-                {this.state.user && !this.state.isExpire ? (
-                  <Redirect exact from="/" to="/home" />
-                ) : (
-                    <Redirect exact from="/" to="/login" />
-                  )}
+                {
+                  <Redirect
+                    exact
+                    from={FE_SUB_URL + "/"}
+                    to={FE_SUB_URL + "/" + ENVIRONMENT().redirectTabName}
+                  />
+                }
                 <Route
                   exact
-                  path="/login"
-                  render={props =>
-                    this.state.user && !this.state.isExpire ? (
-                      <Redirect exact from="/" to="/home" />
-                    ) : (
-                        <Login {...props} />
-                      )
-                  }
+                  path={FE_SUB_URL + "/reservationreport"}
+                  render={(props) => <ReservationReport {...props} />}
                 />
                 <Route
                   exact
-                  path="/register"
-                  render={props =>
-                    this.state.user && !this.state.isExpire ? (
-                      <Redirect exact from="/" to="/home" />
-                    ) : (
-                        <Register {...props} />
-                      )
-                  }
+                  path={FE_SUB_URL + "/contactmanagerment"}
+                  render={(props) => <ContactManagerment {...props} />}
                 />
                 <Route
                   exact
-                  path="/forgotpassword"
-                  render={props =>
-                    this.state.user && !this.state.isExpire ? (
-                      <Redirect exact from="/" to="/home" />
-                    ) : (
-                        <ForgotPassword {...props} />
-                      )
-                  }
+                  path={FE_SUB_URL + "/booking_search"}
+                  render={(props) => <BookingSearch {...props} />}
                 />
                 <Route
                   exact
-                  path="/changepassword"
-                  render={props =>
-                    this.state.user && !this.state.isExpire ? (
-                      <Redirect exact from="/" to="/home" />
-                    ) : (
-                        <ChangePassword {...props} />
-                      )
-                  }
+                  path={FE_SUB_URL + "/createbooking"}
+                  render={(props) => <CreateBooking {...props} />}
                 />
-                <PrivateRoute exact path="/home" component={Home} />
-                <PrivateRoute exact path="/products" component={Products} />
-                <PrivateRoute exact path="/admin" component={ProductAdmin} />
-                <PrivateRoute
+                <Route
                   exact
-                  path="/createbooking"
-                  component={CreateBooking}
-                />
-                <PrivateRoute
-                  exact
-                  path="/contactmanagerment"
-                  component={ContactManagerment}
-                />
-                <PrivateRoute
-                  exact
-                  path="/viewbooking"
-                  component={ViewBooking}
-                />
-                <PrivateRoute
-                  exact
-                  path="/booking_search"
-                  component={BookingSearch}
-                />
-                <PrivateRoute
-                  exact
-                  path="/summary_report_01"
-                  component={SummaryReportOne}
-                />
-                <PrivateRoute
-                  exact
-                  path="/reservationreport"
-                  component={ReservationReport}
-                />
-                <PrivateRoute
-                  exact
-                  path="/reservationdetail"
-                  component={ReservationDetail}
+                  path={FE_SUB_URL + "/summary_report_01"}
+                  render={(props) => <SummaryReportOne {...props} />}
                 />
               </Switch>
               <Footer />

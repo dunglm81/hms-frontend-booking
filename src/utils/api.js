@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { BE_URL, ENVIRONMENT } from './constants';
 import authService from '../services/auth.service';
+import { BE_URL, ENVIRONMENT } from './constants';
+import { log } from './util';
 
 const api_instance = axios.create({
   baseURL: BE_URL,
@@ -13,14 +14,17 @@ api_instance.interceptors.request.use(
     const isExpire = authService.isExpire();
     const isRefresh = authService.isRefresh();
 
+    log("token", token);
+    log("isExpire", isExpire);
+
     if (token && !isExpire) {
       config.headers.authorization = `Bearer ${token}`;
       if (isRefresh) {
         authService.getRefreshToken();
       }
     } else {
-      // authService.logout();
-      // window.location.href = `/login`;
+      authService.logout();
+      window.location.href = `/login`;
     }
     return config;
   },

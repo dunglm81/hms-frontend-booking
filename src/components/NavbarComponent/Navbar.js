@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { NAVBAR_DROPDOWN_ARR } from "../../utils/constants";
+import { FE_SUB_URL, NAVBAR_DROPDOWN_ARR } from "../../utils/constants";
 import "./Navbar.css";
 
 export default class Navbar extends Component {
@@ -52,7 +52,7 @@ export default class Navbar extends Component {
                   {NAVBAR_DROPDOWN_ARR.map((item, index) => {
                     return (
                       <li className="dropdown-item" key={index}>
-                        <Link className="nav-link" to={item.link}>
+                        <Link className="nav-link" to={FE_SUB_URL + item.link}>
                           {item.value}
                         </Link>
                       </li>
@@ -60,7 +60,7 @@ export default class Navbar extends Component {
                   })}
                   <div className="dropdown-divider"></div>
                   <li className="dropdown-item">
-                    <Link className="nav-link" to="/Search_booking">
+                    <Link className="nav-link" to={FE_SUB_URL + "/search_booking"}>
                       Tìm kiếm
                     </Link>
                   </li>

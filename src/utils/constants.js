@@ -36,8 +36,8 @@ export const BE_URL = ENVIRONMENT().beUrl;
 export const LOGIN_URL = `authentication/user_login`;
 export const REFRESH_TOKEN_URL = `authentication/renew_jwt`;
 export const REFRESH_TOKEN_TIME = ENVIRONMENT().refreshTokenTime;
-export const SRS_ACCESS_TOKEN = `srs-access-token`;
-export const SRS_USER = `srs-user`;
+export const HMS_ACCESS_TOKEN = `hms-access-token`;
+export const HMS_USER = `hms-user`;
 
 export const NAVBAR_DROPDOWN_ARR = [
   {
@@ -72,4 +72,5 @@ export const NAVBAR_DROPDOWN_ARR = [
   }
 ];
 
+export const FE_SUB_URL = ENVIRONMENT().feSubUrl;
 export const CREATE_NEW_CONTACT_URL = `/api/new_contact`;
