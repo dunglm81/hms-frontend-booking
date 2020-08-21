@@ -3,7 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import api_instance from '../../../utils/api';
-import { FE_SUB_URL } from '../../../utils/constants';
+import { routeToPage } from '../../../utils/util';
 import AddItemModal from '../../utility/AddItemModalComponent/AddItemModal';
 import styles from './CreateBooking.module.css';
 
@@ -240,7 +240,7 @@ class CreateBooking extends Component {
             .then((response) => {
                 if (response.status === 200 && response.data) {
                     setTimeout(() => {
-                        this.props.history.push(`${FE_SUB_URL}/viewbooking?booking_id=${response.data.booking_id}`);
+                        routeToPage(this.props.history, `/viewbooking?booking_id=${response.data.booking_id}`);
                     }, 1000);
                 }
             })

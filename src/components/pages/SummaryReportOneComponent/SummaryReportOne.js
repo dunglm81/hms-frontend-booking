@@ -2,10 +2,10 @@ import axios from 'axios';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-
 import api_instance from '../../../utils/api';
+import { routeToPage } from '../../../utils/util';
 import styles from './SummaryReportOne.module.css';
-import { FE_SUB_URL } from '../../../utils/constants';
+
 
 
 class SummaryReportOne extends React.Component {
@@ -237,7 +237,7 @@ class SummaryReportOne extends React.Component {
     }
 
     viewBookingDetail(bookingId) {
-        window.open(`${FE_SUB_URL}/viewbooking?booking_id=${bookingId}`, "_blank");
+        routeToPage(null, `/viewbooking?booking_id=${bookingId}`);
     }
 
     render() {

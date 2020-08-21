@@ -33,12 +33,9 @@ class App extends Component {
     this.updateState("user", await authService.getUser());
     this.updateState("isExpire", await authService.isExpire());
 
-    // console.log("TVT user = " + JSON.stringify(this.state.user));
-
     if (!this.state.user) {
       window.location.href = "/login";
     } else {
-      // log("this.state.user", this.state.user);
       this.updateState("isAuthenticating", false);
     }
     // this.updateState("isAuthenticating", false);

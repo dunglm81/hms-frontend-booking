@@ -3,10 +3,10 @@ import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-
 import api_instance from '../../../utils/api';
+import { routeToPage } from '../../../utils/util';
 import styles from './BookingSearch.module.css';
-import { FE_SUB_URL } from '../../../utils/constants';
+
 
 class BookingSearch extends React.Component {
     constructor(props) {
@@ -80,7 +80,7 @@ class BookingSearch extends React.Component {
     }
 
     viewBookingDetail(bookingId) {
-        this.props.history.push(`${FE_SUB_URL}/viewbooking?booking_id=${bookingId}`);
+        routeToPage(this.props.history, `/viewbooking?booking_id=${bookingId}`)
     }
 
     render() {

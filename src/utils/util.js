@@ -1,5 +1,5 @@
 import { Subject } from "rxjs";
-import { ENVIRONMENT } from "./constants";
+import { ENVIRONMENT, FE_SUB_URL } from "./constants";
 
 const subject = new Subject();
 export const dataService = {
@@ -26,5 +26,14 @@ export function log(key, value) {
     } else {
       console.log(`TVT ${key} = ` + value);
     }
+  }
+}
+
+export function routeToPage(history, path) {
+  path = FE_SUB_URL + path;
+  if (history) {
+    history.push(path);
+  } else {
+    window.open(path, "_blank");
   }
 }
