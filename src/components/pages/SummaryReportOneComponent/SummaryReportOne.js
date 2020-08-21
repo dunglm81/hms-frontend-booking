@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 
 import api_instance from '../../../utils/api';
 import styles from './SummaryReportOne.module.css';
+import { FE_SUB_URL } from '../../../utils/constants';
 
 
 class SummaryReportOne extends React.Component {
@@ -236,7 +237,7 @@ class SummaryReportOne extends React.Component {
     }
 
     viewBookingDetail(bookingId) {
-        window.open(`/viewbooking?booking_id=${bookingId}`, "_blank");
+        window.open(`${FE_SUB_URL}/viewbooking?booking_id=${bookingId}`, "_blank");
     }
 
     render() {
