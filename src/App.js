@@ -9,9 +9,9 @@ import ContactManagerment from "./components/pages/ContactManagerment/ContactMan
 import CreateBooking from "./components/pages/CreateBookingComponent/CreateBooking";
 import ReservationReport from "./components/pages/ReservationReport";
 import SummaryReportOne from "./components/pages/SummaryReportOneComponent/SummaryReportOne";
+import ViewBooking from "./components/pages/ViewBookingComponent/ViewBooking";
 import authService from "./services/auth.service";
 import { ENVIRONMENT, FE_SUB_URL } from "./utils/constants";
-import { log } from "./utils/util";
 
 
 library.add(faEdit, faTimes);
@@ -33,22 +33,23 @@ class App extends Component {
     this.updateState("user", await authService.getUser());
     this.updateState("isExpire", await authService.isExpire());
 
-    console.log("TVT user = " + JSON.stringify(this.state.user));
+    // console.log("TVT user = " + JSON.stringify(this.state.user));
 
     if (!this.state.user) {
       window.location.href = "/login";
     } else {
-      log("this.state.user", this.state.user);
+      // log("this.state.user", this.state.user);
       this.updateState("isAuthenticating", false);
     }
-    this.updateState("isAuthenticating", false);
+    // this.updateState("isAuthenticating", false);
   }
 
   render() {
     return (
       !this.state.isAuthenticating &&
       this.state.user &&
-      !this.state.isExpire && (
+      !this.state.isExpire &&
+      (
         <div className="App">
           <Router>
             <div>
@@ -85,6 +86,11 @@ class App extends Component {
                   exact
                   path={FE_SUB_URL + "/summary_report_01"}
                   render={(props) => <SummaryReportOne {...props} />}
+                />
+                <Route
+                  exact
+                  path={FE_SUB_URL + "/viewbooking"}
+                  render={(props) => <ViewBooking {...props} />}
                 />
               </Switch>
               <Footer />

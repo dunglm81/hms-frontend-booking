@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 
 import api_instance from '../../../utils/api';
 import styles from './BookingSearch.module.css';
+import { FE_SUB_URL } from '../../../utils/constants';
 
 class BookingSearch extends React.Component {
     constructor(props) {
@@ -79,7 +80,7 @@ class BookingSearch extends React.Component {
     }
 
     viewBookingDetail(bookingId) {
-        this.props.history.push(`/viewbooking?booking_id=${bookingId}`);
+        this.props.history.push(`${FE_SUB_URL}/viewbooking?booking_id=${bookingId}`);
     }
 
     render() {
