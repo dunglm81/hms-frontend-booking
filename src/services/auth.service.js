@@ -1,19 +1,31 @@
 import api_instance from "../utils/api";
 import Base64 from "../utils/Base64";
-import { HMS_ACCESS_TOKEN, HMS_USER, REFRESH_TOKEN_TIME, REFRESH_TOKEN_URL } from "../utils/constants";
+import { HMS_ACCESS_TOKEN, HMS_USER, REFRESH_TOKEN_URL } from "../utils/constants";
 
 class AuthService {
   getAccessToken() {
     return localStorage.getItem(HMS_ACCESS_TOKEN);
   }
 
+  getExpire() {
+    return localStorage.getItem(HMS_EXPIRE);
+  }
+
+  getUserStr() {
+    return localStorage.getItem(HMS_USER);
+  }
+
   setAccessToken(token) {
     if (token) {
       const payload = token.split(".")[1];
-      let userStr = Base64.decode(payload).toString();
-      userStr = this.convertStr(userStr);
-      localStorage.setItem(HMS_ACCESS_TOKEN, token);
-      localStorage.setItem(HMS_USER, userStr);
+      const userStr = this.convertStr(Base64.decode(payload).toString());
+      const userStrArr = userStr.split(",");
+      const idx = userStrArr.findIndex((item) => item.includes('"exp":'));
+      if (idx !== -1) {
+        localStorage.setItem(HMS_EXPIRE, userStrArr[idx].split(":")[1]);
+        localStorage.setItem(HMS_ACCESS_TOKEN, token);
+        localStorage.setItem(HMS_USER, userStr);
+      }
     }
   }
 
@@ -39,31 +51,16 @@ class AuthService {
     );
   };
 
-  getUser() {
-    let user = null;
-    let userStr = localStorage.getItem(HMS_USER);
-    try {
-      user = JSON.parse(userStr);
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        this.printError(error, true);
-      } else {
-        this.printError(error, false);
-      }
-    }
-    return user;
-  }
-
   isExpire() {
-    const user = this.getUser();
+    const expire = this.getExpire();
     const now = new Date().getTime();
-    return user ? now > this.getUser().exp * 1000 : true;
+    return expire ? now > parseInt(expire) * 1000 : true;
   }
 
   isRefresh() {
-    const user = this.getUser();
+    const expire = this.getExpire();
     const now = new Date().getTime();
-    return user ? now > this.getUser().exp * 1000 - REFRESH_TOKEN_TIME * 60000 : false;
+    return expire ? now > parseInt(expire) * 1000 - 300000 : false;
   }
 
   getRefreshToken() {
@@ -82,6 +79,7 @@ class AuthService {
   logout() {
     localStorage.removeItem(HMS_ACCESS_TOKEN);
     localStorage.removeItem(HMS_USER);
+    localStorage.removeItem(HMS_EXPIRE);
     window.location.href = `/login`;
   }
 }

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import authService from '../services/auth.service';
 import { BE_URL, ENVIRONMENT } from './constants';
-import { log } from './util';
 
 const api_instance = axios.create({
   baseURL: BE_URL,
@@ -13,9 +12,6 @@ api_instance.interceptors.request.use(
     const token = authService.getAccessToken();
     const isExpire = authService.isExpire();
     const isRefresh = authService.isRefresh();
-
-    log("token", token);
-    log("isExpire", isExpire);
 
     if (token && !isExpire) {
       config.headers.authorization = `Bearer ${token}`;

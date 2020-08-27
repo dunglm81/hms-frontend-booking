@@ -1,24 +1,11 @@
 export const ENVIRONMENT = () => {
   let env = {
     beUrl: `http://localhost:9001`,
-    feUrl: `http://localhost:9000`,
     enableDebug: true,
-    leftLogoUrl: "",
-    leftLogoAlt: "",
-    rightLogoUrl: "",
-    rightLogoAlt: "",
     feSubUrl: "",
     beSubUrl: "",
-    companyName: "",
-    tabArr: [],
     refreshTokenTime: 5,
-    timeOutFe: {
-      minutes: 15,
-      seconds: 0
-    },
-    timeOutApi: 300000,
-    redirectTabName: "",
-    filterDayNumber: 3
+    redirectTabName: ""
   };
   const browserWindow = window || {};
   const browserWindowEnv = browserWindow["__env"] || {};
@@ -38,6 +25,7 @@ export const REFRESH_TOKEN_URL = `authentication/renew_jwt`;
 export const REFRESH_TOKEN_TIME = ENVIRONMENT().refreshTokenTime;
 export const HMS_ACCESS_TOKEN = `hms-access-token`;
 export const HMS_USER = `hms-user`;
+export const HMS_EXPIRE = `hms-expire`;
 
 export const NAVBAR_DROPDOWN_ARR = [
   {

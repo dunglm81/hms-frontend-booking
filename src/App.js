@@ -38,7 +38,6 @@ class App extends Component {
     } else {
       this.updateState("isAuthenticating", false);
     }
-    // this.updateState("isAuthenticating", false);
   }
 
   render() {
