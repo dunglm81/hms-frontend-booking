@@ -18,7 +18,7 @@ library.add(faEdit, faTimes);
 
 class App extends Component {
   state = {
-    user: null,
+    userStr: '',
     isExpire: false,
     isAuthenticating: true
   };
@@ -30,10 +30,10 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    this.updateState("user", await authService.getUser());
+    this.updateState("userStr", await authService.getUserStr());
     this.updateState("isExpire", await authService.isExpire());
 
-    if (!this.state.user) {
+    if (!this.state.userStr) {
       window.location.href = "/login";
     } else {
       this.updateState("isAuthenticating", false);
@@ -43,7 +43,7 @@ class App extends Component {
   render() {
     return (
       !this.state.isAuthenticating &&
-      this.state.user &&
+      this.state.userStr &&
       !this.state.isExpire &&
       (
         <div className="App">

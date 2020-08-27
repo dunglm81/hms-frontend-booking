@@ -1,6 +1,6 @@
 import api_instance from "../utils/api";
 import Base64 from "../utils/Base64";
-import { HMS_ACCESS_TOKEN, HMS_USER, REFRESH_TOKEN_URL } from "../utils/constants";
+import { HMS_ACCESS_TOKEN, HMS_USER, REFRESH_TOKEN_URL, HMS_EXPIRE } from "../utils/constants";
 
 class AuthService {
   getAccessToken() {
