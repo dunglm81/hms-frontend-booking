@@ -19,7 +19,7 @@ export function getDataToStorage(key) {
   return localStorage.getItem(key);
 }
 
-export function log(key, value) {
+export function logFn(key, value) {
   if (ENVIRONMENT().enableDebug) {
     if (typeof value === "object") {
       console.log(`TVT ${key} = ` + JSON.stringify(value));

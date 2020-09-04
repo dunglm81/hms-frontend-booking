@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-d
 import Footer from "./components/Footer";
 import Navbar from "./components/NavbarComponent/Navbar";
 import BookingSearch from "./components/pages/BookingSearchComponent/BookingSearch";
+import BookingServiceRoom from "./components/pages/BookingServiceRoomComponent/BookingServiceRoom";
 import ContactManagerment from "./components/pages/ContactManagerment/ContactManagerment";
 import CreateBooking from "./components/pages/CreateBookingComponent/CreateBooking";
 import ReservationReport from "./components/pages/ReservationReport";
@@ -87,6 +88,11 @@ class App extends Component {
                   exact
                   path={FE_SUB_URL + "/viewbooking"}
                   render={(props) => <ViewBooking {...props} />}
+                />
+                <Route
+                  exact
+                  path={FE_SUB_URL + "/booking_service_room"}
+                  render={(props) => <BookingServiceRoom {...props} />}
                 />
               </Switch>
               <Footer />

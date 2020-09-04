@@ -57,8 +57,15 @@ export const NAVBAR_DROPDOWN_ARR = [
     key: "summary_report_01",
     value: "Báo cáo 01",
     link: "/summary_report_01"
+  },
+  {
+    key: "booking_service_room",
+    value: "Xếp phòng",
+    link: "/booking_service_room"
   }
 ];
 
 export const FE_SUB_URL = ENVIRONMENT().feSubUrl;
 export const CREATE_NEW_CONTACT_URL = `/api/new_contact`;
+
+export const API_BOOKING_SERVICE_ROOM = `api/booking_service_room`;

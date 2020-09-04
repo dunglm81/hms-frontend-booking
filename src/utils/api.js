@@ -20,7 +20,6 @@ api_instance.interceptors.request.use(
       }
     } else {
       authService.logout();
-      window.location.href = `/login`;
     }
     return config;
   },

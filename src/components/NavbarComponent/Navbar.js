@@ -10,7 +10,7 @@ export default class Navbar extends Component {
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <a className="navbar-brand" href="/">
             <img
-              src="qh-logo.png"
+              src="/qh-logo.png"
               width="100px"
               alt="Quản lý ks Queen"
               loading="lazy"
