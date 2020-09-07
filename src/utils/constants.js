@@ -69,3 +69,4 @@ export const FE_SUB_URL = ENVIRONMENT().feSubUrl;
 export const CREATE_NEW_CONTACT_URL = `/api/new_contact`;
 
 export const API_BOOKING_SERVICE_ROOM = `api/booking_service_room`;
+export const API_ROOMS = `api/rooms`;

@@ -18,12 +18,25 @@ class BookingServiceRoom extends React.Component {
             to_date: moment(toDate).format("YYYY-MM-DD"),
             isValidDate: true,
             searchData: [],
-            search_type: "checkin"
+            search_type: "checkin",
+            roomArrOrigin: [],
+            roomArr: []
         }
     }
 
     componentDidMount() {
+        this.getDataFromServer();
+    }
 
+    getDataFromServer() {
+        apiService.getRooms().then((response) => {
+            if (response.status === 200) {
+                this.updateState("roomArrOrigin", response.data);
+                this.updateState("roomArr", response.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     handleChangeDate(event) {
@@ -77,6 +90,10 @@ class BookingServiceRoom extends React.Component {
     }
 
     setupData(data) {
+        data = data.map(item => {
+            item.showAutocomplete = false;
+            return item;
+        })
         data = data.reduce((finalList, item) => {
             const idx = finalList.findIndex(item1 => item1.booking_id === item.booking_id);
             item.using_date = moment(item.using_date).format("DD-MM-YYYY");
@@ -128,8 +145,33 @@ class BookingServiceRoom extends React.Component {
             });
             return item;
         });
-
         this.updateState('searchData', data);
+    }
+
+    handleChangeAutoCompleteInput = (idx, idx2, idx3, idx4, event) => {
+        const value = event.target.value;
+        let searchData = JSON.parse(JSON.stringify(this.state.searchData));
+        searchData[idx].data[idx2].data[idx3].data[idx4].room_name = value;
+        this.updateState("searchData", searchData);
+
+        let roomArr = JSON.parse(JSON.stringify(this.state.roomArrOrigin));
+        roomArr = roomArr.filter(item => item.room_name.includes(value));
+        this.updateState("roomArr", roomArr);
+    }
+
+    displayRoomPopup(idx, idx2, idx3, idx4, showAutocomplete) {
+        let searchData = JSON.parse(JSON.stringify(this.state.searchData));
+        searchData[idx].data[idx2].data[idx3].data[idx4].showAutocomplete = showAutocomplete;
+        this.updateState("searchData", searchData);
+
+        let roomArr = JSON.parse(JSON.stringify(this.state.roomArrOrigin));
+        this.updateState("roomArr", roomArr);
+    }
+
+    handleSelectAutoCompleteItem(idx, idx2, idx3, idx4, item) {
+        let searchData = JSON.parse(JSON.stringify(this.state.searchData));
+        searchData[idx].data[idx2].data[idx3].data[idx4].room_name = item.room_name;
+        this.updateState("searchData", searchData);
     }
 
     render() {
@@ -186,15 +228,45 @@ class BookingServiceRoom extends React.Component {
                                                     {item.data.map((item2, idx2) => {
                                                         return (
                                                             <tr key={idx2} className={styles.trCustom}>
-                                                                <td>{item2.service_name}</td>
+                                                                <td>
+                                                                    <div>{item2.service_name}</div>
+                                                                </td>
                                                                 {item2.data.map((item3, idx3) => {
                                                                     return (
-                                                                        <td key={idx3}>
-                                                                            {item3.data.map((item4, idx4) => {
-                                                                                return(
-                                                                                    <div key={idx4}>{item4.index}</div>
-                                                                                )
-                                                                            })}
+                                                                        <td key={idx3} className={styles.tdCustom}>
+                                                                            <div className="d-flex flex-row">
+                                                                                {item3.data.map((item4, idx4) => {
+                                                                                    return (
+                                                                                        <div className={styles.inputContainerCustom} key={idx4}>
+                                                                                            <input className={"form-control mr-2 " + styles.inputCustom}
+                                                                                                value={(this.state.searchData[idx].data[idx2].data[idx3].data[idx4].room_name) || ""}
+                                                                                                onBlur={() => {
+                                                                                                    setTimeout(() => {
+                                                                                                        this.displayRoomPopup(idx, idx2, idx3, idx4, false);
+                                                                                                    }, 300);
+                                                                                                }}
+                                                                                                onFocus={() => {
+                                                                                                    this.displayRoomPopup(idx, idx2, idx3, idx4, true);
+                                                                                                }}
+                                                                                                onChange={(e) => {
+                                                                                                    this.handleChangeAutoCompleteInput(idx, idx2, idx3, idx4, e);
+                                                                                                }}
+                                                                                            />
+                                                                                            {item4.showAutocomplete ?
+                                                                                                <div className={styles.datalistPopup}>
+                                                                                                    {(this.state.roomArr).map((item, idx5) => {
+                                                                                                        return (
+                                                                                                            <div key={idx5} className={styles.datalistItem} onClick={() => {
+                                                                                                                this.handleSelectAutoCompleteItem(idx, idx2, idx3, idx4, item);
+                                                                                                            }} title={item.room_name}>{item.room_name}</div>
+                                                                                                        )
+                                                                                                    })}
+                                                                                                </div> : null}
+                                                                                        </div>
+                                                                                    )
+                                                                                })}
+                                                                            </div>
+
                                                                         </td>
                                                                     )
                                                                 })}

@@ -1,5 +1,5 @@
 import api_instance from "../utils/api";
-import { CREATE_NEW_CONTACT_URL, API_BOOKING_SERVICE_ROOM } from "../utils/constants";
+import { API_ROOMS, CREATE_NEW_CONTACT_URL } from "../utils/constants";
 
 class ApiService {
     createNewContact(body) {
@@ -7,7 +7,11 @@ class ApiService {
     }
 
     getBookingServiceRoom(path, body) {
-        return api_instance.get(API_BOOKING_SERVICE_ROOM, body);
+        return api_instance.get(path, body);
+    }
+
+    getRooms() {
+        return api_instance.get(API_ROOMS); 
     }
 }
 
