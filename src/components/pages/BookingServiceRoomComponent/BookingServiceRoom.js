@@ -18,6 +18,7 @@ class BookingServiceRoom extends React.Component {
             from_date: moment(fromDate).format("YYYY-MM-DD"),
             to_date: moment(toDate).format("YYYY-MM-DD"),
             isValidDate: true,
+            searchDataOrigin: [],
             searchData: [],
             search_type: "checkin",
             roomArrOrigin: [],
@@ -82,7 +83,8 @@ class BookingServiceRoom extends React.Component {
                 }
             }).then((response) => {
                 if (response.status === 200) {
-                    this.setupData(response.data);
+                    this.updateState("searchDataOrigin", JSON.parse(JSON.stringify(response.data)));
+                    this.setupData(JSON.parse(JSON.stringify(response.data)));
                 }
             }).catch((err) => {
                 console.log(err);
@@ -161,20 +163,23 @@ class BookingServiceRoom extends React.Component {
 
     displayRoomPopup(idx, idx2, idx3, idx4, showAutocomplete) {
         let searchData = JSON.parse(JSON.stringify(this.state.searchData));
-        searchData[idx].data[idx2].data[idx3].data[idx4].showAutocomplete = showAutocomplete;
-        this.updateState("searchData", searchData);
+        if (searchData) {
+            searchData[idx].data[idx2].data[idx3].data[idx4].showAutocomplete = showAutocomplete;
+            this.updateState("searchData", searchData);
 
-        let roomArr = JSON.parse(JSON.stringify(this.state.roomArrOrigin));
-        this.updateState("roomArr", roomArr);
+            let roomArr = JSON.parse(JSON.stringify(this.state.roomArrOrigin));
+            this.updateState("roomArr", roomArr);
+        }
     }
 
-    updateRoomItem(idx, idx2, idx3, idx4, value) {
+    updateRoomItem(idx, idx2, idx3, idx4, roomName, roomId) {
         let searchData = JSON.parse(JSON.stringify(this.state.searchData));
         searchData[idx].data[idx2].data = searchData[idx].data[idx2].data.map((item5, idx5) => {
             if (idx5 >= idx3) {
                 item5.data = item5.data.map((item6, idx6) => {
                     if (idx6 === idx4) {
-                        item6.room_name = value;
+                        item6.room_name = roomName;
+                        item6.room_id = roomId;
                     }
                     return item6;
                 });
@@ -184,10 +189,73 @@ class BookingServiceRoom extends React.Component {
         this.updateState("searchData", searchData);
     }
 
-    allowEditBookingItem(idx, value) {
+    allowEditBookingItem(idx, isEdit) {
         let searchData = JSON.parse(JSON.stringify(this.state.searchData));
-        searchData[idx].isEdit = value;
-        this.updateState("searchData", searchData);
+        searchData[idx].isEdit = isEdit;
+
+        if (!isEdit) {
+            const originData = JSON.parse(JSON.stringify(this.state.searchDataOrigin));
+            this.setupData(originData);
+        } else {
+            this.updateState("searchData", searchData);
+        }
+    }
+
+    saveBookingItem(bookingItem) {
+        let dataOrigin = JSON.parse(JSON.stringify(this.state.searchDataOrigin));
+        dataOrigin = dataOrigin.filter(item => item.booking_id === bookingItem.booking_id);
+        const convertData = JSON.parse(JSON.stringify(bookingItem)).data.map(item => {
+            item.data = item.data.reduce((finalList, item1) => {
+                finalList = [...finalList, ...item1.data];
+                return finalList;
+            }, []);
+            return item;
+        })
+
+        dataOrigin = dataOrigin.map(item => {
+            const idx = convertData.findIndex(item1 => item1.service_id === item.service_id);
+            if (idx !== -1) {
+                const idx1 = convertData[idx].data.findIndex(item2 => (item2.using_date === moment(item.using_date).format("DD-MM-YYYY")) && item2.index === item.index);
+                if (idx1 !== -1) {
+                    item.room_id = convertData[idx].data[idx1].room_id;
+                    item.room_name = convertData[idx].data[idx1].room_name;
+                }
+            }
+            return item;
+        })
+        this.updateBookingServiceRoomToServer(dataOrigin, bookingItem.booking_id);
+    }
+
+    updateBookingServiceRoomToServer(data, bookingId) {
+        let promiseArr = [];
+        for (const item of data) {
+            const obj = {
+                id: item.id,
+                room_id: item.room_id || null,
+                room_name: item.room_name
+            }
+            const promise = apiService.updateBookingServieRoom(obj);
+            promiseArr.push(promise);
+        }
+        Promise.all(promiseArr).then((response) => {
+            let searchData = JSON.parse(JSON.stringify(this.state.searchData));
+            const idx = searchData.findIndex(item1 => item1.booking_id === bookingId);
+            if (idx !== -1) {
+                searchData[idx].isEdit = false;
+                this.updateState("searchData", searchData);
+            }
+            let searchDataOrigin = JSON.parse(JSON.stringify(this.state.searchDataOrigin));
+            searchDataOrigin = searchDataOrigin.map(item => {
+                const idx = data.findIndex(item1 => item1.id === item.id);
+                if (idx !== -1) {
+                    item = data[idx];
+                }
+                return item;
+            })
+            this.updateState("searchDataOrigin", searchDataOrigin);
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     render() {
@@ -233,7 +301,7 @@ class BookingServiceRoom extends React.Component {
                                                 {item.isEdit ?
                                                     <div className="d-flex flex-row align-items-center">
                                                         <div className={styles.bgBtnCustom} onClick={() => {
-                                                            this.allowEditBookingItem(idx);
+                                                            this.saveBookingItem(item);
                                                         }}>
                                                             <FontAwesomeIcon className="mr-1" icon="save" /> Save
                                                         </div>
@@ -295,7 +363,7 @@ class BookingServiceRoom extends React.Component {
                                                                                                     {(this.state.roomArr).map((item, idx5) => {
                                                                                                         return (
                                                                                                             <div key={idx5} className={styles.datalistItem} onClick={() => {
-                                                                                                                this.updateRoomItem(idx, idx2, idx3, idx4, item.room_name);
+                                                                                                                this.updateRoomItem(idx, idx2, idx3, idx4, item.room_name, item.room_id);
                                                                                                             }} title={item.room_name}>{item.room_name}</div>
                                                                                                         )
                                                                                                     })}
