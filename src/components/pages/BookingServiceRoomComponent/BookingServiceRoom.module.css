@@ -58,11 +58,73 @@
     z-index: 1000;
     position: absolute;
     background-color: white;
-    padding: 10px;
     border: 1px solid rgb(215, 215, 215);
     top: 40px;
 }
 
 .inputContainerCustom {
     position: relative;
+}
+
+.datalistItem {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 100%;
+    min-width: 100px;
+    padding: 0 10px;
+}
+
+.datalistItem:hover {
+    background-color: blue;
+    color: white;
+    cursor: pointer;
+}
+
+.datalistItem > div {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 120px);
+}
+
+.datalistItem > div:nth-child(1) {
+    margin-right: 20px;
+}
+
+.tableResponsiveCustom {
+    min-height: 350px;
+}
+
+.groupBtnItem {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.groupBtnItem > h4 {
+    margin-bottom: 0;
+}
+
+.bgBtnCustom {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    height: 30px;
+    margin-left: 10px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+.bgBtnCustom:hover {
+    cursor: pointer;
+    background-color: #F4F6F8;
+}
+
+.preventEditTable {
+    pointer-events: none !important;
 }

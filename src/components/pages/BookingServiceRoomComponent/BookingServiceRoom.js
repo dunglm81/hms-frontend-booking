@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from "moment";
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
@@ -101,6 +102,7 @@ class BookingServiceRoom extends React.Component {
                 finalList.push({
                     booking_id: item.booking_id,
                     using_date_arr: [item.using_date],
+                    isEdit: false,
                     data: [item]
                 });
             } else {
@@ -150,10 +152,8 @@ class BookingServiceRoom extends React.Component {
 
     handleChangeAutoCompleteInput = (idx, idx2, idx3, idx4, event) => {
         const value = event.target.value;
-        let searchData = JSON.parse(JSON.stringify(this.state.searchData));
-        searchData[idx].data[idx2].data[idx3].data[idx4].room_name = value;
-        this.updateState("searchData", searchData);
 
+        this.updateRoomItem(idx, idx2, idx3, idx4, value);
         let roomArr = JSON.parse(JSON.stringify(this.state.roomArrOrigin));
         roomArr = roomArr.filter(item => item.room_name.includes(value));
         this.updateState("roomArr", roomArr);
@@ -168,9 +168,25 @@ class BookingServiceRoom extends React.Component {
         this.updateState("roomArr", roomArr);
     }
 
-    handleSelectAutoCompleteItem(idx, idx2, idx3, idx4, item) {
+    updateRoomItem(idx, idx2, idx3, idx4, value) {
         let searchData = JSON.parse(JSON.stringify(this.state.searchData));
-        searchData[idx].data[idx2].data[idx3].data[idx4].room_name = item.room_name;
+        searchData[idx].data[idx2].data = searchData[idx].data[idx2].data.map((item5, idx5) => {
+            if (idx5 >= idx3) {
+                item5.data = item5.data.map((item6, idx6) => {
+                    if (idx6 === idx4) {
+                        item6.room_name = value;
+                    }
+                    return item6;
+                });
+            }
+            return item5;
+        })
+        this.updateState("searchData", searchData);
+    }
+
+    allowEditBookingItem(idx, value) {
+        let searchData = JSON.parse(JSON.stringify(this.state.searchData));
+        searchData[idx].isEdit = value;
         this.updateState("searchData", searchData);
     }
 
@@ -207,13 +223,35 @@ class BookingServiceRoom extends React.Component {
                 </Row>
                 <Row>
                     <Col>
-                        <div className="table-responsive">
+                        <div className={"table-responsive " + styles.tableResponsiveCustom}>
                             {
                                 this.state.searchData.map((item, idx) => {
                                     return (
                                         <div key={idx}>
-                                            <h4>Booking: {item.booking_id}</h4>
-                                            <table className="table table-sm table-hover table-bordered">
+                                            <div className={styles.groupBtnItem}>
+                                                <h4>Booking: {item.booking_id}</h4>
+                                                {item.isEdit ?
+                                                    <div className="d-flex flex-row align-items-center">
+                                                        <div className={styles.bgBtnCustom} onClick={() => {
+                                                            this.allowEditBookingItem(idx);
+                                                        }}>
+                                                            <FontAwesomeIcon className="mr-1" icon="save" /> Save
+                                                        </div>
+                                                        <div className={styles.bgBtnCustom} onClick={() => {
+                                                            this.allowEditBookingItem(idx, false);
+                                                        }}>
+                                                            <FontAwesomeIcon className="mr-1" icon="times" /> Cancel
+                                                        </div>
+                                                    </div>
+                                                    :
+                                                    <div className={styles.bgBtnCustom} onClick={() => {
+                                                        this.allowEditBookingItem(idx, true);
+                                                    }}>
+                                                        <FontAwesomeIcon icon="edit" /> Edit
+                                                    </div>}
+                                            </div>
+
+                                            <table className={"table table-sm table-hover table-bordered " + (item.isEdit ? "" : styles.preventEditTable)}>
                                                 <thead className={"thead-light " + styles.theadCustom}>
                                                     <tr>
                                                         <th scope="col" key="room_type">Loại phòng</th>
@@ -257,7 +295,7 @@ class BookingServiceRoom extends React.Component {
                                                                                                     {(this.state.roomArr).map((item, idx5) => {
                                                                                                         return (
                                                                                                             <div key={idx5} className={styles.datalistItem} onClick={() => {
-                                                                                                                this.handleSelectAutoCompleteItem(idx, idx2, idx3, idx4, item);
+                                                                                                                this.updateRoomItem(idx, idx2, idx3, idx4, item.room_name);
                                                                                                             }} title={item.room_name}>{item.room_name}</div>
                                                                                                         )
                                                                                                     })}

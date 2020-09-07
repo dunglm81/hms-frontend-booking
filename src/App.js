@@ -1,5 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTimes, faSave } from "@fortawesome/free-solid-svg-icons";
 import React, { Component } from "react";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
@@ -15,7 +15,7 @@ import authService from "./services/auth.service";
 import { ENVIRONMENT, FE_SUB_URL } from "./utils/constants";
 
 
-library.add(faEdit, faTimes);
+library.add(faEdit, faTimes, faSave);
 
 class App extends Component {
   state = {
