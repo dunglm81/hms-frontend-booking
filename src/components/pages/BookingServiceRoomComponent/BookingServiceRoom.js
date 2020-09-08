@@ -108,8 +108,7 @@ class BookingServiceRoom extends React.Component {
                     data: [item]
                 });
             } else {
-                const idx1 = finalList.findIndex(item2 => item2.using_date_arr.indexOf(item.using_date) !== -1);
-                if (idx1 === -1) {
+                if (finalList[idx].using_date_arr.indexOf(item.using_date) === -1) {
                     finalList[idx].using_date_arr.push(item.using_date);
                 }
                 finalList[idx].data.push(item);
@@ -215,7 +214,7 @@ class BookingServiceRoom extends React.Component {
         dataOrigin = dataOrigin.map(item => {
             const idx = convertData.findIndex(item1 => item1.service_id === item.service_id);
             if (idx !== -1) {
-                const idx1 = convertData[idx].data.findIndex(item2 => (item2.using_date === moment(item.using_date).format("DD-MM-YYYY")) && item2.index === item.index);
+                const idx1 = convertData[idx].data.findIndex(item2 => (item2.using_date === moment(item.using_date).format("DD-MM-YYYY")) && item2.room_index === item.room_index);
                 if (idx1 !== -1) {
                     item.room_id = convertData[idx].data[idx1].room_id;
                     item.room_name = convertData[idx].data[idx1].room_name;
@@ -297,7 +296,7 @@ class BookingServiceRoom extends React.Component {
                                     return (
                                         <div key={idx}>
                                             <div className={styles.groupBtnItem}>
-                                                <h4>Booking: {item.booking_id}</h4>
+                                                <h5>Booking: {item.booking_id}</h5>
                                                 {item.isEdit ?
                                                     <div className="d-flex flex-row align-items-center">
                                                         <div className={styles.bgBtnCustom} onClick={() => {

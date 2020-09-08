@@ -70,3 +70,4 @@ export const CREATE_NEW_CONTACT_URL = `/api/new_contact`;
 
 export const API_BOOKING_SERVICE_ROOM = `api/booking_service_room`;
 export const API_ROOMS = `api/rooms`;
+export const API_BOOKING_ROOM_ITEM = `api/booking_room_item`;
