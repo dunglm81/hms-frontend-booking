@@ -18,6 +18,10 @@ class ApiService {
         return api_instance.put(API_BOOKING_SERVICE_ROOM, body);
     }
 
+    deleteBookingServiceRoomByBookingId(bookingId) {
+        return api_instance.delete(`${API_BOOKING_SERVICE_ROOM}?booking_id=${bookingId}`);
+    }
+
     getRooms() {
         return api_instance.get(API_ROOMS); 
     }

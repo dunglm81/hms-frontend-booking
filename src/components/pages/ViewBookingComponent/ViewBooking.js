@@ -3,7 +3,9 @@ import queryString from 'query-string';
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import apiService from '../../../services/api.service';
 import api_instance from '../../../utils/api';
+import { createBookingServiceRooms } from '../../../utils/util';
 import AddItemModal from '../../utility/AddItemModalComponent/AddItemModal';
 import ConfirmModal from '../../utility/ConfirmModalComponent/ConfirmModal';
 import EditRoomServiceModal from './EditRoomServiceModalComponent/EditRoomServiceModal';
@@ -210,6 +212,13 @@ class ViewBooking extends React.Component {
                 if (response.status === 200) {
                     this.requestData('booking_room_item');
                     this.requestData('booking_total_value');
+                    apiService.deleteBookingServiceRoomByBookingId(submitData.booking_id).then((response) => {
+                        if (response.status === 200) {
+                            createBookingServiceRooms(submitData.booking_id, submitData.checkin_date, submitData.checkout_date).then(() => { });
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
                 }
             })
             .catch((error) => {

@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import apiService from '../../../services/api.service';
 import api_instance from '../../../utils/api';
-import { routeToPage } from '../../../utils/util';
+import { createBookingServiceRooms, routeToPage } from '../../../utils/util';
 import AddItemModal from '../../utility/AddItemModalComponent/AddItemModal';
 import styles from './CreateBooking.module.css';
 
@@ -240,48 +239,16 @@ class CreateBooking extends Component {
         api_instance.post(`api/new_booking`, data)
             .then((response) => {
                 if (response.status === 200 && response.data) {
-                    this.createBookingServiceRooms(response.data.booking_id);
+                    createBookingServiceRooms(response.data.booking_id, this.state.fromDate, this.state.toDate).then(() => {
+                        setTimeout(() => {
+                            routeToPage(this.props.history, `/viewbooking?booking_id=${response.data.booking_id}`);
+                        }, 1000);
+                    })
                 }
             })
             .catch((error) => {
                 console.log(error);
             })
-    }
-
-    createBookingServiceRooms(bookingId) {
-        apiService.getBookingRoomItems(bookingId).then((response) => {
-            if (response.status === 200) {
-                let promiseArr = [];
-                response.data.map(item => {
-                    for (let idx = 0; idx < item.quantity; idx++) {
-                        const obj = {
-                            booking_id: bookingId,
-                            booking_service_id: item.booking_service_id,
-                            service_id: item.service_id,
-                            service_name: item.service_name,
-                            room_id: null,
-                            room_name: "",
-                            using_date: item.using_date,
-                            room_index: (idx + 1),
-                            booking_checkin_date: this.state.fromDate,
-                            booking_checkout_date: this.state.toDate
-                        }
-                        const promise = apiService.insertBookingServiceRoom(obj);
-                        promiseArr.push(promise);
-                    }
-                    return item;
-                })
-                Promise.all(promiseArr).then(() => {
-                    setTimeout(() => {
-                        routeToPage(this.props.history, `/viewbooking?booking_id=${bookingId}`);
-                    }, 1000);
-                }).catch((err) => {
-                    console.log(err);
-                })
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
     }
 
     handleSelectAutoCompleteItem(item) {
