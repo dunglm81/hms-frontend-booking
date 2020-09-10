@@ -83,6 +83,8 @@ class BookingServiceRoom extends React.Component {
                 }
             }).then((response) => {
                 if (response.status === 200) {
+                    response.data = this.reArrangeData(response.data);
+                    response.data = this.checkErrorRoom(response.data);
                     this.updateState("searchDataOrigin", JSON.parse(JSON.stringify(response.data)));
                     this.setupData(JSON.parse(JSON.stringify(response.data)));
                 }
@@ -103,7 +105,6 @@ class BookingServiceRoom extends React.Component {
     }
 
     async setupData(data) {
-        data = this.reArrangeData(data);
         data = await data.map(item => {
             item.showAutocomplete = false;
             return item;
@@ -165,7 +166,6 @@ class BookingServiceRoom extends React.Component {
 
     handleChangeAutoCompleteInput = (idx, idx2, idx3, idx4, event) => {
         const value = event.target.value;
-
         this.updateRoomItem(idx, idx2, idx3, idx4, value);
         let roomArr = JSON.parse(JSON.stringify(this.state.roomArrOrigin));
         roomArr = roomArr.filter(item => item.room_name.includes(value));
@@ -226,7 +226,7 @@ class BookingServiceRoom extends React.Component {
         dataOrigin = dataOrigin.map(item => {
             const idx = convertData.findIndex(item1 => item1.service_id === item.service_id);
             if (idx !== -1) {
-                const idx1 = convertData[idx].data.findIndex(item2 => (item2.using_date === moment(item.using_date).format("DD-MM-YYYY")) && item2.room_index === item.room_index);
+                const idx1 = convertData[idx].data.findIndex(item2 => (item2.using_date === item.using_date) && item2.room_index === item.room_index);
                 if (idx1 !== -1) {
                     item.room_id = convertData[idx].data[idx1].room_id;
                     item.room_name = convertData[idx].data[idx1].room_name;
@@ -248,13 +248,7 @@ class BookingServiceRoom extends React.Component {
             const promise = apiService.updateBookingServieRoom(obj);
             promiseArr.push(promise);
         }
-        Promise.all(promiseArr).then((response) => {
-            let searchData = JSON.parse(JSON.stringify(this.state.searchData));
-            const idx = searchData.findIndex(item1 => item1.booking_id === bookingId);
-            if (idx !== -1) {
-                searchData[idx].isEdit = false;
-                this.updateState("searchData", searchData);
-            }
+        Promise.all(promiseArr).then(() => {
             let searchDataOrigin = JSON.parse(JSON.stringify(this.state.searchDataOrigin));
             searchDataOrigin = searchDataOrigin.map(item => {
                 const idx = data.findIndex(item1 => item1.id === item.id);
@@ -263,10 +257,22 @@ class BookingServiceRoom extends React.Component {
                 }
                 return item;
             })
+            searchDataOrigin = this.checkErrorRoom(searchDataOrigin);
             this.updateState("searchDataOrigin", searchDataOrigin);
+            this.setupData(searchDataOrigin);
         }).catch((err) => {
             console.log(err);
         })
+    }
+
+    checkErrorRoom(data) {
+        data = data.map(item => {
+            const duplicateRoomData = data.filter(item1 => (item1.booking_id !== item.booking_id) && (item1.using_date === item.using_date) && (item1.room_id === item.room_id) && item.room_id);
+            const duplicateServiceData = data.filter(item1 => (item.room_id) && (item1.room_id === item.room_id) && (item1.service_id !== item.service_id));
+            item.errorRoom = (duplicateRoomData.length > 0 || duplicateServiceData.length > 0);
+            return item;
+        })
+        return data;
     }
 
     render() {
@@ -355,7 +361,7 @@ class BookingServiceRoom extends React.Component {
                                                                                 {item3.data.map((item4, idx4) => {
                                                                                     return (
                                                                                         <div className={styles.inputContainerCustom} key={idx4}>
-                                                                                            <input className={"form-control mr-2 " + styles.inputCustom}
+                                                                                            <input className={"form-control mr-2 " + styles.inputCustom + " " + (item4.errorRoom ? styles.errorRoomInput : "")}
                                                                                                 value={(this.state.searchData[idx].data[idx2].data[idx3].data[idx4].room_name) || ""}
                                                                                                 onBlur={() => {
                                                                                                     setTimeout(() => {

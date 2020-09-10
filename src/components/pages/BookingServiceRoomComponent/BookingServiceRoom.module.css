@@ -134,3 +134,7 @@
     width: 200px;
     min-width: 200px !important;
 }
+
+.errorRoomInput {
+    background-color: #ffccff;
+}
