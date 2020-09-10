@@ -1,0 +1,54 @@
+.functionsGroup {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    border: 1px solid rgb(220, 220, 220);
+    margin: 5px 0 30px 0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.functionsDate {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    align-items: center;
+}
+.functionsDate > div:nth-child(1),
+.functionsDate > div:nth-child(2) {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    white-space: nowrap;
+    margin-right: 30px;
+}
+
+.functionsDate > div:nth-child(1) > div,
+.functionsDate > div:nth-child(2) > div {
+    margin-right: 5px;
+}
+
+.functionsDate > div:nth-child(3) {
+    margin-right: 30px;
+}
+
+.roomContainer {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+.roomItem {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    height: 32px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+    font-weight: 500;
+}

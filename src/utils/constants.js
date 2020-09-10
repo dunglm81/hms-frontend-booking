@@ -62,6 +62,11 @@ export const NAVBAR_DROPDOWN_ARR = [
     key: "booking_service_room",
     value: "Xếp phòng",
     link: "/booking_service_room"
+  },
+  {
+    key: "roomplan",
+    value: "Kế hoạch vệ sinh",
+    link: "/roomplan"
   }
 ];
 

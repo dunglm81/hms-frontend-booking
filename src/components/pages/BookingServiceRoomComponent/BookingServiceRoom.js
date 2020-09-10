@@ -92,14 +92,25 @@ class BookingServiceRoom extends React.Component {
         }
     }
 
-    setupData(data) {
-        data = data.map(item => {
+    reArrangeData(data) {
+        let usingDateArr = data.map(item => item.using_date).sort();
+        usingDateArr = [...new Set(usingDateArr)];
+        let finalList = [];
+        for (const usingDateItem of usingDateArr) {
+            finalList = [...finalList, ...data.filter(item => item.using_date === usingDateItem)];
+        }
+        return finalList;
+    }
+
+    async setupData(data) {
+        data = this.reArrangeData(data);
+        data = await data.map(item => {
             item.showAutocomplete = false;
             return item;
         })
-        data = data.reduce((finalList, item) => {
+
+        data = await data.reduce((finalList, item) => {
             const idx = finalList.findIndex(item1 => item1.booking_id === item.booking_id);
-            item.using_date = moment(item.using_date).format("DD-MM-YYYY");
             if (idx === -1) {
                 finalList.push({
                     booking_id: item.booking_id,
@@ -116,7 +127,7 @@ class BookingServiceRoom extends React.Component {
             return finalList;
         }, []);
 
-        data = data.map(item => {
+        data = await data.map(item => {
             item.data = item.data.reduce((finalList, item1) => {
                 const idx = finalList.findIndex(item2 => item1.service_id === item2.service_id);
                 if (idx === -1) {
@@ -131,7 +142,7 @@ class BookingServiceRoom extends React.Component {
                 return finalList;
             }, []);
 
-            item.data.map(item2 => {
+            item.data = item.data.map(item2 => {
                 item2.data = item2.data.reduce((finalList, item3) => {
                     const idx = finalList.findIndex(item4 => item3.using_date === item4.using_date);
                     if (idx === -1) {
@@ -148,6 +159,7 @@ class BookingServiceRoom extends React.Component {
             });
             return item;
         });
+
         this.updateState('searchData', data);
     }
 
@@ -321,7 +333,7 @@ class BookingServiceRoom extends React.Component {
                                             <table className={"table table-sm table-hover table-bordered " + (item.isEdit ? "" : styles.preventEditTable)}>
                                                 <thead className={"thead-light " + styles.theadCustom}>
                                                     <tr>
-                                                        <th scope="col" key="room_type">Loại phòng</th>
+                                                        <th scope="col" key="room_type" className={styles.thFixWidth}>Loại phòng</th>
                                                         {item.using_date_arr.map((item1, idx1) => {
                                                             return (
                                                                 <th scope="col" key={idx1}>{item1}</th>

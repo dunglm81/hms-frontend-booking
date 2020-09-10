@@ -9,6 +9,7 @@ import BookingServiceRoom from "./components/pages/BookingServiceRoomComponent/B
 import ContactManagerment from "./components/pages/ContactManagerment/ContactManagerment";
 import CreateBooking from "./components/pages/CreateBookingComponent/CreateBooking";
 import ReservationReport from "./components/pages/ReservationReport";
+import RoomPlan from "./components/pages/RoomPlanComponent/RoomPlan";
 import SummaryReportOne from "./components/pages/SummaryReportOneComponent/SummaryReportOne";
 import ViewBooking from "./components/pages/ViewBookingComponent/ViewBooking";
 import authService from "./services/auth.service";
@@ -93,6 +94,11 @@ class App extends Component {
                   exact
                   path={FE_SUB_URL + "/booking_service_room"}
                   render={(props) => <BookingServiceRoom {...props} />}
+                />
+                <Route
+                  exact
+                  path={FE_SUB_URL + "/roomplan"}
+                  render={(props) => <RoomPlan {...props} />}
                 />
               </Switch>
               <Footer />
