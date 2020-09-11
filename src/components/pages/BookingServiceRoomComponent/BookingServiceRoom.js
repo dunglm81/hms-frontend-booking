@@ -270,6 +270,14 @@ class BookingServiceRoom extends React.Component {
             const duplicateRoomData = data.filter(item1 => (item1.booking_id !== item.booking_id) && (item1.using_date === item.using_date) && (item1.room_id === item.room_id) && item.room_id);
             const duplicateServiceData = data.filter(item1 => (item.room_id) && (item1.room_id === item.room_id) && (item1.service_id !== item.service_id));
             item.errorRoom = (duplicateRoomData.length > 0 || duplicateServiceData.length > 0);
+            item.errorMessage = '';
+            if(duplicateRoomData.length > 0) {
+                item.errorMessage = `Phòng đã được xếp ở bookingId = ${duplicateRoomData[0].booking_id}`
+            }
+
+            if(duplicateServiceData.length > 0) {
+                item.errorMessage = item.errorMessage + ` Phòng này thuộc loại ${duplicateServiceData[0].service_name} ở bookingId = ${duplicateServiceData[0].booking_id}`
+            }
             return item;
         })
         return data;
@@ -336,7 +344,7 @@ class BookingServiceRoom extends React.Component {
                                                     </div>}
                                             </div>
 
-                                            <table className={"table table-sm table-hover table-bordered " + (item.isEdit ? "" : styles.preventEditTable)}>
+                                            <table className={"table table-sm table-hover table-bordered"}>
                                                 <thead className={"thead-light " + styles.theadCustom}>
                                                     <tr>
                                                         <th scope="col" key="room_type" className={styles.thFixWidth}>Loại phòng</th>
@@ -360,8 +368,8 @@ class BookingServiceRoom extends React.Component {
                                                                             <div className="d-flex flex-row">
                                                                                 {item3.data.map((item4, idx4) => {
                                                                                     return (
-                                                                                        <div className={styles.inputContainerCustom} key={idx4}>
-                                                                                            <input className={"form-control mr-2 " + styles.inputCustom + " " + (item4.errorRoom ? styles.errorRoomInput : "")}
+                                                                                        <div className={styles.inputContainerCustom} key={idx4} title={item4.errorMessage}>
+                                                                                            <input className={"form-control mr-2 " + styles.inputCustom + " " + (item4.errorRoom ? styles.errorRoomInput : "") + " " + (item.isEdit ? "" : styles.preventEditTable)}
                                                                                                 value={(this.state.searchData[idx].data[idx2].data[idx3].data[idx4].room_name) || ""}
                                                                                                 onBlur={() => {
                                                                                                     setTimeout(() => {
