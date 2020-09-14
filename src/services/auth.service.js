@@ -1,6 +1,6 @@
 import api_instance from "../utils/api";
 import Base64 from "../utils/Base64";
-import { HMS_ACCESS_TOKEN, HMS_USER, REFRESH_TOKEN_URL, HMS_EXPIRE } from "../utils/constants";
+import { HMS_ACCESS_TOKEN, HMS_EXPIRE, HMS_ORG, HMS_USER, REFRESH_TOKEN_URL, HMS_ORG_CODE } from "../utils/constants";
 
 class AuthService {
   getAccessToken() {
@@ -61,6 +61,25 @@ class AuthService {
     const expire = this.getExpire();
     const now = new Date().getTime();
     return expire ? now > parseInt(expire) * 1000 - 300000 : false;
+  }
+
+  getOrg() {
+    let org = null;
+    let orgStr = localStorage.getItem(HMS_ORG);
+    try {
+      org = JSON.parse(orgStr);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        this.printError(error, true);
+      } else {
+        this.printError(error, false);
+      }
+    }
+    return org;
+  }
+
+  getOrgCode() {
+    return localStorage.getItem(HMS_ORG_CODE);
   }
 
   getRefreshToken() {

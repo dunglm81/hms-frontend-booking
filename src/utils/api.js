@@ -12,8 +12,10 @@ api_instance.interceptors.request.use(
     const token = authService.getAccessToken();
     const isExpire = authService.isExpire();
     const isRefresh = authService.isRefresh();
+    const orgCode = authService.getOrgCode();
 
-    if (token && !isExpire) {
+    if (token && !isExpire && orgCode) {
+      config.headers.orgcode = orgCode;
       config.headers.authorization = `Bearer ${token}`;
       if (isRefresh) {
         authService.getRefreshToken();
