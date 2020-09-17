@@ -1,6 +1,6 @@
 import axios from 'axios';
 import authService from '../services/auth.service';
-import { BE_URL, ENVIRONMENT } from './constants';
+import { BE_URL, ENVIRONMENT, REFRESH_TOKEN_URL } from './constants';
 
 const api_instance = axios.create({
   baseURL: BE_URL,
@@ -17,7 +17,7 @@ api_instance.interceptors.request.use(
     if (token && !isExpire && orgCode) {
       config.headers.orgcode = orgCode;
       config.headers.authorization = `Bearer ${token}`;
-      if (isRefresh) {
+      if (isRefresh && config.url !== REFRESH_TOKEN_URL) {
         authService.getRefreshToken();
       }
     } else {
