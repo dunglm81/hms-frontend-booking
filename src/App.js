@@ -32,7 +32,7 @@ class App extends Component {
 
   async componentDidMount() {
     if (!this.state.userStr) {
-      window.location.href = "/login";
+      authService.logout();
     }
   }
 
