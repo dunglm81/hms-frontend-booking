@@ -13,16 +13,15 @@ import RoomPlan from "./components/pages/RoomPlanComponent/RoomPlan";
 import SummaryReportOne from "./components/pages/SummaryReportOneComponent/SummaryReportOne";
 import ViewBooking from "./components/pages/ViewBookingComponent/ViewBooking";
 import authService from "./services/auth.service";
-import { ENVIRONMENT, FE_SUB_URL } from "./utils/constants";
+import { FE_SUB_URL, REDIRECT_TAB_NAME } from "./utils/constants";
 
 
 library.add(faEdit, faTimes, faSave);
 
 class App extends Component {
   state = {
-    userStr: '',
-    isExpire: false,
-    isAuthenticating: true
+    userStr: authService.getUserStr(),
+    isExpire: authService.isExpire()
   };
 
   updateState(key, value) {
@@ -32,19 +31,13 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    this.updateState("userStr", await authService.getUserStr());
-    this.updateState("isExpire", await authService.isExpire());
-
     if (!this.state.userStr) {
       window.location.href = "/login";
-    } else {
-      this.updateState("isAuthenticating", false);
     }
   }
 
   render() {
     return (
-      !this.state.isAuthenticating &&
       this.state.userStr &&
       !this.state.isExpire &&
       (
@@ -57,7 +50,7 @@ class App extends Component {
                   <Redirect
                     exact
                     from={FE_SUB_URL + "/"}
-                    to={FE_SUB_URL + "/" + ENVIRONMENT().redirectTabName}
+                    to={FE_SUB_URL + "/" + REDIRECT_TAB_NAME}
                   />
                 }
                 <Route

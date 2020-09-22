@@ -3,7 +3,6 @@ export const ENVIRONMENT = () => {
     beUrl: `http://localhost:9001`,
     enableDebug: true,
     feSubUrl: "",
-    beSubUrl: "",
     refreshTokenTime: 5,
     redirectTabName: ""
   };
@@ -71,6 +70,7 @@ export const NAVBAR_DROPDOWN_ARR = [
     link: "/roomplan"
   }
 ];
+export const REDIRECT_TAB_NAME = ENVIRONMENT().redirectTabName;
 
 export const FE_SUB_URL = ENVIRONMENT().feSubUrl;
 export const CREATE_NEW_CONTACT_URL = `/api/new_contact`;

@@ -12,14 +12,6 @@ export const dataService = {
   getData: () => subject.asObservable()
 };
 
-export function saveDataToStorage(key, valueObj) {
-  localStorage.setItem(key, JSON.stringify(valueObj));
-}
-
-export function getDataToStorage(key) {
-  return localStorage.getItem(key);
-}
-
 export function logFn(key, value) {
   if (ENVIRONMENT().enableDebug) {
     if (typeof value === "object") {

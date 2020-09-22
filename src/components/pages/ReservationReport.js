@@ -43,8 +43,8 @@ class ReservationReport extends Component {
       })
       .catch((error) => {
         console.log(error);
-        var message;
-        if (error.response.status === 409) {
+        let message = '';
+        if (error.response && error.response.status === 409) {
           message = error.response.data;
           this.setState({ modalMessage: message });
         } else {
