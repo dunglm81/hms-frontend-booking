@@ -6,7 +6,6 @@ RUN npm install
 COPY ./ /app/
 
 COPY ./env.js /app/public/
-COPY ./constants.js /app/src/utils/
 
 RUN npm run build
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
