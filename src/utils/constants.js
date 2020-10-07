@@ -18,6 +18,7 @@ export const ENVIRONMENT = () => {
 };
 
 export const BE_URL = `http://${process.env.REACT_APP_SERVER_IP}/backend-booking`;
+// export const BE_URL = `http://localhost:80`;
 
 export const LOGIN_URL = `authentication/user_login`;
 export const REFRESH_TOKEN_URL = `authentication/renew_jwt`;
@@ -32,48 +33,58 @@ export const NAVBAR_DROPDOWN_ARR = [
   {
     key: "reservationreport",
     value: "Tình hình đặt phòng",
-    link: "/reservationreport"
+    link: "/reservationreport",
+    active: false
   },
   {
     key: "reservationdetail",
     value: "Booking",
-    link: "/reservationdetail"
+    link: "/reservationdetail",
+    active: false
   },
   {
     key: "createbooking",
     value: "Tạo Booking",
-    link: "/createbooking"
+    link: "/createbooking",
+    active: false
   },
   {
     key: "contactmanagerment",
     value: "QL Khách hàng",
-    link: "/contactmanagerment"
+    link: "/contactmanagerment",
+    active: false
   },
   {
     key: "booking_search",
     value: "Truy vấn Booking",
-    link: "/booking_search"
+    link: "/booking_search",
+    active: false
   },
   {
     key: "summary_report_01",
     value: "Báo cáo 01",
-    link: "/summary_report_01"
+    link: "/summary_report_01",
+    active: false
   },
   {
     key: "booking_service_room",
     value: "Xếp phòng",
-    link: "/booking_service_room"
+    link: "/booking_service_room",
+    active: false
   },
   {
     key: "roomplan",
     value: "Kế hoạch vệ sinh",
-    link: "/roomplan"
+    link: "/roomplan",
+    active: false
   }
 ];
 export const REDIRECT_TAB_NAME = ENVIRONMENT().redirectTabName;
 
 export const FE_SUB_URL = ENVIRONMENT().feSubUrl;
-export const CREATE_NEW_CONTACT_URL = `/api/new_contact`;
+
+export const API_CREATE_NEW_CONTACT = `/api/new_contact`;
+export const API_UPDATE_CONTACT = `/api/update_contact`;
 
 export const API_BOOKING_SERVICE_ROOM = `api/booking_service_room`;
 export const API_ROOMS = `api/rooms`;

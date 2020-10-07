@@ -1,10 +1,7 @@
 import api_instance from "../utils/api";
-import { API_ROOMS, CREATE_NEW_CONTACT_URL, API_BOOKING_SERVICE_ROOM, API_BOOKING_ROOM_ITEM } from "../utils/constants";
+import { API_ROOMS, API_CREATE_NEW_CONTACT, API_BOOKING_SERVICE_ROOM, API_BOOKING_ROOM_ITEM, API_UPDATE_CONTACT } from "../utils/constants";
 
 class ApiService {
-    createNewContact(body) {
-        return api_instance.post(CREATE_NEW_CONTACT_URL, body);
-    }
 
     getBookingServiceRoom(path, body) {
         return api_instance.get(path, body);
@@ -29,6 +26,15 @@ class ApiService {
     getBookingRoomItems(bookingId) {
         return api_instance.get(`${API_BOOKING_ROOM_ITEM}?booking_id=${bookingId}`);
     }
+
+    // Contact
+    createNewContact(body) {
+        return api_instance.post(API_CREATE_NEW_CONTACT, body);
+    }
+    updateContact(body) {
+        return api_instance.post(API_UPDATE_CONTACT, body);
+    }
+    
 }
 
 export default new ApiService();

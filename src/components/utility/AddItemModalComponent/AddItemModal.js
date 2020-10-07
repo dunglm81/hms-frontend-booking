@@ -1,9 +1,10 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import apiService from "../../../services/api.service";
 import api_instance from "../../../utils/api";
 import styles from "./AddItemModal.module.css";
+
 
 class AddItemModal extends React.Component {
   constructor(props) {
@@ -228,16 +229,13 @@ class AddItemModal extends React.Component {
       email: this.state.fieldArr[2].value,
     };
 
-    api_instance
-      .post(`api/new_contact`, submitData)
-      .then((response) => {
-        if (response.status === 200) {
-          this.props.inOnHide(submitData);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    apiService.createNewContact(submitData).then(response => {
+      if (response.status === 200) {
+        this.props.inOnHide(submitData);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
   checkValidate() {
@@ -249,19 +247,18 @@ class AddItemModal extends React.Component {
       case "transactions":
         arr[0].validate = true;
         arr[1].validate = regexDate.test(arr[1].value);
-        arr[2].validate = arr[2].value;
+        arr[2].validate = arr[2].value ? true : false;
         break;
       case "otherService":
         arr[0].validate = true;
-        arr[1].validate = arr[1].value;
-        arr[2].validate = arr[2].value;
+        arr[1].validate = arr[1].value ? true : false;
+        arr[2].validate = arr[2].value ? true : false;
         arr[3].validate = regexDate.test(arr[3].value);
         arr[4].validate = true;
         break;
       case "newContact":
-        // const regexMail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        const regexPhone = /^[0-9-]*$/;
-        arr[0].validate = arr[0].value;
+        const regexPhone = /([03|06|07|08|09]|01[2|6|8|9])+([0-9]{8})\b/g;
+        arr[0].validate = arr[0].value ? true : false;
         arr[1].validate = regexPhone.test(arr[1].value);
         arr[2].validate = true;
         break;
@@ -269,9 +266,34 @@ class AddItemModal extends React.Component {
     }
     isValidate = arr[0].validate && arr[1].validate && arr[2].validate;
 
-    if (isValidate) {
+    this.setState({
+      fieldArr: arr,
+    });
+    return isValidate;
+  }
+
+  updateCurrentContact() {
+    let currentContact = this.props.editData;
+    currentContact.contact_name = this.state.fieldArr[0].value;
+    currentContact.phone_1 = this.state.fieldArr[1].value;
+    currentContact.email = this.state.fieldArr[2].value;
+    apiService.updateContact(currentContact).then(response => {
+      if (response.status === 200) {
+        this.props.inOnHide();
+      }
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  handleActionBtn() {
+    if (this.checkValidate()) {
       if (this.props.typeModal === "newContact") {
-        this.submitNewContact();
+        if (this.props.editData && Object.keys(this.props.editData).length > 0) {
+          this.updateCurrentContact();
+        } else {
+          this.submitNewContact();
+        }
       } else {
         this.props.inOnHide(this.state.fieldArr);
         this.setState({
@@ -280,10 +302,6 @@ class AddItemModal extends React.Component {
           dropdownArr: [],
         });
       }
-    } else {
-      this.setState({
-        fieldArr: arr,
-      });
     }
   }
 
@@ -329,6 +347,9 @@ class AddItemModal extends React.Component {
                       onChange={(e) => {
                         this.handleChangeInput(e, index);
                       }}
+                      onBlur={() => {
+                        this.checkValidate();
+                      }}
                       type={typeInput}
                       className="form-control"
                       value={item.value.toLocaleString()}
@@ -336,22 +357,22 @@ class AddItemModal extends React.Component {
                       disabled={item.disabled ? "disabled" : ""}
                     />
                   ) : (
-                    <select
-                      className="form-control"
-                      name={item.key}
-                      onChange={(e) => {
-                        this.handleChangeInput(e, index);
-                      }}
-                    >
-                      {this.state.dropdownArr.map((item1, index1) => {
-                        return (
-                          <option key={index1}>
-                            {item1.account_name || item1.service_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  )}
+                      <select
+                        className="form-control"
+                        name={item.key}
+                        onChange={(e) => {
+                          this.handleChangeInput(e, index);
+                        }}
+                      >
+                        {this.state.dropdownArr.map((item1, index1) => {
+                          return (
+                            <option key={index1}>
+                              {item1.account_name || item1.service_name}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    )}
                 </div>
               </div>
             );
@@ -370,7 +391,7 @@ class AddItemModal extends React.Component {
           <Button
             variant="primary"
             onClick={() => {
-              this.checkValidate();
+              this.handleActionBtn();
             }}
           >
             {this.props.editData ? "Lưu" : "Thêm"}

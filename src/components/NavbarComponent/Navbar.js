@@ -4,14 +4,35 @@ import { FE_SUB_URL, NAVBAR_DROPDOWN_ARR } from "../../utils/constants";
 import "./Navbar.css";
 
 export default class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dropdownArr: NAVBAR_DROPDOWN_ARR
+    }
+  }
+
+  componentDidMount() {
+    const pathArr = window.location.pathname.split("/");
+    const length = pathArr.length;
+    const tabName = pathArr[length - 1];
+    let arr = JSON.parse(JSON.stringify(this.state.dropdownArr));
+    arr = arr.map(item => {
+      item.active = (item.key === tabName) ? true : false
+      return item;
+    })
+    this.setState({
+      dropdownArr: arr
+    })
+  }
+
   render() {
     return (
       <div className="sticky-top container-custom">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <a className="navbar-brand" href="/">
             <img
-              src="/qh-logo.png"
-              width="100px"
+              src={process.env.PUBLIC_URL + '/qh-logo.png'}
+              width="150px"
               alt="Quản lý ks Queen"
               loading="lazy"
             />
@@ -30,7 +51,7 @@ export default class Navbar extends Component {
 
           <div id="navbarSupportedContent" className="collapse navbar-collapse">
             <ul className="navbar-nav mr-auto">
-              <li className="nav-item active">
+              <li className="nav-item">
                 <a className="nav-link" href="/">
                   Home <span className="sr-only">(current)</span>
                 </a>
@@ -49,43 +70,19 @@ export default class Navbar extends Component {
                   Lễ tân
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  {NAVBAR_DROPDOWN_ARR.map((item, index) => {
+                  {(this.state.dropdownArr || []).map((item, index) => {
                     return (
-                      <li className="dropdown-item" key={index}>
+                      <li className={"dropdown-item " + (item.active ? "active" : "")} key={index}>
                         <Link className="nav-link" to={FE_SUB_URL + item.link}>
                           {item.value}
                         </Link>
                       </li>
                     );
                   })}
-                  <div className="dropdown-divider"></div>
-                  <li className="dropdown-item">
-                    <Link className="nav-link" to={FE_SUB_URL + "/search_booking"}>
-                      Tìm kiếm
-                    </Link>
-                  </li>
                 </ul>
               </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link disabled"
-                  href="/"
-                  tabIndex="-1"
-                  aria-disabled="true"
-                >
-                  Nhà hàng
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link disabled"
-                  href="/"
-                  tabIndex="-1"
-                  aria-disabled="true"
-                >
-                  Báo cáo
-                </a>
-              </li>
+
+
             </ul>
           </div>
         </nav>
