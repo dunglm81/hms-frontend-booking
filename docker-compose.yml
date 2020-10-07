@@ -2,7 +2,10 @@ version: "2"
 services:
   frontend-booking:
     restart: always
-    build: .
+    build:
+      context: .
+      args:
+        - SERVER_IP=${SERVER_IP}    
     ports:
       - "8011:80"
     networks:

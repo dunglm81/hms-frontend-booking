@@ -3,9 +3,14 @@ FROM tiangolo/node-frontend:10 as build-stage
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install
+
+ARG SERVER_IP
+
+ENV REACT_APP_SERVER_IP $SERVER_IP
+
 COPY ./ /app/
 
-COPY ./env.js /app/public/
+#COPY ./env.js /app/public/
 
 RUN npm run build
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
