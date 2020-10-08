@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -52,8 +53,8 @@ class ReservationReport extends Component {
   requestData() {
     apiService.getRoomServiceBookingStatus(this.state.from_date, this.state.to_date).then(response => {
       if (response.status === 200) {
-        this.updateState("fromDateDisplay", this.state.from_date);
-        this.updateState("toDateDisplay", this.state.to_date);
+        this.updateState("fromDateDisplay", moment(this.state.from_date).format("DD-MM-YYYY"));
+        this.updateState("toDateDisplay", moment(this.state.to_date).format("DD-MM-YYYY"));
         this.updateState("searchData", response.data);
       }
     }).catch(err => {
@@ -89,9 +90,10 @@ class ReservationReport extends Component {
                   <div className="input-group-prepend">
                     <span className="input-group-text">Từ ngày:</span>
                   </div>
-                  <input type="date" name="from_date" placeholder="Chọn ngày" value={this.state.from_date} required
+                  <input type="date" name="from_date" date-format="dd/mm/yy" placeholder="Chọn ngày" value={this.state.from_date} required
                     className={"form-control " + (this.state.isValidDate ? "" : styles.alertErrorByBorder)}
                     onChange={this.handleChange} />
+                  <div className={styles.dateDisplay}>{moment(this.state.from_date).format("DD-MM-YYYY")}</div>
                   {this.state.isValidDate ? null : <div className={styles.alertErrorByText}>Ngày không hợp lệ</div>}
                 </div>
                 <div className={styles.inputGroupItem}>
@@ -102,6 +104,7 @@ class ReservationReport extends Component {
                     className={"form-control " + (this.state.isValidDate ? "" : styles.alertErrorByBorder)}
                     onChange={this.handleChange}
                   />
+                  <div className={styles.dateDisplay}>{moment(this.state.to_date).format("DD-MM-YYYY")}</div>
                   {this.state.isValidDate ? null : <div className={styles.alertErrorByText}>Ngày không hợp lệ</div>}
                 </div>
                 <button className="btn btn-primary" onClick={this.handleSearchByDate}>Xem dữ liệu</button>
@@ -111,7 +114,7 @@ class ReservationReport extends Component {
         </Row>
         <Row>
           <Col>
-            Kết quả tìm kiếm từ ngày {this.state.fromDateDisplay} đến ngày {this.state.toDateDisplay}
+            <div className="mb-1">Kết quả tìm kiếm từ ngày {this.state.fromDateDisplay} đến ngày {this.state.toDateDisplay}</div>
             <LeftColumnTableList header={this.state.searchData[2]} data={this.state.searchData[0]} searchBooking={(date) => {
               routeToPage(this.props.history, `/booking_search?search_type=room_night&&search_value=${date}`);
             }} />

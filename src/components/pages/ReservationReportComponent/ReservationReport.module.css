@@ -29,4 +29,14 @@
     left: 100px;
 }
 
+.dateDisplay {
+    position: absolute;
+    left: 110px;
+    height: 90%;
+    width: 120px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+}
+
 
