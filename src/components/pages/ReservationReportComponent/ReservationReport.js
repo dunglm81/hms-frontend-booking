@@ -83,7 +83,7 @@ class ReservationReport extends Component {
       <Container>
         <Row className="mb-2">
           <Col>
-            <h3 className="mt-3">Tình hình đặt phòng</h3>
+            <h4 className="p-3">Tình hình đặt phòng</h4>
             <form>
               <div className={"input-group mb-3"}>
                 <div className={styles.inputGroupItem}>

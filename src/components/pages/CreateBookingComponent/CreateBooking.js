@@ -305,7 +305,7 @@ class CreateBooking extends Component {
                 <Container>
                     <Row>
                         <Col>
-                            <h2>Tạo booking</h2>
+                            <h4 className="p-3">Tạo booking</h4>
                             <div className={styles.inputGroup}>
                                 <div className={styles.inputGroupZero}>
                                     <div>Số điện thoại:</div>

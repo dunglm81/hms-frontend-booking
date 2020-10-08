@@ -160,7 +160,7 @@ class ContactManagerment extends React.Component {
                 <Container>
                     <Row>
                         <Col>
-                            <h2>Danh sách khách hàng</h2>
+                            <h4 className="p-3">Danh sách khách hàng</h4>
                             <div className={styles.functionsGroup}>
                                 <input className="form-control mr-1" onKeyUp={(e) => { this.handleOnKeyup(e) }} onBlur={() => { this.handleOnBlurInput() }} onChange={(e) => this.handleChangeAutoCompleteInput(e)} type="text" placeholder="Tên khách hàng..." value={this.state.autocompleteValue} />
                                 {this.state.showAutocomplete && this.state.autocompleteData.length > 0 ?

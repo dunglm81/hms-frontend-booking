@@ -89,7 +89,7 @@ class BookingSearch extends React.Component {
                 <Container>
                     <Row>
                         <Col>
-                            <h2>Truy vấn Booking</h2>
+                            <h4 className="p-3">Truy vấn Booking</h4>
                             <div className={styles.inputGroup + ' d-flex flex-row flex-wrap w-100'}>
                                 <div className={'d-flex flex-row flex-nowrap align-items-center'}>
                                     <div>Số điện thoại:</div>
