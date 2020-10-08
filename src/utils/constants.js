@@ -37,12 +37,6 @@ export const NAVBAR_DROPDOWN_ARR = [
     active: false
   },
   {
-    key: "reservationdetail",
-    value: "Booking",
-    link: "/reservationdetail",
-    active: false
-  },
-  {
     key: "createbooking",
     value: "Tạo Booking",
     link: "/createbooking",
@@ -89,3 +83,5 @@ export const API_UPDATE_CONTACT = `/api/update_contact`;
 export const API_BOOKING_SERVICE_ROOM = `api/booking_service_room`;
 export const API_ROOMS = `api/rooms`;
 export const API_BOOKING_ROOM_ITEM = `api/booking_room_item`;
+
+export const API_ROOM_SERVICE_BOOKING_STATUS = `api/room_service_booking_status`;

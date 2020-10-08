@@ -17,7 +17,6 @@ class ReservationDetail extends Component {
       //display booking info
     } else {
       //display New booking
-      console.log("New booking");
       this.newBooking();
     }
 

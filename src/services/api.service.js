@@ -1,5 +1,5 @@
 import api_instance from "../utils/api";
-import { API_ROOMS, API_CREATE_NEW_CONTACT, API_BOOKING_SERVICE_ROOM, API_BOOKING_ROOM_ITEM, API_UPDATE_CONTACT } from "../utils/constants";
+import { API_ROOMS, API_CREATE_NEW_CONTACT, API_BOOKING_SERVICE_ROOM, API_BOOKING_ROOM_ITEM, API_UPDATE_CONTACT, API_ROOM_SERVICE_BOOKING_STATUS } from "../utils/constants";
 
 class ApiService {
 
@@ -35,6 +35,15 @@ class ApiService {
         return api_instance.post(API_UPDATE_CONTACT, body);
     }
     
+    // ReservationReport
+    getRoomServiceBookingStatus(fromDate, toDate) {
+        return api_instance.get(API_ROOM_SERVICE_BOOKING_STATUS, {
+            params: {
+                from_date: fromDate,
+                to_date: toDate
+            }
+        });
+    }
 }
 
 export default new ApiService();

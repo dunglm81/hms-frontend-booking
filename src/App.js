@@ -8,7 +8,7 @@ import BookingSearch from "./components/pages/BookingSearchComponent/BookingSear
 import BookingServiceRoom from "./components/pages/BookingServiceRoomComponent/BookingServiceRoom";
 import ContactManagerment from "./components/pages/ContactManagerment/ContactManagerment";
 import CreateBooking from "./components/pages/CreateBookingComponent/CreateBooking";
-import ReservationReport from "./components/pages/ReservationReport";
+import ReservationReport from "./components/pages/ReservationReportComponent/ReservationReport";
 import RoomPlan from "./components/pages/RoomPlanComponent/RoomPlan";
 import SummaryReportOne from "./components/pages/SummaryReportOneComponent/SummaryReportOne";
 import ViewBooking from "./components/pages/ViewBookingComponent/ViewBooking";

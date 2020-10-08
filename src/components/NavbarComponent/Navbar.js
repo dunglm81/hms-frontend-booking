@@ -15,9 +15,13 @@ export default class Navbar extends Component {
     const pathArr = window.location.pathname.split("/");
     const length = pathArr.length;
     const tabName = pathArr[length - 1];
+    this.updateActiveTab(tabName);
+  }
+
+  updateActiveTab(key) {
     let arr = JSON.parse(JSON.stringify(this.state.dropdownArr));
     arr = arr.map(item => {
-      item.active = (item.key === tabName) ? true : false
+      item.active = (item.key === key) ? true : false;
       return item;
     })
     this.setState({
@@ -72,7 +76,11 @@ export default class Navbar extends Component {
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   {(this.state.dropdownArr || []).map((item, index) => {
                     return (
-                      <li className={"dropdown-item " + (item.active ? "active" : "")} key={index}>
+                      <li className={"dropdown-item " + (item.active ? "active" : "")} key={index}
+                        onClick={() => {
+                          this.updateActiveTab(item.key);
+                        }}
+                      >
                         <Link className="nav-link" to={FE_SUB_URL + item.link}>
                           {item.value}
                         </Link>

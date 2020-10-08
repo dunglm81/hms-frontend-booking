@@ -1,0 +1,32 @@
+.inputGroupItem {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.inputGroupItem span {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    width: 100px;
+}
+.inputGroupItem input {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.alertErrorByBorder {
+    border: 1px solid red;
+}
+
+.alertErrorByText {
+    color: red;
+    font-style: italic;
+    font-size: 12px;
+    position: absolute;
+    top: 36px;
+    left: 100px;
+}
+
+

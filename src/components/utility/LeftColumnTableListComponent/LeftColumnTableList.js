@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from "./LeftColumnTableList.module.css";
 
 class LeftColumnTableList extends React.Component {
 
@@ -16,7 +17,7 @@ class LeftColumnTableList extends React.Component {
             {this.props.data.map((item, idx) => {
               const day = new Date(item.date).getDay();
               return (
-                <tr className={(day === 5 ? 'table-info' : '') + (day === 6 ? 'table-warning' : '')} key={idx} onClick={() => {
+                <tr className={styles.trCustom + " " + (day === 5 ? 'table-info' : '') + (day === 6 ? 'table-warning' : '')} key={idx} onClick={() => {
                   this.props.searchBooking(item.date);
                 }}>
                   <th scope="row">{item.date}</th>
