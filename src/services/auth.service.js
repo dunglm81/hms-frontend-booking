@@ -87,7 +87,7 @@ class AuthService {
       .get(REFRESH_TOKEN_URL)
       .then((response) => {
         if (response.status === 200) {
-          this.setAccessToken(response.data.accessToken);
+          this.setAccessToken(response.data.token);
         }
       })
       .catch((err) => {
