@@ -1,6 +1,6 @@
-import api_instance from "../utils/api";
+import axios from 'axios';
 import Base64 from "../utils/Base64";
-import { HMS_ACCESS_TOKEN, HMS_EXPIRE, HMS_ORG, HMS_USER, REFRESH_TOKEN_URL, HMS_ORG_CODE, REFRESH_TOKEN_TIME } from "../utils/constants";
+import { BE_URL_ADMIN, HMS_ACCESS_TOKEN, HMS_EXPIRE, HMS_ORG, HMS_ORG_CODE, HMS_USER, REFRESH_TOKEN_TIME, REFRESH_TOKEN_URL } from "../utils/constants";
 
 class AuthService {
   getAccessToken() {
@@ -45,8 +45,7 @@ class AuthService {
 
   printError = function (error, explicit) {
     console.log(
-      `[${explicit ? "EXPLICIT" : "INEXPLICIT"}] ${error.name}: ${
-      error.message
+      `[${explicit ? "EXPLICIT" : "INEXPLICIT"}] ${error.name}: ${error.message
       }`
     );
   };
@@ -83,16 +82,16 @@ class AuthService {
   }
 
   getRefreshToken() {
-    return api_instance
-      .get(REFRESH_TOKEN_URL)
-      .then((response) => {
-        if (response.status === 200) {
-          this.setAccessToken(response.data.token);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    return axios({
+      url: REFRESH_TOKEN_URL,
+      baseURL: BE_URL_ADMIN
+    }).then(response => {
+      if (response.status === 200) {
+        this.setAccessToken(response.data.token);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
   logout() {

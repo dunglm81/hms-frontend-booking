@@ -1,6 +1,6 @@
 import axios from 'axios';
 import authService from '../services/auth.service';
-import { BE_URL, REFRESH_TOKEN_URL } from './constants';
+import { BE_URL, BE_URL_ADMIN, REFRESH_TOKEN_URL } from './constants';
 
 const api_instance = axios.create({
   baseURL: BE_URL
