@@ -211,8 +211,12 @@ class SummaryReportOne extends React.Component {
 
             // Update other services
             for (const item1 of this.state.otherServiceArr) {
-                const idx1 = responses[1].data.findIndex(item2 => item2.service_name === item1.service_name);
-                searchDataArr[idx][item1.service_name] = (idx1 !== -1) ? responses[1].data[idx1].quantity * responses[1].data[idx1].unit_price : 0;
+                const otherServiceItemArr = responses[1].data.filter(item2 => item2.service_name === item1.service_name);
+                searchDataArr[idx][item1.service_name] = 0;
+                otherServiceItemArr.map(item3 => {
+                    searchDataArr[idx][item1.service_name] = searchDataArr[idx][item1.service_name] + item3.quantity * item3.unit_price;
+                    return item3;
+                })
                 otherServiceValue = otherServiceValue + searchDataArr[idx][item1.service_name];
             }
             searchDataArr[idx]['totalService'] = roomServiceValue + otherServiceValue;

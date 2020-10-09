@@ -11,6 +11,7 @@ import ConfirmModal from '../../utility/ConfirmModalComponent/ConfirmModal';
 import EditRoomServiceModal from './EditRoomServiceModalComponent/EditRoomServiceModal';
 import UpdateDescriptionModal from './UpdateDescriptionModalComponent/UpdateDescriptionModal';
 import styles from './ViewBooking.module.css';
+import moment from "moment";
 
 
 const customStyle = (checkValue) => {
@@ -414,11 +415,11 @@ class ViewBooking extends React.Component {
                             </div>
                             <div>
                                 <div>Ngày checkin:</div>
-                                <div className="ml-2">{this.state.bookingDetail.checkinDate}</div>
+                                <div className="ml-2">{moment(this.state.bookingDetail.checkinDate).format("DD-MM-YYYY")}</div>
                             </div>
                             <div>
                                 <div>Ngày checkout:</div>
-                                <div className="ml-2">{this.state.bookingDetail.checkoutDate}</div>
+                                <div className="ml-2">{moment(this.state.bookingDetail.checkoutDate).format("DD-MM-YYYY")}</div>
                             </div>
                         </div>
                         <div className={styles.note}>
@@ -450,10 +451,12 @@ class ViewBooking extends React.Component {
                                 <button className="btn btn-warning ml-5">Hủy</button>
                             </div> : null}
 
-                            {(this.state.bookingDetail.status === 'valid') ? <div onClick={() => {
+                            {(this.state.bookingDetail.status === 'valid') ? <div 
+                            className={(this.state.totalValue.value !== this.state.totalPayment.value) ? styles.preventClickEvent : ""}
+                            onClick={() => {
                                 this.displayConfirmModal(false, 'baselineBooking', this.state.bookingDetail.bookingId, true);
                             }}>
-                                <button className="btn btn-primary ml-2">Chốt</button>
+                                <button className={"btn btn-primary ml-2"}>Chốt</button>
                             </div> : null}
                         </div>
 
@@ -473,7 +476,7 @@ class ViewBooking extends React.Component {
                                 <thead className="thead-light">
                                     <tr>
                                         <th scope="col"></th>
-                                        {this.state.roomService.dateArr.map((item, index) => { return <th scope="col" key={index}>{item}</th> })}
+                                        {this.state.roomService.dateArr.map((item, index) => { return <th scope="col" key={index}>{moment(item).format("DD-MM-YYYY")}</th> })}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -524,6 +527,7 @@ class ViewBooking extends React.Component {
                                         <th scope="col">Số lượng</th>
                                         <th scope="col">Đơn giá</th>
                                         <th scope="col">Thành tiền</th>
+                                        <th scope="col">Ngày</th>
                                         <th scope="col">Miêu tả</th>
                                     </tr>
                                 </thead>
@@ -542,6 +546,7 @@ class ViewBooking extends React.Component {
                                                     <td key="quantity">{item.quantity}</td>
                                                     <td key="unit">{(item.unit_price || 0).toLocaleString()}</td>
                                                     <td key="totalvalue">{(item.quantity * item.unit_price || 0).toLocaleString()}</td>
+                                                    <td key="date">{moment(item.using_date).format("DD-MM-YYYY")}</td>
                                                     <td key="description">{item.description}</td>
                                                 </tr>
                                             )
@@ -578,7 +583,7 @@ class ViewBooking extends React.Component {
                                         this.state.transactions.data.map((item, index) => {
                                             return (
                                                 <tr key={index}>
-                                                    <td key="date">{item.payment_date}</td>
+                                                    <td key="date">{moment(item.payment_date).format("DD-MM-YYYY")}</td>
                                                     <td key="money">{(item.payment_value || 0).toLocaleString()}</td>
                                                     <td key="account">{item.payment_account_name}</td>
                                                     {this.state.bookingDetail.status === 'valid' ? <td key="remove">
