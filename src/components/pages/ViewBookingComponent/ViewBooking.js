@@ -235,7 +235,7 @@ class ViewBooking extends React.Component {
         }
 
         return bookingRoomItems.map(item => {
-            item.quantity = item.quantity ? item.quantity : "0"; 
+            item.quantity = item.quantity ? item.quantity : "0";
             item.unit_price = item.unit_price ? item.unit_price : "0";
             return {
                 service_id: item.service_id,
@@ -380,10 +380,8 @@ class ViewBooking extends React.Component {
         })
     }
 
-    displayUpdateDescriptionModal(display, description) {
-        if (description) {
-            this.requestData('booking_detail');
-        }
+    displayUpdateDescriptionModal(display) {
+        this.requestData('booking_detail');
         this.setState({
             updateDescriptionModalData: {
                 show: display
@@ -428,7 +426,7 @@ class ViewBooking extends React.Component {
                                 <div>Ghi chú:</div>
                                 {(this.state.bookingDetail.status === 'valid') ? <div className="ml-2" onClick={() => { this.displayUpdateDescriptionModal(true) }}><FontAwesomeIcon icon="edit" /></div> : null}
                             </div>
-                            <div>{this.state.bookingDetail.description}</div>
+                            <div className={styles.descriptionContainer}>{this.state.bookingDetail.description}</div>
                         </div>
                     </Row>
                     <Row className="p-3">
