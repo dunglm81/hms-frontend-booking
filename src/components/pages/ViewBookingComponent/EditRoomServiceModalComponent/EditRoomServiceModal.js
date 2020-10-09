@@ -80,8 +80,10 @@ class EditRoomServiceModal extends React.Component {
                                                                 <div>Đơn giá:
                                                                 <input onChange={(e) => {
                                                                         this.handleChangeInput(e, 'unit_price', index2);
-                                                                    }} type="number" className="form-control" value={item2.unit_price} name={item1} />
+                                                                    }} type="number"
+                                                                        className={"form-control " + (item2.quantity && (!item2.unit_price || item2.unit_price === "0") ? styles.alertBorder : "")} value={item2.unit_price} name={item1} />
                                                                 </div>
+                                                                {(item2.quantity && (!item2.unit_price || item2.unit_price === "0")) ? <div className={styles.alertChooseUnitPrice}>Hãy chọn đơn giá!</div> : null}
                                                             </td>
                                                         )
                                                     })

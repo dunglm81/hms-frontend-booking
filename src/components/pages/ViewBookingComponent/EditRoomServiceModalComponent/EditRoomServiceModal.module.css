@@ -4,3 +4,12 @@
 .tdCustom > div > input {
     min-width: 110px;
 }
+
+.alertChooseUnitPrice {
+    color: red;
+    font-style: italic;
+    font-size: 12px;
+}
+.alertBorder {
+    border: 1px solid red;
+}
