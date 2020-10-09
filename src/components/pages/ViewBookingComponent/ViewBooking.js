@@ -235,6 +235,8 @@ class ViewBooking extends React.Component {
         }
 
         return bookingRoomItems.map(item => {
+            item.quantity = item.quantity ? item.quantity : "0"; 
+            item.unit_price = item.unit_price ? item.unit_price : "0";
             return {
                 service_id: item.service_id,
                 using_date: item.using_date,

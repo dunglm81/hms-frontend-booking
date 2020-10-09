@@ -13,7 +13,8 @@ class RoomPlan extends React.Component {
             searchData: [],
             checkinData: [],
             checkoutData: [],
-            restData: []
+            restData: [],
+            isLoading: true
         }
     }
 
@@ -22,6 +23,13 @@ class RoomPlan extends React.Component {
     }
 
     handleSearchByUsingDate() {
+        this.setState({
+            searchData: [],
+            checkinData: [],
+            checkoutData: [],
+            restData: [],
+            isLoading: true
+        });
         let path = API_BOOKING_SERVICE_ROOM;
         apiService.getBookingServiceRoom(path, {
             params: {
@@ -31,8 +39,10 @@ class RoomPlan extends React.Component {
             if (response.status === 200) {
                 this.setupData(response.data);
             }
+            this.updateState("isLoading", false);
         }).catch((err) => {
             console.log(err);
+            this.updateState("isLoading", false);
         })
     }
 
@@ -82,44 +92,57 @@ class RoomPlan extends React.Component {
                         </div>
                     </Col>
                 </Row>
-                <Row className={"p-3"}>
-                    <Col>
-                        <h6>Danh sách các phòng checkout</h6>
-                        {this.state.checkoutData.length > 0 ? <div className={styles.roomContainer}>
-                            {this.state.checkoutData.map((item, idx) => {
-                                return (
-                                    <div key={idx} className={styles.roomItem}>{item.room_name}</div>
-                                )
-                            })}
-                        </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
-                    </Col>
-                </Row>
 
-                <Row className={"p-3"}>
-                    <Col>
-                        <h6>Danh sách các phòng checkin</h6>
-                        {this.state.checkinData.length > 0 ? <div className={styles.roomContainer}>
-                            {this.state.checkinData.map((item, idx) => {
-                                return (
-                                    <div key={idx} className={styles.roomItem}>{item.room_name}</div>
-                                )
-                            })}
-                        </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
-                    </Col>
-                </Row>
+                {this.state.isLoading ?
+                    <div className="progress-bar-container">
+                        <div className="spinner-border text-primary"></div>
+                    </div> : <div>
+                        <Row className={"p-3"}>
+                            <Col>
+                                <h6>Danh sách các phòng checkout</h6>
+                                <div>
+                                    {this.state.checkoutData.length > 0 ? <div className={styles.roomContainer}>
+                                        {this.state.checkoutData.map((item, idx) => {
+                                            return (
+                                                <div key={idx} className={styles.roomItem}>{item.room_name}</div>
+                                            )
+                                        })}
+                                    </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
+                                </div>
+                            </Col>
+                        </Row>
 
-                <Row className={"p-3"}>
-                    <Col>
-                        <h6>Danh sách các phòng ở</h6>
-                        {this.state.restData.length > 0 ? <div className={styles.roomContainer}>
-                            {this.state.restData.map((item, idx) => {
-                                return (
-                                    <div key={idx} className={styles.roomItem}>{item.room_name}</div>
-                                )
-                            })}
-                        </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
-                    </Col>
-                </Row>
+                        <Row className={"p-3"}>
+                            <Col>
+                                <h6>Danh sách các phòng checkin</h6>
+                                <div>
+                                    {this.state.checkinData.length > 0 ? <div className={styles.roomContainer}>
+                                        {this.state.checkinData.map((item, idx) => {
+                                            return (
+                                                <div key={idx} className={styles.roomItem}>{item.room_name}</div>
+                                            )
+                                        })}
+                                    </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
+                                </div>
+                            </Col>
+                        </Row>
+
+                        <Row className={"p-3"}>
+                            <Col>
+                                <h6>Danh sách các phòng ở</h6>
+                                <div>
+                                    {this.state.restData.length > 0 ? <div className={styles.roomContainer}>
+                                        {this.state.restData.map((item, idx) => {
+                                            return (
+                                                <div key={idx} className={styles.roomItem}>{item.room_name}</div>
+                                            )
+                                        })}
+                                    </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
+                }
             </div>
         )
     }
