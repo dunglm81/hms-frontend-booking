@@ -19,6 +19,7 @@ export const ENVIRONMENT = () => {
 
 export const BE_URL = `http://${process.env.REACT_APP_SERVER_IP}/backend-booking`;
 export const BE_URL_ADMIN = `http://${process.env.REACT_APP_SERVER_IP}/backend-admin`;
+// export const BE_URL_ADMIN = `http://localhost:9001`;
 // export const BE_URL = `http://localhost:80`;
 
 export const REFRESH_TOKEN_URL = `authentication/renew_jwt`;

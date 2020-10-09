@@ -82,44 +82,44 @@ class RoomPlan extends React.Component {
                         </div>
                     </Col>
                 </Row>
-                {this.state.checkoutData.length > 0 ? <Row className={"p-3"}>
+                <Row className={"p-3"}>
                     <Col>
                         <h6>Danh sách các phòng checkout</h6>
-                        <div className={styles.roomContainer}>
+                        {this.state.checkoutData.length > 0 ? <div className={styles.roomContainer}>
                             {this.state.checkoutData.map((item, idx) => {
                                 return (
                                     <div key={idx} className={styles.roomItem}>{item.room_name}</div>
                                 )
                             })}
-                        </div>
+                        </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
                     </Col>
-                </Row> : null}
+                </Row>
 
-                {this.state.checkinData.length > 0 ? <Row className={"p-3"}>
+                <Row className={"p-3"}>
                     <Col>
                         <h6>Danh sách các phòng checkin</h6>
-                        <div className={styles.roomContainer}>
+                        {this.state.checkinData.length > 0 ? <div className={styles.roomContainer}>
                             {this.state.checkinData.map((item, idx) => {
                                 return (
                                     <div key={idx} className={styles.roomItem}>{item.room_name}</div>
                                 )
                             })}
-                        </div>
+                        </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
                     </Col>
-                </Row> : null}
+                </Row>
 
-                {this.state.restData.length > 0 ? <Row className={"p-3"}>
+                <Row className={"p-3"}>
                     <Col>
                         <h6>Danh sách các phòng ở</h6>
-                        <div className={styles.roomContainer}>
+                        {this.state.restData.length > 0 ? <div className={styles.roomContainer}>
                             {this.state.restData.map((item, idx) => {
                                 return (
                                     <div key={idx} className={styles.roomItem}>{item.room_name}</div>
                                 )
                             })}
-                        </div>
+                        </div> : <div className={styles.alertNoData}>Không có dữ liệu</div>}
                     </Col>
-                </Row> : null}
+                </Row>
             </div>
         )
     }
