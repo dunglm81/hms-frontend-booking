@@ -5,6 +5,6 @@
     window.__env.enableDebug = true;
     window.__env.feSubUrl = `/booking`;
     window.__env.redirectTabName = `reservationreport`;
-    window.__env.refreshTokenTime = 5;
+    window.__env.refreshTokenTime = 15;
   }
 })(this);
