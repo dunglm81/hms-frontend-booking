@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Base64 from "../utils/Base64";
 import { BE_URL_ADMIN, HMS_ACCESS_TOKEN, HMS_EXPIRE, HMS_ORG, HMS_ORG_CODE, HMS_USER, REFRESH_TOKEN_TIME, REFRESH_TOKEN_URL } from "../utils/constants";
+import { logFn } from '../utils/util';
 
 class AuthService {
   getAccessToken() {
@@ -82,6 +83,7 @@ class AuthService {
   }
 
   getRefreshToken() {
+    logFn("go to refresh token", null);
     return axios({
       url: REFRESH_TOKEN_URL,
       baseURL: BE_URL_ADMIN
