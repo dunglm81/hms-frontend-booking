@@ -1,5 +1,6 @@
+import axios from 'axios';
 import api_instance from "../utils/api";
-import { API_ROOMS, API_CREATE_NEW_CONTACT, API_BOOKING_SERVICE_ROOM, API_BOOKING_ROOM_ITEM, API_UPDATE_CONTACT, API_ROOM_SERVICE_BOOKING_STATUS } from "../utils/constants";
+import { API_BOOKING_ROOM_ITEM, API_BOOKING_SERVICE_ROOM, API_CREATE_NEW_CONTACT, API_ROOMS, API_ROOM_SERVICE_BOOKING_STATUS, API_UPDATE_CONTACT } from "../utils/constants";
 
 class ApiService {
 
@@ -20,7 +21,7 @@ class ApiService {
     }
 
     getRooms() {
-        return api_instance.get(API_ROOMS); 
+        return api_instance.get(API_ROOMS);
     }
 
     getBookingRoomItems(bookingId) {
@@ -34,7 +35,7 @@ class ApiService {
     updateContact(body) {
         return api_instance.post(API_UPDATE_CONTACT, body);
     }
-    
+
     // ReservationReport
     getRoomServiceBookingStatus(fromDate, toDate) {
         return api_instance.get(API_ROOM_SERVICE_BOOKING_STATUS, {
@@ -43,6 +44,14 @@ class ApiService {
                 to_date: toDate
             }
         });
+    }
+
+    getRoomPlanData(usingDate) {
+        const apiArr = [
+            api_instance.get(`${API_BOOKING_SERVICE_ROOM}?using_date=${usingDate}`),
+            api_instance.get(`${API_BOOKING_SERVICE_ROOM}?checkout_date=${usingDate}`)
+        ];
+        return axios.all(apiArr);
     }
 }
 
