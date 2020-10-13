@@ -64,6 +64,11 @@
 
 .inputContainerCustom {
     position: relative;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    max-width: 85px;
+    padding: 5px 0;
 }
 
 .datalistItem {
@@ -130,11 +135,29 @@
     pointer-events: none !important;
 }
 
-.thFixWidth {
-    width: 200px;
-    min-width: 200px !important;
-}
-
 .errorRoomInput {
     background-color: #ffccff;
+}
+
+.thFixWidth,
+.tdCustomTitle {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+.thFixWidthOne,
+.tdCustomContent {
+    width: 350px;
+    min-width: 350px;
+    max-width: 350px;
+}
+
+.tdCustomContent > div:nth-child(1) {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+.tableCustom {
+    width: auto;
 }

@@ -349,13 +349,13 @@ class BookingServiceRoom extends React.Component {
                                                     </div>}
                                             </div>
 
-                                            <table className={"table table-sm table-hover table-bordered"}>
+                                            <table className={"table table-sm table-hover table-bordered " + styles.tableCustom}>
                                                 <thead className={"thead-light " + styles.theadCustom}>
                                                     <tr>
                                                         <th scope="col" key="room_type" className={styles.thFixWidth}>Loại phòng</th>
                                                         {item.using_date_arr.map((item1, idx1) => {
                                                             return (
-                                                                <th scope="col" key={idx1}>{item1}</th>
+                                                                <th scope="col" key={idx1} className={styles.thFixWidthOne}>{item1}</th>
                                                             )
                                                         })}
                                                     </tr>
@@ -364,17 +364,17 @@ class BookingServiceRoom extends React.Component {
                                                     {item.data.map((item2, idx2) => {
                                                         return (
                                                             <tr key={idx2} className={styles.trCustom}>
-                                                                <td>
+                                                                <td className={styles.tdCustomTitle}>
                                                                     <div>{item2.service_name}</div>
                                                                 </td>
                                                                 {item2.data.map((item3, idx3) => {
                                                                     return (
-                                                                        <td key={idx3} className={styles.tdCustom}>
-                                                                            <div className="d-flex flex-row">
+                                                                        <td key={idx3} className={styles.tdCustomContent}>
+                                                                            <div>
                                                                                 {item3.data.map((item4, idx4) => {
                                                                                     return (
                                                                                         <div className={styles.inputContainerCustom} key={idx4} title={item4.errorMessage}>
-                                                                                            <input className={"form-control mr-2 " + styles.inputCustom + " " + (item4.errorRoom ? styles.errorRoomInput : "") + " " + (item.isEdit ? "" : styles.preventEditTable)}
+                                                                                            <input className={"form-control " + styles.inputCustom + " " + (item4.errorRoom ? styles.errorRoomInput : "") + " " + (item.isEdit ? "" : styles.preventEditTable)}
                                                                                                 value={(this.state.searchData[idx].data[idx2].data[idx3].data[idx4].room_name) || ""}
                                                                                                 onBlur={() => {
                                                                                                     setTimeout(() => {
