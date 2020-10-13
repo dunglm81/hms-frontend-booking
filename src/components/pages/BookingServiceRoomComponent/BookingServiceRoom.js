@@ -4,6 +4,7 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import apiService from "../../../services/api.service";
 import { API_BOOKING_SERVICE_ROOM } from "../../../utils/constants";
+import { logFn } from '../../../utils/util';
 import styles from "./BookingServiceRoom.module.css";
 
 class BookingServiceRoom extends React.Component {
@@ -267,9 +268,10 @@ class BookingServiceRoom extends React.Component {
 
     checkErrorRoom(data) {
         data = data.map(item => {
-            const duplicateRoomData = data.filter(item1 => (item1.booking_id !== item.booking_id) && (item1.using_date === item.using_date) && (item1.room_id === item.room_id) && item.room_id);
+            const duplicateRoomData = data.filter(item1 => (item1.booking_id !== item.booking_id) && (item1.using_date === item.using_date) && item.room_id && (item1.room_id === item.room_id));
+            const duplicateRoomDataOne = data.filter(item2 => item2.booking_id === item.booking_id && item2.using_date === item.using_date && item.room_id && item2.room_id === item.room_id);
             const duplicateServiceData = data.filter(item1 => (item.room_id) && (item1.room_id === item.room_id) && (item1.service_id !== item.service_id));
-            item.errorRoom = (duplicateRoomData.length > 0 || duplicateServiceData.length > 0);
+            item.errorRoom = (duplicateRoomData.length > 0 || duplicateServiceData.length > 0 || duplicateRoomDataOne.length > 1);
             item.errorMessage = '';
             if(duplicateRoomData.length > 0) {
                 item.errorMessage = `Phòng đã được xếp ở bookingId = ${duplicateRoomData[0].booking_id}`
@@ -277,6 +279,10 @@ class BookingServiceRoom extends React.Component {
 
             if(duplicateServiceData.length > 0) {
                 item.errorMessage = item.errorMessage + ` Phòng này thuộc loại ${duplicateServiceData[0].service_name} ở bookingId = ${duplicateServiceData[0].booking_id}`
+            }
+
+            if(duplicateRoomDataOne.length > 1) {
+                item.errorMessage = item.errorMessage + `Lỗi xếp phòng trùng nhau`;
             }
             return item;
         })

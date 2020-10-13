@@ -60,8 +60,6 @@ class AuthService {
   isRefresh() {
     const expire = this.getExpire();
     const now = new Date().getTime();
-    logFn("delta", now - parseInt(expire) * 1000);
-    logFn("token time", REFRESH_TOKEN_TIME * 60000);
     return expire ? now > parseInt(expire) * 1000 - REFRESH_TOKEN_TIME * 60000 : false;
   }
 
@@ -85,7 +83,6 @@ class AuthService {
   }
 
   getRefreshToken() {
-    logFn("go to refresh token", null);
     return axios({
       url: REFRESH_TOKEN_URL,
       baseURL: BE_URL_ADMIN
