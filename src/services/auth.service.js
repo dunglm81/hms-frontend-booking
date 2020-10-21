@@ -95,12 +95,7 @@ class AuthService {
   }
 
   logout() {
-    localStorage.removeItem(HMS_ACCESS_TOKEN);
-    localStorage.removeItem(HMS_USER);
-    localStorage.removeItem(HMS_EXPIRE);
-    localStorage.removeItem(HMS_ORG);
-    localStorage.removeItem(HMS_ORG_CODE);
-    window.location.href = `/login`;
+    window.location.href = `/home?state=logout`;
   }
 }
 
