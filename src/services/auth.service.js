@@ -95,7 +95,8 @@ class AuthService {
   }
 
   logout() {
-    window.location.href = `/home?state=logout`;
+    // window.location.href = `/home?state=logout`;
+    window.location.href = `/login`;
   }
 }
 
