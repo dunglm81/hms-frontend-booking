@@ -38,8 +38,7 @@ class App extends Component {
 
   render() {
     return (
-      this.state.userStr &&
-      !this.state.isExpire &&
+      this.state.userStr && !this.state.isExpire &&
       (
         <div className="App">
           <Router>

@@ -257,9 +257,9 @@ class AddItemModal extends React.Component {
         arr[4].validate = true;
         break;
       case "newContact":
-        const regexPhone = /([03|06|07|08|09]|01[2|6|8|9])+([0-9]{8})\b/g;
+        const regexPhone = /([03|06|07|08|09]|01[2|6|8|9])+([0-9]{9})\b/g;
         arr[0].validate = arr[0].value ? true : false;
-        arr[1].validate = regexPhone.test(arr[1].value);
+        arr[1].validate = regexPhone.test(arr[1].value) && arr[1].value.length > 9 && arr[1].value.length < 12;
         arr[2].validate = true;
         break;
       default:
