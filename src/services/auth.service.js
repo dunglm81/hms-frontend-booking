@@ -84,7 +84,11 @@ class AuthService {
   getRefreshToken() {
     return axios({
       url: REFRESH_TOKEN_URL,
-      baseURL: BE_URL_ADMIN
+      baseURL: BE_URL_ADMIN,
+      headers: {
+        orgCode: this.getOrgCode(),
+        authorization: `Bearer ${this.getAccessToken()}`
+      }
     }).then(response => {
       if (response.status === 200) {
         this.setAccessToken(response.data.token);
