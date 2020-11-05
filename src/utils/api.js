@@ -16,8 +16,7 @@ api_instance.interceptors.request.use(
     if (token && !isExpire && orgCode) {
       config.headers.orgcode = orgCode;
       config.headers.authorization = `Bearer ${token}`;
-      if (config.url !== REFRESH_TOKEN_URL) {
-      // if (isRefresh && config.url !== REFRESH_TOKEN_URL) {
+      if (isRefresh && config.url !== REFRESH_TOKEN_URL) {
         authService.getRefreshToken();
       }
     } else {
