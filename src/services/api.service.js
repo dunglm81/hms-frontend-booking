@@ -1,6 +1,6 @@
 import axios from 'axios';
 import api_instance from "../utils/api";
-import { API_BOOKING_ROOM_ITEM, API_BOOKING_SERVICE_ROOM, API_CREATE_NEW_CONTACT, API_ROOMS, API_ROOM_SERVICE_BOOKING_STATUS, API_UPDATE_CONTACT } from "../utils/constants";
+import { API_BOOKING_ROOM_ITEM, API_BOOKING_SEARCH, API_BOOKING_SERVICE_ROOM, API_CREATE_NEW_CONTACT, API_ROOMS, API_ROOM_SERVICE_BOOKING_STATUS, API_UPDATE_CONTACT } from "../utils/constants";
 
 class ApiService {
 
@@ -52,6 +52,10 @@ class ApiService {
             api_instance.get(`${API_BOOKING_SERVICE_ROOM}?checkout_date=${usingDate}`)
         ];
         return axios.all(apiArr);
+    }
+
+    getBookingSearch(searchType, searchValue) {
+        return api_instance.get(`${API_BOOKING_SEARCH}?search_type=${searchType}&search_value=${searchValue}`);
     }
 }
 

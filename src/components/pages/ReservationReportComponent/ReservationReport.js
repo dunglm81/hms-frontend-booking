@@ -116,7 +116,7 @@ class ReservationReport extends Component {
           <Col>
             <div className="mb-1">Kết quả tìm kiếm từ ngày {this.state.fromDateDisplay} đến ngày {this.state.toDateDisplay}</div>
             <LeftColumnTableList header={this.state.searchData[2]} data={this.state.searchData[0]} searchBooking={(date) => {
-              routeToPage(this.props.history, `/booking_search?search_type=room_night&&search_value=${date}`);
+              routeToPage(this.props.history, `/booking_search?search_type=room_night&search_value=${date}`);
             }} />
           </Col>
         </Row>

@@ -24,3 +24,14 @@
 .trCustom {
     cursor: pointer;
 }
+
+.dateDisplay {
+    position: absolute;
+    left: 130px;
+    height: 36px;
+    width: 120px;
+    padding-left: 15px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+}

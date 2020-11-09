@@ -86,3 +86,5 @@ export const API_ROOMS = `api/rooms`;
 export const API_BOOKING_ROOM_ITEM = `api/booking_room_item`;
 
 export const API_ROOM_SERVICE_BOOKING_STATUS = `api/room_service_booking_status`;
+
+export const API_BOOKING_SEARCH = `api/booking_search`;
