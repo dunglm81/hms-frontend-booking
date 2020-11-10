@@ -30,8 +30,8 @@ class App extends Component {
     });
   }
 
-  async componentDidMount() {
-    if (!this.state.userStr) {
+  componentDidMount() {
+    if (!this.state.userStr || this.state.isExpire) {
       authService.logout();
     }
   }
