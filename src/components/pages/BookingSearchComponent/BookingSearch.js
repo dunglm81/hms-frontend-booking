@@ -63,9 +63,10 @@ const BookingSearch = () => {
             queryArr.map(item => {
                 if (item.key === name) {
                     item.value = value;
-                    if (name === "room_night" || name === "checkin" || name === "checkout") {
-                        item.valueAlt = moment(value).format("DD/MM/YYYY");
-                    }
+                    item.valueAlt = moment(value).format("DD/MM/YYYY");
+                } else {
+                    item.value = "";
+                    item.valueAlt = "dd/mm/yyyy";
                 }
                 return item;
             })
