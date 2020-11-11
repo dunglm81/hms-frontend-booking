@@ -29,4 +29,20 @@ api_instance.interceptors.request.use(
   }
 );
 
+api_instance.interceptors.response.use(response => {
+  return response;
+}, err => {
+  const resErr = err.response;
+  if (resErr) {
+    console.log(resErr);
+    alert(`Mã lỗi: ${resErr.status}\nNội dung: ${resErr.data}\nXin Vui lòng thử lại!`);
+  } else if (err.request) {
+    console.log(err.request);
+  } else {
+    console.log('Error', err.mesage);
+    alert(`Thông báo: ${err.message}`)
+  }
+  return Promise.reject(err);
+})
+
 export default api_instance;
