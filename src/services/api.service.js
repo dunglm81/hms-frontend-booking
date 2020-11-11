@@ -1,6 +1,6 @@
 import axios from 'axios';
 import api_instance from "../utils/api";
-import { API_BOOKING_ROOM_ITEM, API_BOOKING_SEARCH, API_BOOKING_SERVICE_ROOM, API_CREATE_NEW_CONTACT, API_ROOMS, API_ROOM_SERVICE_BOOKING_STATUS, API_UPDATE_CONTACT } from "../utils/constants";
+import { API_BOOKING_ROOM_ITEM, API_BOOKING_SEARCH, API_BOOKING_SERVICE_ROOM, API_CREATE_NEW_CONTACT, API_ROOMS, API_ROOM_SERVICE_BOOKING_STATUS, API_SEARCH_CONTACT_BY_NAME_PAGING, API_UPDATE_CONTACT } from "../utils/constants";
 
 class ApiService {
 
@@ -56,6 +56,10 @@ class ApiService {
 
     getBookingSearch(searchType, searchValue) {
         return api_instance.get(`${API_BOOKING_SEARCH}?search_type=${searchType}&search_value=${searchValue}`);
+    }
+
+    searchContactByNamePaging(params) {
+        return api_instance.get(`${API_SEARCH_CONTACT_BY_NAME_PAGING}${params}`);
     }
 }
 

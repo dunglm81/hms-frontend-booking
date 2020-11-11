@@ -174,6 +174,7 @@ class AddItemModal extends React.Component {
           );
           fieldArr[2].value = editData.email || "";
           fieldArr[3].value = editData.contact_id || "";
+          title = "Chỉnh sửa thông tin khách hàng";
         }
         break;
       default:

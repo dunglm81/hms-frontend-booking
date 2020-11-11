@@ -3,6 +3,7 @@ import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import apiService from '../../../services/api.service';
 
 import api_instance from '../../../utils/api';
 import AddItemModal from '../../utility/AddItemModalComponent/AddItemModal';
@@ -37,43 +38,33 @@ class ContactManagerment extends React.Component {
     requestData(name, currentPage, pageSize, isAutoComplete) {
         var get_params = `?contact_name=${name}&current_page=${currentPage}&page_size=${pageSize}`;
 
-        api_instance.get(`api/search_contact_by_name_paging${get_params}`)
-            .then((response) => {
-                if (response.status === 200) {
-                    if (isAutoComplete) {
-                        if (response.data[4].length > 0) {
-                            this.setState({
-                                autocompleteData: response.data[4],
-                                showAutocomplete: true
-                            });
-                        } else {
-                            this.setState({
-                                showAutocomplete: false
-                            })
-                        }
+        apiService.searchContactByNamePaging(get_params).then(response => {
+            if(response.status === 200) {
+                if (isAutoComplete) {
+                    if (response.data[4].length > 0) {
+                        this.setState({
+                            autocompleteData: response.data[4],
+                            showAutocomplete: true
+                        });
                     } else {
                         this.setState({
-                            searchData: response.data[4],
-                            pagination: {
-                                totalPage: response.data[2].total_page,
-                                totalElement: response.data[0].total_item,
-                                currentPage: response.data[3].current_page,
-                                rowPerPage: response.data[1].page_size
-                            }
-                        });
+                            showAutocomplete: false
+                        })
                     }
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                let message = '';
-                if (error.response && error.response.status === 409) {
-                    message = error.response.data;
-                    this.setState({ modalMessage: message });
                 } else {
-                    this.setState({ modalMessage: error });
+                    this.setState({
+                        searchData: response.data[4],
+                        pagination: {
+                            totalPage: response.data[2].total_page,
+                            totalElement: response.data[0].total_item,
+                            currentPage: response.data[3].current_page,
+                            rowPerPage: response.data[1].page_size
+                        }
+                    });
                 }
-            });
+            }
+        }).catch(err => {
+        })
     }
 
     handleCurrentPage = (currentPage) => {
