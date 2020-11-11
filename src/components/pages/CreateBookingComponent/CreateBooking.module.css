@@ -147,3 +147,13 @@
     margin-left: 10px;
     margin-bottom: 5px;
 }
+
+.alertChooseUnitPrice {
+    color: red;
+    font-style: italic;
+    font-size: 12px;
+    padding-left: 40px;
+}
+.alertBorder {
+    border: 1px solid red;
+}

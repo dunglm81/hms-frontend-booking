@@ -391,8 +391,11 @@ class CreateBooking extends Component {
                                                                         <div>SL:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'quantity', item1.using_date, item.service_id)} name={item.service_name} value={item1.quantity} />
                                                                     </div>
                                                                     <div className={styles.tdCustom}>
-                                                                        <div>ĐG:</div> <input type="number" className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} value={item1.unit_price} />
+                                                                        <div>ĐG:</div> <input type="number" 
+                                                                        className={"form-control " + (item1.quantity && (!item1.unit_price || item1.unit_price === "0") ? styles.alertBorder : "")} 
+                                                                        onChange={(e) => this.handleBookingDataInput(e, 'unit_price', item1.using_date, item.service_id)} name={item.service_name} value={item1.unit_price} />
                                                                     </div>
+                                                                    {(item1.quantity && (!item1.unit_price || item1.unit_price === "0")) ? <div className={styles.alertChooseUnitPrice}>Hãy chọn đơn giá!</div> : null}
                                                                     <div className={styles.tdCustom}>
                                                                         <div>MT:</div> <input className="form-control" onChange={(e) => this.handleBookingDataInput(e, 'description', item1.using_date, item.service_id)} name={item.service_name} />
                                                                     </div>

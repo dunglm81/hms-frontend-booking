@@ -151,7 +151,7 @@ const BookingSearch = () => {
                                 return (
                                     <div className={'d-flex flex-row flex-nowrap align-items-center position-relative'} key={idx}>
                                         <div>{item.keyAlt}:</div>
-                                        <input className="form-control" type={renderInputType(item.key)} onFocus={(e) => { handleOnFocus(e) }} onChange={(e) => { handleChangeAutoCompleteInput(e) }} value={item.value} name={item.key} />
+                                        <input className="form-control" type={renderInputType(item.key)} onFocus={(e) => { handleOnFocus(e) }} onChange={(e) => { handleChangeAutoCompleteInput(e) }} value={item.value} name={item.key} maxLength={50} />
                                         {(item.valueAlt && (item.key === "room_night" || item.key === "checkin" || item.key === "checkout")) ? <div className={styles.dateDisplay}>{item.valueAlt}</div> : null}
                                     </div>
                                 )
