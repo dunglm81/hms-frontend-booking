@@ -356,6 +356,7 @@ class AddItemModal extends React.Component {
                       value={item.value.toLocaleString()}
                       name={item.key}
                       disabled={item.disabled ? "disabled" : ""}
+                      maxLength={100}
                     />
                   ) : (
                       <select

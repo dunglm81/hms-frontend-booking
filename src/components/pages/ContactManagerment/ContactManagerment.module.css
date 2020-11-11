@@ -49,3 +49,8 @@
     display: block;
 }
 
+.theadCustom {
+    white-space: nowrap;
+    min-width: 150px;
+}
+

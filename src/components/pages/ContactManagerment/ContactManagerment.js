@@ -68,7 +68,7 @@ class ContactManagerment extends React.Component {
     }
 
     handleCurrentPage = (currentPage) => {
-        this.requestData('', currentPage, 20);
+        this.requestData(this.state.autocompleteValue, currentPage, 20);
     }
 
     handleChangeAutoCompleteInput = (event) => {
@@ -173,7 +173,7 @@ class ContactManagerment extends React.Component {
                         <Col>
                             <div className="table-responsive">
                                 <table className="table table-sm table-hover table-bordered">
-                                    <thead className="thead-light">
+                                    <thead className={"thead-light " + styles.theadCustom}>
                                         <tr>
                                             <th scope="col">Họ tên</th>
                                             <th scope="col">Số điện thoại</th>
